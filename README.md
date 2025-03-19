@@ -1,1 +1,1 @@
-## Proiect POO - Joc 2Dgit init
+## Proiect POO - Joc 2D
