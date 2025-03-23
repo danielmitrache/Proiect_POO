@@ -6,7 +6,7 @@
 class Player : public Actor, public sf::Drawable {
 private:
     sf::RectangleShape m_shape;
-    float m_f_speed = 2.0f;
+    float m_f_speed = 3.0f; // Speed of the player
 public:
     Player();
     Player(float x, float y);

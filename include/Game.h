@@ -1,12 +1,15 @@
 #ifndef GAME_H
 #define GAME_H
+#include <vector>
 #include <SFML/Graphics.hpp>
 #include "Player.h"
+#include "Platform.h"
 
 class Game {
 private:
     sf::RenderWindow window; // Fereastra jocului
     Player player;           // Jucătorul
+    std::vector <Platform> platforms; // Platformele
 public:
     Game();                // Constructor
     ~Game();               // Destructor
