@@ -1,7 +1,7 @@
 # Setări pentru compilare
 CXX = g++
 CXXFLAGS = -I"C:/SFML/SFML-3.0.0/include" -DSFML_STATIC
-LDFLAGS = -L"C:/SFML/SFML-3.0.0/lib" -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lopengl32 -lfreetype -lwinmm -lgdi32 -mwindows
+LDFLAGS = -L"C:/SFML/SFML-3.0.0/lib" -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lopengl32 -lfreetype -lwinmm -lgdi32
 
 # Detectează automat fișierele sursă și creează obiecte
 SRC_DIR = src

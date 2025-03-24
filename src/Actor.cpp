@@ -11,9 +11,7 @@ Actor::Actor(float x, float y) {
     m_f_y = y;
 }
 
-Actor::~Actor() {
-    std::cout << "Actor destroyed" << std::endl;   
-}
+Actor::~Actor() { }
 
 float Actor::getX() const {
     return m_f_x;
@@ -29,4 +27,42 @@ void Actor::setX(float x) {
 
 void Actor::setY(float y) {
     m_f_y = y;
+}
+
+void Actor::setHasGravity(bool hasGravity) {
+    m_b_hasGravity = hasGravity;
+}
+
+void Actor::setGravity(float gravity) {
+    m_f_gravity = gravity;
+}
+
+bool Actor::getHasGravity() const {
+    return m_b_hasGravity;
+}
+
+float Actor::getGravity() const {
+    return m_f_gravity;
+}
+
+void Actor::applyGravity() {
+    if (m_b_hasGravity) {
+        m_f_y -= m_f_gravity;
+    }
+}
+
+float Actor::getWidth() const {
+    return m_f_width;
+}
+
+float Actor::getHeight() const {
+    return m_f_height;
+}
+
+void Actor::setWidth(float width) {
+    m_f_width = width;
+}
+
+void Actor::setHeight(float height) {
+    m_f_height = height;
 }
