@@ -44,8 +44,6 @@ void Game::update() {
     // Actualizează logica jucătorului (mișcări, salt, gravitație, etc.)
     player.update();
 
-    player.applyGravity();
-
     // Rezolvă coliziunile pentru fiecare platformă
     for (auto& platform : platforms) {
         if (Colisions::checkColision(player, platform)) {
@@ -79,11 +77,11 @@ void Game::update() {
                     // Jucătorul cade pe platformă
                     player.move({ pLeft, platTop - player.getHeight() });
                     player.setVerticalSpeed(0);
+                    player.setCanJump(true);
                     // Aici, de asemenea, poți marca că jucătorul nu mai sare (ex: m_b_isJumping = false)
                 } else {
                     // Jucătorul lovește platforma de jos
                     player.move({ pLeft, platBottom });
-                    player.setVerticalSpeed(0);
                 }
             }
         }

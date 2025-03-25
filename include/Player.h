@@ -12,7 +12,8 @@ private:
     float m_f_verticalSpeed = 0.0f; // Vertical speed of the player
     float m_f_horizontalSpeed = 0.0f; // Horizontal speed of the player
 
-    float m_f_jumpForce = 30.0f; // Jump force
+    float m_f_jumpForce = 13.0f; // Jump force
+    bool m_b_canJump = false;
 public:
     Player();
     Player(sf::Vector2f position);
@@ -30,6 +31,13 @@ public:
 
     /// GRAVITY ///
     void applyGravity() override;
+
+    /// JUMPING ///
+    bool getCanJump() const;
+    void setCanJump(bool canJump);
+private:
+    /// JUMPING ///
+    void _jump();
 };
 
 #endif // PLAYER_H

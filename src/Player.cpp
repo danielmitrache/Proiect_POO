@@ -33,7 +33,6 @@ void Player::move(sf::Vector2f position) {
 }
 
 void Player::update() {
-    m_f_verticalSpeed = 0.0f;
     m_f_horizontalSpeed = 0.0f;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
     {
@@ -59,6 +58,17 @@ void Player::update() {
         m_f_verticalSpeed = m_f_speed;
         setY(m_shape.getPosition().y);
     }
+
+
+    /// GRAVITY AND JUMPING ///
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) 
+    {
+        _jump();
+    }
+    applyGravity();
+
+    m_shape.move(sf::Vector2f(0.f, m_f_verticalSpeed));
+    setY(m_shape.getPosition().y);
 }
 
 float Player::getVerticalSpeed() {
@@ -79,7 +89,21 @@ void Player::setHorizontalSpeed(float horizontalSpeed) {
 
 void Player::applyGravity() {
     if (m_b_hasGravity) {
-        m_shape.move(sf::Vector2f(0.f, m_f_gravity));
-        setY(m_shape.getPosition().y);
+        m_f_verticalSpeed += m_f_gravity;
     }
+}
+
+void Player::_jump() {
+    if (m_b_canJump) {
+        m_b_canJump = false;
+        m_f_verticalSpeed = -m_f_jumpForce;
+    }
+}
+
+bool Player::getCanJump() const {
+    return m_b_canJump;
+}
+
+void Player::setCanJump(bool canJump) {
+    m_b_canJump = canJump;
 }

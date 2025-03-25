@@ -5,7 +5,7 @@
 
 class Gravity {
 protected:
-    float m_f_gravity = 7.f;
+    float m_f_gravity = 0.5f;
     bool m_b_hasGravity = true;
 public:
     virtual void applyGravity() = 0;
