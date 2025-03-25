@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include "Platform.h"
+#include "Gravity.h"
 
 class Game {
 private:

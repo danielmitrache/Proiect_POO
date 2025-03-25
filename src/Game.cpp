@@ -22,6 +22,7 @@ Game::~Game() {}
 
 // Loop-ul principal al jocului
 void Game::run() {
+    player.setHasGravity(true);
     while (window.isOpen()) {
         processEvents();
         update();
@@ -42,6 +43,8 @@ void Game::processEvents() {
 void Game::update() {
     // Actualizează logica jucătorului (mișcări, salt, gravitație, etc.)
     player.update();
+
+    player.applyGravity();
 
     // Rezolvă coliziunile pentru fiecare platformă
     for (auto& platform : platforms) {

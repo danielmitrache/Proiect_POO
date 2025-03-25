@@ -1,9 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include "Actor.h"
+#include "Gravity.h"
 #ifndef PLAYER_H
 #define PLAYER_H
 
-class Player : public Actor, public sf::Drawable {
+class Player : public Actor, public sf::Drawable, public Gravity {
 private:
     sf::RectangleShape m_shape;
     float m_f_speed = 7.0f; // Speed of the player
@@ -25,6 +26,10 @@ public:
 
     float getHorizontalSpeed();
     void setHorizontalSpeed(float horizontalSpeed);
+
+
+    /// GRAVITY ///
+    void applyGravity() override;
 };
 
 #endif // PLAYER_H
