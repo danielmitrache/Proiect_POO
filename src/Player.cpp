@@ -76,12 +76,3 @@ float Player::getHorizontalSpeed() {
 void Player::setHorizontalSpeed(float horizontalSpeed) {
     m_f_horizontalSpeed = horizontalSpeed;
 }
-
-void Player::setHasGravity(bool hasGravity) {
-    m_b_hasGravity = hasGravity;
-}
-
-bool Player::getHasGravity() {
-    return m_b_hasGravity;
-}
-

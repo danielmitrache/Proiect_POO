@@ -29,28 +29,6 @@ void Actor::setY(float y) {
     m_f_y = y;
 }
 
-void Actor::setHasGravity(bool hasGravity) {
-    m_b_hasGravity = hasGravity;
-}
-
-void Actor::setGravity(float gravity) {
-    m_f_gravity = gravity;
-}
-
-bool Actor::getHasGravity() const {
-    return m_b_hasGravity;
-}
-
-float Actor::getGravity() const {
-    return m_f_gravity;
-}
-
-void Actor::applyGravity() {
-    if (m_b_hasGravity) {
-        m_f_y -= m_f_gravity;
-    }
-}
-
 float Actor::getWidth() const {
     return m_f_width;
 }

@@ -22,7 +22,6 @@ Game::~Game() {}
 
 // Loop-ul principal al jocului
 void Game::run() {
-    player.setHasGravity(true);
     while (window.isOpen()) {
         processEvents();
         update();
