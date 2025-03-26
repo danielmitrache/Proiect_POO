@@ -8,5 +8,4 @@ namespace Colisions {
                actor1.getY() < actor2.getY() + actor2.getHeight() &&
                actor1.getY() + actor1.getHeight() > actor2.getY();
     }
-
 }

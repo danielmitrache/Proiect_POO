@@ -28,16 +28,15 @@ public:
     float getHorizontalSpeed();
     void setHorizontalSpeed(float horizontalSpeed);
 
-
-    /// GRAVITY ///
-    void applyGravity() override;
-
     /// JUMPING ///
     bool getCanJump() const;
     void setCanJump(bool canJump);
 private:
     /// JUMPING ///
     void _jump();
+
+    /// GRAVITY ///
+    void _applyGravity() override;
 };
 
 #endif // PLAYER_H

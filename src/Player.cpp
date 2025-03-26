@@ -65,7 +65,7 @@ void Player::update() {
     {
         _jump();
     }
-    applyGravity();
+    _applyGravity();
 
     m_shape.move(sf::Vector2f(0.f, m_f_verticalSpeed));
     setY(m_shape.getPosition().y);
@@ -87,7 +87,7 @@ void Player::setHorizontalSpeed(float horizontalSpeed) {
     m_f_horizontalSpeed = horizontalSpeed;
 }
 
-void Player::applyGravity() {
+void Player::_applyGravity() {
     if (m_b_hasGravity) {
         m_f_verticalSpeed += m_f_gravity;
     }

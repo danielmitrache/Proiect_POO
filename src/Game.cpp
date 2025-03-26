@@ -43,7 +43,7 @@ void Game::processEvents() {
 void Game::update() {
     // Actualizează logica jucătorului (mișcări, salt, gravitație, etc.)
     player.update();
-
+    player.setCanJump(false); // Resetăm posibilitatea de a sări
     // Rezolvă coliziunile pentru fiecare platformă
     for (auto& platform : platforms) {
         if (Colisions::checkColision(player, platform)) {
@@ -76,7 +76,7 @@ void Game::update() {
                 if (pTop < platTop) {
                     // Jucătorul cade pe platformă
                     player.move({ pLeft, platTop - player.getHeight() });
-                    player.setVerticalSpeed(0);
+                    player.setVerticalSpeed(0.f);
                     player.setCanJump(true);
                     // Aici, de asemenea, poți marca că jucătorul nu mai sare (ex: m_b_isJumping = false)
                 } else {
