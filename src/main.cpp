@@ -2,6 +2,6 @@
 
 int main() {
     Game game;
-    game.run(); // Rulează jocul
+    game.run();
     return 0;
 }

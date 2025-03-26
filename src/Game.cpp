@@ -1,37 +1,37 @@
 #include "../include/Game.h"
 #include "../include/Colisions.h"
 #include <iostream>
-#include <algorithm> // std::min, std::max
+#include <algorithm>
 
-static unsigned int WINDOW_WIDTH = 1400u;
-static unsigned int WINDOW_HEIGHT = 800u;
-// Constructor: inițializează fereastra
+const unsigned int WINDOW_WIDTH = 1400u;
+const unsigned int WINDOW_HEIGHT = 800u;
 Game::Game() 
     : window(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "My game!"),
     player({100.f, 50.f}) 
 {
     this->window.setFramerateLimit(60);
 
-    // Adaugă platforme
+    // Adauga platforme
     platforms.push_back(Platform({0.f, 450.f}, {1400.f, 50.f}));
-    platforms.push_back(Platform({200.f, 300.f}, {200.f, 50.f}));
+    platforms.push_back(Platform({200.f, 350.f}, {200.f, 50.f}));
     platforms.push_back(Platform({500.f, 300.f}, {50.f, 200.f}));
 }
-// Destructor (dacă ai nevoie să cureți resurse)
+
 Game::~Game() {}
 
 // Loop-ul principal al jocului
 void Game::run() {
     player.setHasGravity(true);
+    player.setMode(PlayerMode::Platformer);
     while (window.isOpen()) {
-        processEvents();
-        update();
-        render();
+        _processEvents();
+        _update();
+        _render();
     }
 }
 
-// Procesează input-ul utilizatorului
-void Game::processEvents() {
+// Proceseaza input-ul utilizatorului
+void Game::_processEvents() {
     while (const std::optional event = window.pollEvent())
     {
         if (event->is<sf::Event::Closed>())
@@ -39,12 +39,12 @@ void Game::processEvents() {
     }
 }
 
-// Update logică joc
-void Game::update() {
-    // Actualizează logica jucătorului (mișcări, salt, gravitație, etc.)
+// Update logica joc
+void Game::_update() {
     player.update();
-    player.setCanJump(false); // Resetăm posibilitatea de a sări
-    // Rezolvă coliziunile pentru fiecare platformă
+    player.setCanJump(false); // Presupunem ca nu putem sari pana cand nu verificam coliziunile
+
+
     for (auto& platform : platforms) {
         if (Colisions::checkColision(player, platform)) {
             // Extragem marginile jucătorului
@@ -53,49 +53,61 @@ void Game::update() {
             float pTop    = player.getY();
             float pBottom = player.getY() + player.getHeight();
 
-            // Margini platformă
+            // Margini platforma
             float platLeft   = platform.getX();
             float platRight  = platform.getX() + platform.getWidth();
             float platTop    = platform.getY();
             float platBottom = platform.getY() + platform.getHeight();
 
-            // Calculăm overlap-ul pe fiecare axă
+            // Calculam overlap-ul pe fiecare axa
             float overlapX = std::min(pRight, platRight) - std::max(pLeft, platLeft);
             float overlapY = std::min(pBottom, platBottom) - std::max(pTop, platTop);
 
-            // Aplică corecția doar pe axa cu suprapunerea minimă
-            if (overlapX < overlapY) { // Rezolvare coliziune pe axa orizontală
+            // Aplica corectia doar pe axa cu suprapunerea minima
+            if (overlapX < overlapY) { // Rezolvare coliziune pe axa orizontala
                 if (pLeft < platLeft) {
-                    // Jucătorul vine din stânga platformei
+                    // Jucatorul vine din stanga platformei
                     player.move({ pLeft - overlapX, pTop });
                 } else {
-                    // Jucătorul vine din dreapta platformei
+                    // Jucatorul vine din dreapta platformei
                     player.move({ pLeft + overlapX, pTop });
                 }
-            } else { // Rezolvare coliziune pe axa verticală
+            } else { // Rezolvare coliziune pe axa verticala
                 if (pTop < platTop) {
-                    // Jucătorul cade pe platformă
+                    // Jucatorul cade pe platformă
                     player.move({ pLeft, platTop - player.getHeight() });
                     player.setVerticalSpeed(0.f);
                     player.setCanJump(true);
-                    // Aici, de asemenea, poți marca că jucătorul nu mai sare (ex: m_b_isJumping = false)
                 } else {
-                    // Jucătorul lovește platforma de jos
+                    // Jucatorul lovește platforma de jos
                     player.move({ pLeft, platBottom });
+                    player.setVerticalSpeed(-0.75 * player.getVerticalSpeed());
                 }
             }
         }
     }
 }
 
-// Randare pe ecran
-void Game::render() {
-    window.clear(); // Șterge ecranul
-    // Aici vei desena elementele jocului
-    window.draw(player);
+void Game::_render() {
+    if (m_b_cameraFollowsPlayer) {
+        _centerCameraOnPlayer();
+    }
 
+    window.clear();
+
+    _drawActors();
+
+    window.display();
+}
+
+void Game::_centerCameraOnPlayer() {
+    sf::View view = window.getDefaultView();
+    view.setCenter({player.getX() + player.getWidth() / 2.f,player.getY() + player.getHeight() / 2.f});
+    window.setView(view);
+}
+
+void Game::_drawActors() {
+    window.draw(player);
     for (auto& platform : platforms)
         window.draw(platform);
-
-    window.display(); // Afișează frame-ul
 }

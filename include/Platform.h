@@ -11,6 +11,8 @@ public:
     Platform(sf::Vector2f position);
     Platform(sf::Vector2f position, sf::Vector2f size);
     ~Platform();
+
+    // Draw the platform
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 

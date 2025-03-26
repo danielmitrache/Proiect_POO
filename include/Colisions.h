@@ -4,6 +4,7 @@
 #include "Actor.h"
 
 namespace Colisions {
+    // Function that checks whether two actors are colliding
     bool checkColision(Actor& actor1, Actor& actor2);
 }
 

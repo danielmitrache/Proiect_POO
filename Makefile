@@ -1,31 +1,31 @@
-# Setări pentru compilare
+# Compile settings
 CXX = g++
 CXXFLAGS = -I"C:/SFML/SFML-3.0.0/include" -DSFML_STATIC
 LDFLAGS = -L"C:/SFML/SFML-3.0.0/lib" -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lopengl32 -lfreetype -lwinmm -lgdi32
 
-# Detectează automat fișierele sursă și creează obiecte
+# Get all source files and object files
 SRC_DIR = src
 SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp, %.o, $(SRC_FILES))
 
-# Executabil final
+# Final executable
 TARGET = game.exe
 
-# Regula principală
+# Default rules
 all: $(TARGET) clean_objs
 
-# Regula pentru compilare
+# Compile all source files to object files
 %.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Regula pentru link-editare
+# Link all object files to final executable
 $(TARGET): $(OBJ_FILES)
 	$(CXX) $^ -o $@ $(LDFLAGS)
 
-# Șterge fișierele obiect după link-editare
+# Delete all object files
 clean_objs:
 	del /F $(OBJ_FILES)
 
-# Regula pentru curățare completă
+# Clean everything
 clean:
 	del /F $(OBJ_FILES) $(TARGET)
