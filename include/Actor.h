@@ -22,6 +22,9 @@ public:
     
     void setWidth(float width);
     void setHeight(float height);
+
+    void setPosition(sf::Vector2f position);
+    sf::Vector2f getPosition() const;
 };
 
 #endif // ACTOR_H

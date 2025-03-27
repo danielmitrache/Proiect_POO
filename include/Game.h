@@ -6,6 +6,7 @@
 #include "Platform.h"
 #include "Gravity.h"
 #include "DeadlyPlatform.h"
+#include "NextLevelTrigger.h"
 
 class Game {
 private:
@@ -14,6 +15,7 @@ private:
 
     Player player;           // Jucatorul
     std::vector<std::unique_ptr<Platform>> platforms; // Platformele
+    NextLevelTrigger nextLevelTrigger; // Trigger pentru nivelul urmator
 public:
     Game();               
     ~Game();               
@@ -32,10 +34,13 @@ private:
     void _render();
 
     // Center the camera on the player
-    void _centerCameraOnPlayer();
+    void _centerCameraOnPlayer(float offsetX = 0.f, float offsetY = 0.f);
     
     // Draw the actors
     void _drawActors(); 
+
+    // Platformer level loader
+    void _loadPlatformerLevel(const std::string& levelPath, float tileSize = 50.f);
 };
 
 #endif // GAME_H

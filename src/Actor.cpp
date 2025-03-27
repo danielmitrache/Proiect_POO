@@ -44,3 +44,12 @@ void Actor::setWidth(float width) {
 void Actor::setHeight(float height) {
     m_f_height = height;
 }
+
+void Actor::setPosition(sf::Vector2f position) {
+    m_f_x = position.x;
+    m_f_y = position.y;
+}
+
+sf::Vector2f Actor::getPosition() const {
+    return sf::Vector2f(m_f_x, m_f_y);
+}
