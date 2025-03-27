@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Platform.h"
 #include "Gravity.h"
+#include "DeadlyPlatform.h"
 
 class Game {
 private:
@@ -12,7 +13,7 @@ private:
     sf::RenderWindow window; // Fereastra jocului
 
     Player player;           // Jucatorul
-    std::vector <Platform> platforms; // Platformele
+    std::vector<std::unique_ptr<Platform>> platforms; // Platformele
 public:
     Game();               
     ~Game();               

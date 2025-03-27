@@ -14,6 +14,11 @@ public:
 
     // Draw the platform
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+    void setColor(const sf::Color& color);
+    sf::Color getColor() const;
+
+    virtual bool isDeadly() const;
 };
 
 #endif // PLATFORM_H

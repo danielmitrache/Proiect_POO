@@ -12,9 +12,10 @@ Game::Game()
     this->window.setFramerateLimit(60);
 
     // Adauga platforme
-    platforms.push_back(Platform({0.f, 450.f}, {1400.f, 50.f}));
-    platforms.push_back(Platform({200.f, 350.f}, {200.f, 50.f}));
-    platforms.push_back(Platform({500.f, 300.f}, {50.f, 200.f}));
+    platforms.push_back(std::make_unique<Platform>(sf::Vector2f{0.f, 450.f}, sf::Vector2f{1400.f, 50.f}));
+    platforms.push_back(std::make_unique<Platform>(sf::Vector2f{200.f, 350.f}, sf::Vector2f{200.f, 50.f}));
+    platforms.push_back(std::make_unique<Platform>(sf::Vector2f{500.f, 300.f}, sf::Vector2f{50.f, 200.f}));
+    platforms.push_back(std::make_unique<DeadlyPlatform>(sf::Vector2f{400.f, 400.f}, sf::Vector2f{200.f, 50.f}, 10.f));
 }
 
 Game::~Game() {}
@@ -46,7 +47,12 @@ void Game::_update() {
 
 
     for (auto& platform : platforms) {
-        if (Colisions::checkColision(player, platform)) {
+        if (Colisions::checkColision(player, *platform)) {
+
+            if (platform -> isDeadly()) {
+                player.move({100.f, 50.f});
+            }
+
             // Extragem marginile jucătorului
             float pLeft   = player.getX();
             float pRight  = player.getX() + player.getWidth();
@@ -54,10 +60,10 @@ void Game::_update() {
             float pBottom = player.getY() + player.getHeight();
 
             // Margini platforma
-            float platLeft   = platform.getX();
-            float platRight  = platform.getX() + platform.getWidth();
-            float platTop    = platform.getY();
-            float platBottom = platform.getY() + platform.getHeight();
+            float platLeft   = platform -> getX();
+            float platRight  = platform -> getX() + platform -> getWidth();
+            float platTop    = platform -> getY();
+            float platBottom = platform -> getY() + platform -> getHeight();
 
             // Calculam overlap-ul pe fiecare axa
             float overlapX = std::min(pRight, platRight) - std::max(pLeft, platLeft);
@@ -109,5 +115,5 @@ void Game::_centerCameraOnPlayer() {
 void Game::_drawActors() {
     window.draw(player);
     for (auto& platform : platforms)
-        window.draw(platform);
+        window.draw(*platform);
 }

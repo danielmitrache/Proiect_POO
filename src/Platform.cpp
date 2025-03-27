@@ -35,3 +35,15 @@ Platform::~Platform() { }
 void Platform::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(m_shape, states);
 }
+
+void Platform::setColor(const sf::Color& color) {
+    m_shape.setFillColor(color);
+}
+
+sf::Color Platform::getColor() const {
+    return m_shape.getFillColor();
+}
+
+bool Platform::isDeadly() const {
+    return false;
+}
