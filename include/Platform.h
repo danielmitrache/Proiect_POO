@@ -6,10 +6,13 @@
 class Platform : public Actor, public sf::Drawable {
 private:
     sf::RectangleShape m_shape;
+
+    bool m_b_isSticky = false;
 public:
     Platform();
     Platform(sf::Vector2f position);
     Platform(sf::Vector2f position, sf::Vector2f size);
+    Platform(sf::Vector2f position, sf::Vector2f size, bool isSticky);
     ~Platform();
 
     // Draw the platform
@@ -19,6 +22,9 @@ public:
     sf::Color getColor() const;
 
     virtual bool isDeadly() const;
+
+    bool isSticky() const;
+    void setSticky(bool isSticky);
 };
 
 #endif // PLATFORM_H

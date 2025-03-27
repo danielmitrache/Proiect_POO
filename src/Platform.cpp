@@ -30,6 +30,17 @@ Platform::Platform(sf::Vector2f position, sf::Vector2f size) {
     m_shape.setPosition(position);
 }
 
+Platform::Platform(sf::Vector2f position, sf::Vector2f size, bool isSticky) {
+    setWidth(size.x);
+    setHeight(size.y);
+    setX(position.x);
+    setY(position.y);
+    m_shape.setSize(size);
+    m_shape.setFillColor(sf::Color::Yellow);
+    m_shape.setPosition(position);
+    m_b_isSticky = isSticky;
+}
+
 Platform::~Platform() { }
 
 void Platform::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -46,4 +57,12 @@ sf::Color Platform::getColor() const {
 
 bool Platform::isDeadly() const {
     return false;
+}
+
+bool Platform::isSticky() const {
+    return m_b_isSticky;
+}
+
+void Platform::setSticky(bool isSticky) {
+    m_b_isSticky = isSticky;
 }

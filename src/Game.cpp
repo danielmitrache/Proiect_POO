@@ -14,7 +14,7 @@ Game::Game()
     // Adauga platforme
     platforms.push_back(std::make_unique<Platform>(sf::Vector2f{0.f, 450.f}, sf::Vector2f{1400.f, 50.f}));
     platforms.push_back(std::make_unique<Platform>(sf::Vector2f{200.f, 350.f}, sf::Vector2f{200.f, 50.f}));
-    platforms.push_back(std::make_unique<Platform>(sf::Vector2f{500.f, 300.f}, sf::Vector2f{50.f, 200.f}));
+    platforms.push_back(std::make_unique<Platform>(sf::Vector2f{500.f, 300.f}, sf::Vector2f{50.f, 200.f}, true));
     platforms.push_back(std::make_unique<DeadlyPlatform>(sf::Vector2f{400.f, 400.f}, sf::Vector2f{200.f, 50.f}, 10.f));
 }
 
@@ -71,6 +71,10 @@ void Game::_update() {
 
             // Aplica corectia doar pe axa cu suprapunerea minima
             if (overlapX < overlapY) { // Rezolvare coliziune pe axa orizontala
+                if (platform -> isSticky()) {
+                    player.setVerticalSpeed(0.f);
+                    player.setCanJump(true);
+                }
                 if (pLeft < platLeft) {
                     // Jucatorul vine din stanga platformei
                     player.move({ pLeft - overlapX, pTop });
