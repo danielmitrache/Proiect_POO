@@ -42,7 +42,86 @@ void Game::_update() {
     player.update();
     player.setCanJump(false); // Presupunem ca nu putem sari pana cand nu verificam coliziunile
 
+    _solvePlatformCollisions(player, platforms);
+    _checkNextLevelTriggerCollision(player, nextLevelTrigger);
+}
 
+void Game::_render() {
+    if (m_b_cameraFollowsPlayer) {
+        _centerCameraOnPlayer(0.f, -50.f);
+    }
+
+    window.clear();
+
+    _drawActors();
+
+    window.display();
+}
+
+void Game::_centerCameraOnPlayer(float offsetX, float offsetY) {
+    sf::View view = window.getDefaultView();
+    view.setCenter({player.getX() + player.getWidth() / 2.f + offsetX,player.getY() + player.getHeight() / 2.f + offsetY});
+    window.setView(view);
+}
+
+void Game::_drawActors() {
+    window.draw(player);
+    window.draw(nextLevelTrigger);
+    for (auto& platform : platforms)
+        window.draw(*platform);
+}
+
+void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
+    // Stergem nivelul curent
+    _deleteCurrentLevel();
+
+    std::ifstream file(levelPath);
+    if (!file.is_open()) {
+        std::cerr << "Could not open file: " << levelPath << std::endl;
+        return;
+    }
+
+    bool doesCameraFollowPlayer = true;
+    file >> doesCameraFollowPlayer;
+    m_b_cameraFollowsPlayer = doesCameraFollowPlayer;
+
+    std::string line;
+    int lineNumber = 0;
+    while(std::getline(file, line)) {
+        std::istringstream iss(line);
+        std::string token;
+        int columnNumber = 0;
+        while (iss >> token) {
+            int tileType = std::stoi(token);
+
+            if (tileType == 0){
+                columnNumber ++;
+                continue;
+            }
+            sf::Vector2f position(columnNumber * tileSize, lineNumber * tileSize);
+            sf::Vector2f size(tileSize, tileSize);
+            if (tileType == 1)
+                platforms.push_back(std::make_unique<Platform>(position, size));
+            else if (tileType == 2)
+                platforms.push_back(std::make_unique<DeadlyPlatform>(position, size, 10.f));
+            else if (tileType == 3)
+                platforms.push_back(std::make_unique<Platform>(position, size, true));
+            else if (tileType == 4) 
+                player.move(position);
+            else if (tileType == 5) {
+                nextLevelTrigger.move(position);
+                nextLevelTrigger.setNextLevelID(nextLevelTrigger.getNextLevelID() + 1);   
+            }
+            columnNumber ++;
+        }
+        lineNumber ++;
+    }
+
+    file.close();
+    std::cout << "Level loaded from: " << levelPath << std::endl;
+}
+
+void Game::_solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<Platform>> &platforms) {
     for (auto& platform : platforms) {
         if (Colisions::checkColision(player, *platform)) {
 
@@ -95,70 +174,12 @@ void Game::_update() {
     }
 }
 
-void Game::_render() {
-    if (m_b_cameraFollowsPlayer) {
-        _centerCameraOnPlayer(0.f, 50.f);
+void Game::_checkNextLevelTriggerCollision(Player &player, NextLevelTrigger &nextLevelTrigger) {
+    if (Colisions::checkColision(player, nextLevelTrigger)) {
+        _loadPlatformerLevel(nextLevelTrigger.getNextLevelPath());
     }
-
-    window.clear();
-
-    _drawActors();
-
-    window.display();
 }
 
-void Game::_centerCameraOnPlayer(float offsetX, float offsetY) {
-    sf::View view = window.getDefaultView();
-    view.setCenter({player.getX() + player.getWidth() / 2.f + offsetX,player.getY() + player.getHeight() / 2.f + offsetY});
-    window.setView(view);
-}
-
-void Game::_drawActors() {
-    window.draw(player);
-    window.draw(nextLevelTrigger);
-    for (auto& platform : platforms)
-        window.draw(*platform);
-}
-
-void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
-    std::ifstream file(levelPath);
-    if (!file.is_open()) {
-        std::cerr << "Could not open file: " << levelPath << std::endl;
-        return;
-    }
-
-    std::string line;
-    int lineNumber = 0;
-    while(std::getline(file, line)) {
-        std::istringstream iss(line);
-        std::string token;
-        int columnNumber = 0;
-        while (iss >> token) {
-            int tileType = std::stoi(token);
-
-            if (tileType == 0){
-                columnNumber ++;
-                continue;
-            }
-            sf::Vector2f position(columnNumber * tileSize, lineNumber * tileSize);
-            sf::Vector2f size(tileSize, tileSize);
-            if (tileType == 1)
-                platforms.push_back(std::make_unique<Platform>(position, size));
-            else if (tileType == 2)
-                platforms.push_back(std::make_unique<DeadlyPlatform>(position, size, 10.f));
-            else if (tileType == 3)
-                platforms.push_back(std::make_unique<Platform>(position, size, true));
-            else if (tileType == 4) 
-                player.move(position);
-            else if (tileType == 5) {
-                nextLevelTrigger.setPosition(position);
-                nextLevelTrigger.setNextLevelPath("D:/ProiectPOO/assets/level_layouts/level1.txt");
-            }
-            columnNumber ++;
-        }
-        lineNumber ++;
-    }
-
-    file.close();
-    std::cout << "Level loaded from: " << levelPath << std::endl;
+void Game::_deleteCurrentLevel() {
+    platforms.clear();
 }

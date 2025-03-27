@@ -5,24 +5,27 @@
 
 class NextLevelTrigger : public Triggers, public sf::Drawable {
 private:
-    std::string m_s_nextLevelPath; // Path to the next level
+    int m_i_nextLevelID; // Next level ID
     sf::CircleShape m_shape; // Shape for the trigger area
 public:
     NextLevelTrigger(); // Default constructor
-    NextLevelTrigger(sf::Vector2f position, std::string nextLevelPath); // Constructor with position and level path
+    NextLevelTrigger(sf::Vector2f position, int nextLevelID); // Constructor with position and level id
     ~NextLevelTrigger(); // Destructor
 
     // Set the next level path
-    void setNextLevelPath(const std::string& nextLevelPath);
+    void setNextLevelID(const int nextLevelID);
 
     // Get the next level path
-    const std::string& getNextLevelPath() const;
+    const int getNextLevelID() const;
 
     // Draw the trigger area
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     // Move the trigger area (both the position and the shape)
-    //void move(const sf::Vector2f )
+    void move(const sf::Vector2f);
+
+    // Build the next level path
+    std::string getNextLevelPath(std::string BASE_PATH = "D:/ProiectPOO/assets/level_layouts/") const;
 };
 
 #endif // NEXTLEVELTRIGGER_H

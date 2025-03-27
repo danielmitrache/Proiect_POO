@@ -41,6 +41,15 @@ private:
 
     // Platformer level loader
     void _loadPlatformerLevel(const std::string& levelPath, float tileSize = 50.f);
+
+    // Function that makes sure the player does not go through walls and platforms
+    void _solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<Platform>> &platforms);
+
+    // Function that solves trigger collisions
+    void _checkNextLevelTriggerCollision(Player &player, NextLevelTrigger &nextLevelTrigger);
+
+    // Function that deletes the current level
+    void _deleteCurrentLevel();
 };
 
 #endif // GAME_H
