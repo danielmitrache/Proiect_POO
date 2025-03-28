@@ -1,6 +1,7 @@
 #include "../include/NextLevelTrigger.h"
 
 NextLevelTrigger::NextLevelTrigger() : Triggers() {
+    m_i_nextLevelID = 0; // Initialize the next level ID to 0
     m_shape.setRadius(10.f); // Set the radius of the trigger area
     m_shape.setFillColor(sf::Color::Blue); // Set the color of the trigger area
     m_shape.setPosition({0.f, 0.f}); // Set the position of the trigger area

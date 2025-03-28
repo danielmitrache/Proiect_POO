@@ -75,6 +75,9 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
     // Stergem nivelul curent
     _deleteCurrentLevel();
 
+   // player.move({-999.f, -999.f});
+   // nextLevelTrigger.move({999.f, 999.f});
+
     std::ifstream file(levelPath);
     if (!file.is_open()) {
         std::cerr << "Could not open file: " << levelPath << std::endl;
@@ -86,11 +89,11 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
     m_b_cameraFollowsPlayer = doesCameraFollowPlayer;
 
     std::string line;
-    int lineNumber = 0;
+    int lineNumber = 0, columnNumber = 0;
     while(std::getline(file, line)) {
         std::istringstream iss(line);
         std::string token;
-        int columnNumber = 0;
+        columnNumber = 0;
         while (iss >> token) {
             int tileType = std::stoi(token);
 
@@ -106,15 +109,24 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
                 platforms.push_back(std::make_unique<DeadlyPlatform>(position, size, 10.f));
             else if (tileType == 3)
                 platforms.push_back(std::make_unique<Platform>(position, size, true));
-            else if (tileType == 4) 
+            else if (tileType == 4) {
                 player.move(position);
+                player.setLastSpawn(position);
+            }
             else if (tileType == 5) {
                 nextLevelTrigger.move(position);
-                nextLevelTrigger.setNextLevelID(nextLevelTrigger.getNextLevelID() + 1);   
+                nextLevelTrigger.setNextLevelID(nextLevelTrigger.getNextLevelID() + 1);  
             }
             columnNumber ++;
         }
         lineNumber ++;
+    }
+
+    if (!m_b_cameraFollowsPlayer) {
+        // Center the camera on the level
+        sf::View view = window.getDefaultView();
+        view.setCenter({columnNumber * tileSize / 2.f, lineNumber * tileSize / 2.f});
+        window.setView(view);
     }
 
     file.close();
@@ -126,7 +138,11 @@ void Game::_solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<
         if (Colisions::checkColision(player, *platform)) {
 
             if (platform -> isDeadly()) {
-                player.move({100.f, 50.f});
+                // Resetam nivelul
+                //nextLevelTrigger.setNextLevelID(nextLevelTrigger.getNextLevelID() - 1);
+                //_loadPlatformerLevel(nextLevelTrigger.getNextLevelPath());
+                player.move(player.getLastSpawn());
+                continue;
             }
 
             // Extragem marginile jucătorului

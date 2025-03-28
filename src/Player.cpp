@@ -8,6 +8,7 @@ Player::Player() {
     m_shape.setSize(sf::Vector2f(50.f, 50.f));
     m_shape.setFillColor(sf::Color::White);
     m_shape.setPosition(sf::Vector2f(0.f, 0.f));
+    m_v2f_lastSpawn = sf::Vector2f(0.f, 0.f);
 }
 
 Player::Player(sf::Vector2f position) {
@@ -18,6 +19,7 @@ Player::Player(sf::Vector2f position) {
     m_shape.setSize(sf::Vector2f(50.f, 50.f));
     m_shape.setFillColor(sf::Color::White);
     m_shape.setPosition(position);
+    m_v2f_lastSpawn = position;
 }
 
 Player::~Player() { }
@@ -123,4 +125,12 @@ void Player::setMode(PlayerMode mode) {
 
 PlayerMode Player::getMode() const {
     return m_playerMode;
+}
+
+sf::Vector2f Player::getLastSpawn() const {
+    return m_v2f_lastSpawn;
+}
+
+void Player::setLastSpawn(sf::Vector2f lastSpawn) {
+    m_v2f_lastSpawn = lastSpawn;
 }

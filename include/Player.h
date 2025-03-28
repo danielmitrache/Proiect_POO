@@ -21,6 +21,8 @@ private:
     bool m_b_canJump = false;
 
     PlayerMode m_playerMode = PlayerMode::Platformer;
+
+    sf::Vector2f m_v2f_lastSpawn{0.f, 0.f}; // Last spawn position
 public:
     Player();
     Player(sf::Vector2f position);
@@ -40,6 +42,9 @@ public:
 
     float getHorizontalSpeed();
     void setHorizontalSpeed(float horizontalSpeed);
+
+    sf::Vector2f getLastSpawn() const;
+    void setLastSpawn(sf::Vector2f lastSpawn);
 
     /// JUMPING ///
     bool getCanJump() const;

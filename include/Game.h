@@ -10,10 +10,11 @@
 
 class Game {
 private:
-    bool m_b_cameraFollowsPlayer = true;
+    bool m_b_cameraFollowsPlayer;
     sf::RenderWindow window; // Fereastra jocului
 
     Player player;           // Jucatorul
+
     std::vector<std::unique_ptr<Platform>> platforms; // Platformele
     NextLevelTrigger nextLevelTrigger; // Trigger pentru nivelul urmator
 public:

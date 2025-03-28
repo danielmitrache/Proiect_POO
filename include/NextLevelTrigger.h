@@ -5,7 +5,7 @@
 
 class NextLevelTrigger : public Triggers, public sf::Drawable {
 private:
-    int m_i_nextLevelID; // Next level ID
+    int m_i_nextLevelID = 0; // Next level ID
     sf::CircleShape m_shape; // Shape for the trigger area
 public:
     NextLevelTrigger(); // Default constructor
