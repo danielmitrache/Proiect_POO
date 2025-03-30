@@ -7,16 +7,20 @@
 #include "Gravity.h"
 #include "DeadlyPlatform.h"
 #include "NextLevelTrigger.h"
+#include "Background.h"
+#include "UnlockLevelTrigger.h"
 
 class Game {
 private:
     bool m_b_cameraFollowsPlayer;
     sf::RenderWindow window; // Fereastra jocului
+    Background background; // Fundalul jocului
 
     Player player;           // Jucatorul
 
     std::vector<std::unique_ptr<Platform>> platforms; // Platformele
     NextLevelTrigger nextLevelTrigger; // Trigger pentru nivelul urmator
+    std::vector<UnlockLevelTrigger> unlockLevelTriggers; // Trigger pentru deblocarea nivelului
 public:
     Game();               
     ~Game();               

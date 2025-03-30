@@ -9,9 +9,11 @@ const unsigned int WINDOW_HEIGHT = 800u;
 Game::Game() 
     : window(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "My game!"),
     player({50.f, 200.f}),
-    nextLevelTrigger()
+    nextLevelTrigger(),
+    background("D:/ProiectPOO/assets/textures/Backgrounds/2.png")
 {
     this->window.setFramerateLimit(60);
+    background.setScale({WINDOW_WIDTH, WINDOW_HEIGHT});
 }
 
 Game::~Game() {}
@@ -47,12 +49,15 @@ void Game::_update() {
 }
 
 void Game::_render() {
+    window.clear();
+
     if (m_b_cameraFollowsPlayer) {
         _centerCameraOnPlayer(0.f, -50.f);
     }
 
-    window.clear();
+    background.setPositionToView(window.getView()); // Setam pozitia fundalului in functie de camera
 
+    window.draw(background); // Desenam fundalul
     _drawActors();
 
     window.display();
@@ -74,9 +79,6 @@ void Game::_drawActors() {
 void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
     // Stergem nivelul curent
     _deleteCurrentLevel();
-
-   // player.move({-999.f, -999.f});
-   // nextLevelTrigger.move({999.f, 999.f});
 
     std::ifstream file(levelPath);
     if (!file.is_open()) {
