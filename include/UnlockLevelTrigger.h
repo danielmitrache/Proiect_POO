@@ -6,7 +6,7 @@
 
 class UnlockLevelTrigger : public Triggers, public sf::Drawable {
 private:
-    sf::RectangleShape m_shape; // Shape for the trigger
+    sf::CircleShape m_shape; // Shape for the trigger
     bool m_b_isActive = false; // State of the trigger
 public:
     UnlockLevelTrigger();

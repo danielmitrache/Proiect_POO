@@ -45,7 +45,8 @@ void Game::_update() {
     player.setCanJump(false); // Presupunem ca nu putem sari pana cand nu verificam coliziunile
 
     _solvePlatformCollisions(player, platforms);
-    _checkNextLevelTriggerCollision(player, nextLevelTrigger);
+    _checkUnlockLevelTriggerCollision(player, unlockLevelTriggers);
+    _checkNextLevelTriggerCollision(player, nextLevelTrigger, unlockLevelTriggers);
 }
 
 void Game::_render() {
@@ -74,6 +75,8 @@ void Game::_drawActors() {
     window.draw(nextLevelTrigger);
     for (auto& platform : platforms)
         window.draw(*platform);
+    for (auto& unlockLevelTrigger : unlockLevelTriggers)
+        window.draw(unlockLevelTrigger);
 }
 
 void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
@@ -118,6 +121,9 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
             else if (tileType == 5) {
                 nextLevelTrigger.move(position);
                 nextLevelTrigger.setNextLevelID(nextLevelTrigger.getNextLevelID() + 1);  
+            }
+            else if (tileType == 6) {
+                unlockLevelTriggers.push_back(UnlockLevelTrigger(position));
             }
             columnNumber ++;
         }
@@ -192,12 +198,22 @@ void Game::_solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<
     }
 }
 
-void Game::_checkNextLevelTriggerCollision(Player &player, NextLevelTrigger &nextLevelTrigger) {
-    if (Colisions::checkColision(player, nextLevelTrigger)) {
+void Game::_checkNextLevelTriggerCollision(Player &player, NextLevelTrigger &nextLevelTrigger, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {
+    if (Colisions::checkColision(player, nextLevelTrigger) && unlockLevelTriggers.empty()) {
         _loadPlatformerLevel(nextLevelTrigger.getNextLevelPath());
     }
 }
 
 void Game::_deleteCurrentLevel() {
     platforms.clear();
+    unlockLevelTriggers.clear();
+}
+
+void Game::_checkUnlockLevelTriggerCollision(Player &player, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {
+    for (size_t i = 0; i < unlockLevelTriggers.size(); ++i) {
+        if (Colisions::checkColision(player, unlockLevelTriggers[i])) {
+            unlockLevelTriggers.erase(unlockLevelTriggers.begin() + i);
+            i --;
+        }
+    }
 }
