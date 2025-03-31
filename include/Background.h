@@ -7,6 +7,7 @@ class Background : public sf::Drawable {
 private:
     sf::Texture m_texture;  // Texture for the background
     sf::Sprite m_sprite;    // Sprite for the background
+
 public:
     Background(); // Default constructor
     ~Background(); // Destructor

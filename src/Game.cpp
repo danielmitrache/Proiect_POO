@@ -54,9 +54,14 @@ void Game::_render() {
 
     if (m_b_cameraFollowsPlayer) {
         _centerCameraOnPlayer(0.f, -50.f);
+        background.setScale({4 * WINDOW_WIDTH, 4 * WINDOW_HEIGHT}); // Setam dimensiunea fundalului in functie de camera
+        background.setPosition({- 1000.f, -1000.f}); // Setam pozitia fundalului in functie de camera
     }
 
-    background.setPositionToView(window.getView()); // Setam pozitia fundalului in functie de camera
+    if (!m_b_cameraFollowsPlayer) {
+        background.setScale({WINDOW_WIDTH, WINDOW_HEIGHT}); // Setam dimensiunea fundalului in functie de camera
+        background.setPositionToView(window.getView()); // Setam pozitia fundalului in functie de camera
+    }
 
     window.draw(background); // Desenam fundalul
     _drawActors();

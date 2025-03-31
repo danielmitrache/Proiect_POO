@@ -45,3 +45,4 @@ void Background::setPositionToView(const sf::View& view) {
 
     m_sprite.setPosition(topLeft);
 }
+
