@@ -142,6 +142,9 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
         window.setView(view);
     }
 
+    // Add platform that kills the player if it falls into the void
+    platforms.push_back(std::make_unique<DeadlyPlatform>(sf::Vector2f(-9999.f, lineNumber * tileSize + 400.f), sf::Vector2f(99999999.f, 10.f), 999999.f, false));
+
     file.close();
     std::cout << "Level loaded from: " << levelPath << std::endl;
 }
