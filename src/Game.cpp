@@ -55,7 +55,8 @@ void Game::_render() {
     if (m_b_cameraFollowsPlayer) {
         _centerCameraOnPlayer(0.f, -50.f);
         background.setScale({4 * WINDOW_WIDTH, 4 * WINDOW_HEIGHT}); // Setam dimensiunea fundalului in functie de camera
-        background.setPosition({- 1000.f, -1000.f}); // Setam pozitia fundalului in functie de camera
+        float parallaxFactor = 0.5f;
+        background.setPosition(sf::Vector2f(-1000.f, -1 * m_f_levelHeight - 500.f) + sf::Vector2f(player.getX() * parallaxFactor, player.getY() * parallaxFactor)); // Setam pozitia fundalului in functie de camera
     }
 
     if (!m_b_cameraFollowsPlayer) {
@@ -144,6 +145,9 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
 
     // Add platform that kills the player if it falls into the void
     platforms.push_back(std::make_unique<DeadlyPlatform>(sf::Vector2f(-9999.f, lineNumber * tileSize + 400.f), sf::Vector2f(99999999.f, 10.f), 999999.f, false));
+
+    m_f_levelHeight = lineNumber * tileSize;
+    m_f_levelWidth = columnNumber * tileSize;
 
     file.close();
     std::cout << "Level loaded from: " << levelPath << std::endl;

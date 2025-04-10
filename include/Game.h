@@ -13,6 +13,7 @@
 class Game {
 private:
     bool m_b_cameraFollowsPlayer;
+    float m_f_levelWidth, m_f_levelHeight; // Dimensiunile nivelului curent
     sf::RenderWindow window; // Fereastra jocului
     Background background; // Fundalul jocului
 
