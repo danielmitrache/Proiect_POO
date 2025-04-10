@@ -9,6 +9,7 @@
 #include "NextLevelTrigger.h"
 #include "Background.h"
 #include "UnlockLevelTrigger.h"
+#include "EnemyWalker.h"
 
 class Game {
 private:
@@ -22,6 +23,10 @@ private:
     std::vector<std::unique_ptr<Platform>> platforms; // Platformele
     NextLevelTrigger nextLevelTrigger; // Trigger pentru nivelul urmator
     std::vector<UnlockLevelTrigger> unlockLevelTriggers; // Trigger pentru deblocarea nivelului
+    std::vector<EnemyWalker> enemyWalkers; // Inamicii
+
+    sf::Texture m_texture_heartTexture; // Textura pentru inimile jucatorului
+    std::vector<sf::Sprite> heartSprites; // Inimile jucatorului
 public:
     Game();               
     ~Game();               

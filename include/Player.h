@@ -23,6 +23,8 @@ private:
     PlayerMode m_playerMode = PlayerMode::Platformer;
 
     sf::Vector2f m_v2f_lastSpawn{0.f, 0.f}; // Last spawn position
+
+    float m_f_health = 100.f; // Health of the player
 public:
     Player();
     Player(sf::Vector2f position);
@@ -53,6 +55,10 @@ public:
     /// PLAYER MODE ///
     void setMode(PlayerMode mode);
     PlayerMode getMode() const;
+
+    /// PLAYER HEALTH ///
+    void setHealth(float health);
+    float getHealth() const;
 private:
     /// JUMPING ///
     // If it can jump, apply the jump force

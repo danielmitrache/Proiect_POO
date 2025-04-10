@@ -134,3 +134,11 @@ sf::Vector2f Player::getLastSpawn() const {
 void Player::setLastSpawn(sf::Vector2f lastSpawn) {
     m_v2f_lastSpawn = lastSpawn;
 }
+
+void Player::setHealth(float health) {
+    m_f_health = health;
+}
+
+float Player::getHealth() const {
+    return m_f_health;
+}

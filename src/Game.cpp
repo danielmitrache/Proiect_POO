@@ -14,6 +14,17 @@ Game::Game()
 {
     this->window.setFramerateLimit(60);
     background.setScale({WINDOW_WIDTH, WINDOW_HEIGHT});
+
+    if(!m_texture_heartTexture.loadFromFile("D:/ProiectPOO/assets/textures/heart.png")) {
+        std::cerr << "Error loading heart texture" << std::endl;
+    }
+
+    for(int i = 0; i < 3; i ++) {
+        sf::Sprite heart(m_texture_heartTexture);
+        heart.setPosition({WINDOW_WIDTH - 50.f * (i + 1), WINDOW_HEIGHT - 50.f});
+        heart.setScale({2.f, 2.f});
+        heartSprites.push_back(heart);
+    }
 }
 
 Game::~Game() {}
@@ -83,6 +94,13 @@ void Game::_drawActors() {
         window.draw(*platform);
     for (auto& unlockLevelTrigger : unlockLevelTriggers)
         window.draw(unlockLevelTrigger);
+    for (auto& enemyWalker : enemyWalkers)
+        window.draw(enemyWalker);
+
+    // Desenam inimile jucatorului
+    for (auto& heartSprite : heartSprites) {
+        window.draw(heartSprite);
+    }
 }
 
 void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
@@ -130,6 +148,9 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
             }
             else if (tileType == 6) {
                 unlockLevelTriggers.push_back(UnlockLevelTrigger(position));
+            }
+            else if (tileType == 7) {
+                enemyWalkers.push_back(EnemyWalker(position, 10.f, 10.f));
             }
             columnNumber ++;
         }
