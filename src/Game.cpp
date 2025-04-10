@@ -21,7 +21,7 @@ Game::Game()
 
     for(int i = 0; i < 3; i ++) {
         sf::Sprite heart(m_texture_heartTexture);
-        heart.setPosition({WINDOW_WIDTH - 50.f * (i + 1), WINDOW_HEIGHT - 50.f});
+        heart.setPosition({5.f + i * 50.f, 5.f});
         heart.setScale({2.f, 2.f});
         heartSprites.push_back(heart);
     }
@@ -61,7 +61,7 @@ void Game::_update() {
 }
 
 void Game::_render() {
-    window.clear();
+    window.clear(); 
 
     if (m_b_cameraFollowsPlayer) {
         _centerCameraOnPlayer(0.f, -50.f);
@@ -77,6 +77,7 @@ void Game::_render() {
 
     window.draw(background); // Desenam fundalul
     _drawActors();
+    _drawUI(); // Desenam UI-ul
 
     window.display();
 }
@@ -96,10 +97,12 @@ void Game::_drawActors() {
         window.draw(unlockLevelTrigger);
     for (auto& enemyWalker : enemyWalkers)
         window.draw(enemyWalker);
+}
 
-    // Desenam inimile jucatorului
-    for (auto& heartSprite : heartSprites) {
-        window.draw(heartSprite);
+void Game::_drawUI() {
+    window.setView(window.getDefaultView()); // Setam camera la pozitia initiala
+    for (auto& heart : heartSprites) {
+        window.draw(heart); // Desenam inimile
     }
 }
 

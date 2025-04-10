@@ -50,6 +50,9 @@ private:
     // Draw the actors
     void _drawActors(); 
 
+    // Draw UI elements
+    void _drawUI();
+
     // Platformer level loader
     void _loadPlatformerLevel(const std::string& levelPath, float tileSize = 50.f);
 
