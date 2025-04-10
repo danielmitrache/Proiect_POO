@@ -10,7 +10,8 @@ Game::Game()
     : window(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "My game!"),
     player({50.f, 200.f}),
     nextLevelTrigger(),
-    background("D:/ProiectPOO/assets/textures/Backgrounds/2.png")
+    background("D:/ProiectPOO/assets/textures/Backgrounds/2.png"),
+    m_f_playerInvincibilityTime(0.f)
 {
     this->window.setFramerateLimit(60);
     background.setScale({WINDOW_WIDTH, WINDOW_HEIGHT});
@@ -55,9 +56,16 @@ void Game::_update() {
     player.update();
     player.setCanJump(false); // Presupunem ca nu putem sari pana cand nu verificam coliziunile
 
+    if (m_f_playerInvincibilityTime > 0.f) {
+        m_f_playerInvincibilityTime -= 1.f / 60.f; // Scadem timpul de invincibilitate
+    }
+
+    _moveEnemyWalkers(enemyWalkers, platforms);
     _solvePlatformCollisions(player, platforms);
     _checkUnlockLevelTriggerCollision(player, unlockLevelTriggers);
     _checkNextLevelTriggerCollision(player, nextLevelTrigger, unlockLevelTriggers);
+    _checkEnemyCollisions(player, enemyWalkers);
+    _updateHearts(player.getHealth());
 }
 
 void Game::_render() {
@@ -153,7 +161,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
                 unlockLevelTriggers.push_back(UnlockLevelTrigger(position));
             }
             else if (tileType == 7) {
-                enemyWalkers.push_back(EnemyWalker(position, 10.f, 10.f));
+                enemyWalkers.push_back(EnemyWalker(position, 3.f, 30.f));
             }
             columnNumber ++;
         }
@@ -250,6 +258,88 @@ void Game::_checkUnlockLevelTriggerCollision(Player &player, std::vector<UnlockL
         if (Colisions::checkColision(player, unlockLevelTriggers[i])) {
             unlockLevelTriggers.erase(unlockLevelTriggers.begin() + i);
             i --;
+        }
+    }
+}
+
+void Game::_updateHearts(int health) {
+    if (health > 70) {
+        heartSprites.clear();
+        for(int i = 0; i < 3; i ++) {
+            sf::Sprite heart(m_texture_heartTexture);
+            heart.setPosition({5.f + i * 50.f, 5.f});
+            heart.setScale({2.f, 2.f});
+            heartSprites.push_back(heart);
+        }
+    }
+    else if (health > 30 && health <= 70) {
+        heartSprites.clear();
+        for(int i = 0; i < 2; i ++) {
+            sf::Sprite heart(m_texture_heartTexture);
+            heart.setPosition({5.f + i * 50.f, 5.f});
+            heart.setScale({2.f, 2.f});
+            heartSprites.push_back(heart);
+        }
+    }
+    else if (health > 0 && health <= 30) {
+        heartSprites.clear();
+        for(int i = 0; i < 1; i ++) {
+            sf::Sprite heart(m_texture_heartTexture);
+            heart.setPosition({5.f + i * 50.f, 5.f});
+            heart.setScale({2.f, 2.f});
+            heartSprites.push_back(heart);
+        }
+    }
+    else if (health <= 0) {
+        heartSprites.clear();
+        health = 0; // Set health to 0 to avoid negative health
+    }
+
+
+    if (health == 0) {
+        // Game over logic here
+        std::cout << "Game Over!" << std::endl;
+        player.move(player.getLastSpawn());
+        player.setHealth(100); // Reset health to 100
+        for(int i = 0; i < 3; i ++) {
+            sf::Sprite heart(m_texture_heartTexture);
+            heart.setPosition({5.f + i * 50.f, 5.f});
+            heart.setScale({2.f, 2.f});
+            heartSprites.push_back(heart);
+        }
+    }
+}
+
+void Game::_checkEnemyCollisions(Player &player, std::vector<EnemyWalker> &enemyWalkers) {
+    for (size_t i = 0; i < enemyWalkers.size(); ++i) {
+        EnemyWalker& enemyWalker = enemyWalkers[i];
+        if (Colisions::checkColision(player, enemyWalker)) {
+            if (m_f_playerInvincibilityTime > 0.f) {
+                // Player is invincible, ignore the hit
+                continue;
+            }
+            if (player.getVerticalSpeed() > 0.f) {
+                std::cout << "Player jumped on enemy!" << std::endl;
+                // Player jumps on the enemy
+                player.setVerticalSpeed(-player.getVerticalSpeed() * 1.3f); // Bounce off the enemy
+                enemyWalkers.erase(enemyWalkers.begin() + i); // Remove the enemy
+                i --; // Adjust index after removal
+                continue; // Skip the rest of the loop
+            } 
+            player.setHealth(player.getHealth() - enemyWalker.getDamage());
+            std::cout << "Player hit by enemy! Health: " << player.getHealth() << std::endl;
+            m_f_playerInvincibilityTime = 1.f; // Set invincibility time to 1 second
+        }
+    }
+}
+
+void Game::_moveEnemyWalkers(std::vector<EnemyWalker> &enemyWalkers, std::vector<std::unique_ptr<Platform>> &platforms) {
+    for (auto& enemyWalker : enemyWalkers) {
+        enemyWalker.update();
+        for (auto& platform : platforms) {
+            if (Colisions::checkColision(enemyWalker, *platform)) {
+                enemyWalker.reverseDirection(); // Inversam directia inamicului
+            }
         }
     }
 }

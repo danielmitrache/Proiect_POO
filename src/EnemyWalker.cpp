@@ -13,7 +13,16 @@ EnemyWalker::EnemyWalker(const sf::Vector2f& position, float speed, float damage
 
 EnemyWalker::~EnemyWalker() {}
 
-void EnemyWalker::update(float deltaTime) {}
+void EnemyWalker::update() {
+    sf::Vector2f position = m_shape.getPosition(); // Get the current position of the enemy walker
+    position += m_v_direction * m_f_speed;
+    m_shape.setPosition(position); // Update the position of the enemy walker
+    setPosition(position); // Update the position of the enemy walker in the Actor class
+}
+
+void EnemyWalker::reverseDirection() {
+    m_v_direction.x = -m_v_direction.x; // Reverse the direction of the enemy walker
+}
 
 void EnemyWalker::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(m_shape, states); // Draw the enemy walker shape

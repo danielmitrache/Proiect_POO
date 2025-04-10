@@ -19,6 +19,7 @@ private:
     Background background; // Fundalul jocului
 
     Player player;           // Jucatorul
+    float m_f_playerInvincibilityTime = 0.f; // Timpul de invincibilitate al jucatorului
 
     std::vector<std::unique_ptr<Platform>> platforms; // Platformele
     NextLevelTrigger nextLevelTrigger; // Trigger pentru nivelul urmator
@@ -67,6 +68,15 @@ private:
 
     // Function that checks if the player is in the trigger area of the unlock level trigger
     void _checkUnlockLevelTriggerCollision(Player &player, std::vector<UnlockLevelTrigger> &unlockLevelTriggers);
+
+    // Function that updates hearts based on player health
+    void _updateHearts(int health);
+
+    // Function that checks all enemies collisions
+    void _checkEnemyCollisions(Player &player, std::vector<EnemyWalker> &enemyWalkers);
+
+    // Function that moves all enemy walkers
+    void _moveEnemyWalkers(std::vector<EnemyWalker> &enemyWalkers, std::vector<std::unique_ptr<Platform>> &platforms);
 };
 
 #endif // GAME_H

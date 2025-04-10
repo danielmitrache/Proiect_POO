@@ -12,7 +12,8 @@ private:
 public:
     EnemyWalker(const sf::Vector2f& position, float speed = 100.f, float damage = 10.f);
     ~EnemyWalker() override;
-    void update(float deltaTime);
+    void update();
+    void reverseDirection();
     void draw(sf::RenderTarget& targer, sf::RenderStates states) const override;
 };
 
