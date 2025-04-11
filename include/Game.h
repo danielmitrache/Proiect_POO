@@ -77,6 +77,9 @@ private:
 
     // Function that moves all enemy walkers
     void _moveEnemyWalkers(std::vector<EnemyWalker> &enemyWalkers, std::vector<std::unique_ptr<Platform>> &platforms);
+
+    // Function that resets player position and health
+    void _resetPlayerPositionAndHealth();
 };
 
 #endif // GAME_H

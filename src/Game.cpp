@@ -26,6 +26,8 @@ Game::Game()
         heart.setScale({2.f, 2.f});
         heartSprites.push_back(heart);
     }
+
+    nextLevelTrigger.setNextLevelID(-1); // Set the next level ID to 1
 }
 
 Game::~Game() {}
@@ -193,7 +195,7 @@ void Game::_solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<
                 // Resetam nivelul
                 //nextLevelTrigger.setNextLevelID(nextLevelTrigger.getNextLevelID() - 1);
                 //_loadPlatformerLevel(nextLevelTrigger.getNextLevelPath());
-                player.move(player.getLastSpawn());
+                player.setHealth(-1.f); // Set health to 0 to trigger game over
                 continue;
             }
 
@@ -251,6 +253,7 @@ void Game::_checkNextLevelTriggerCollision(Player &player, NextLevelTrigger &nex
 void Game::_deleteCurrentLevel() {
     platforms.clear();
     unlockLevelTriggers.clear();
+    enemyWalkers.clear();
 }
 
 void Game::_checkUnlockLevelTriggerCollision(Player &player, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {
@@ -299,14 +302,7 @@ void Game::_updateHearts(int health) {
     if (health == 0) {
         // Game over logic here
         std::cout << "Game Over!" << std::endl;
-        player.move(player.getLastSpawn());
-        player.setHealth(100); // Reset health to 100
-        for(int i = 0; i < 3; i ++) {
-            sf::Sprite heart(m_texture_heartTexture);
-            heart.setPosition({5.f + i * 50.f, 5.f});
-            heart.setScale({2.f, 2.f});
-            heartSprites.push_back(heart);
-        }
+        _resetPlayerPositionAndHealth(); // Reset player position and health
     }
 }
 
@@ -322,8 +318,6 @@ void Game::_checkEnemyCollisions(Player &player, std::vector<EnemyWalker> &enemy
                 std::cout << "Player jumped on enemy!" << std::endl;
                 // Player jumps on the enemy
                 player.setVerticalSpeed(-player.getVerticalSpeed() * 1.3f); // Bounce off the enemy
-                enemyWalkers.erase(enemyWalkers.begin() + i); // Remove the enemy
-                i --; // Adjust index after removal
                 continue; // Skip the rest of the loop
             } 
             player.setHealth(player.getHealth() - enemyWalker.getDamage());
@@ -341,5 +335,16 @@ void Game::_moveEnemyWalkers(std::vector<EnemyWalker> &enemyWalkers, std::vector
                 enemyWalker.reverseDirection(); // Inversam directia inamicului
             }
         }
+    }
+}
+
+void Game::_resetPlayerPositionAndHealth() {
+    player.move(player.getLastSpawn());
+    player.setHealth(100); // Reset health to 100
+    for(int i = 0; i < 3; i ++) {
+        sf::Sprite heart(m_texture_heartTexture);
+        heart.setPosition({5.f + i * 50.f, 5.f});
+        heart.setScale({2.f, 2.f});
+        heartSprites.push_back(heart);
     }
 }
