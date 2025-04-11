@@ -12,7 +12,9 @@ Game::Game()
     nextLevelTrigger(),
     background("D:/ProiectPOO/assets/textures/Backgrounds/2.png"),
     m_f_playerInvincibilityTime(0.f),
-    m_coinText(m_font)
+    m_coinText(m_font),
+    m_deathCountText(m_font),
+    m_i_deathCount(0)
 {
     this->window.setFramerateLimit(60);
     background.setScale({WINDOW_WIDTH, WINDOW_HEIGHT});
@@ -22,24 +24,21 @@ Game::Game()
         std::cerr << "Error loading heart texture" << std::endl;
     }
 
-    /// Initialize the heart sprites
-    for(int i = 0; i < 3; i ++) {
-        sf::Sprite heart(m_texture_heartTexture);
-        heart.setPosition({5.f + i * 50.f, 5.f});
-        heart.setScale({2.f, 2.f});
-        heartSprites.push_back(heart);
-    }
-
-
     /// Load the font
     if (!m_font.openFromFile("D:/ProiectPOO/assets/fonts/airstrike.ttf")) {
         std::cerr << "Error loading font" << std::endl;
     }
     m_coinText = sf::Text(m_font);
-    m_coinText.setCharacterSize(30);
+    m_coinText.setCharacterSize(40);
     m_coinText.setFillColor(sf::Color(255, 215, 0));
-    m_coinText.setPosition({50.f, 90.f});
+    m_coinText.setPosition({50.f, 45.f});
     m_coinText.setString("Coins: 0 / 0");
+    m_deathCountText = sf::Text(m_font);
+    m_deathCountText.setCharacterSize(40);
+    m_deathCountText.setFillColor(sf::Color::Red);
+    m_deathCountText.setPosition({50.f, 5.f});
+    m_deathCountText.setString("Deaths: 0");
+
 }
 
 Game::~Game() {}
@@ -80,6 +79,13 @@ void Game::_update() {
     _checkNextLevelTriggerCollision(player, nextLevelTrigger, unlockLevelTriggers);
     _checkEnemyCollisions(player, enemyWalkers);
     _updateHearts(player.getHealth());
+    
+
+    if (player.getHealth() <= 0) {
+        std::cout << "Game Over!" << std::endl;
+        m_i_deathCount ++; // Increment death count
+        _resetPlayerPositionAndHealth(); // Reset player position and health
+    }
 }
 
 void Game::_render() {
@@ -130,6 +136,10 @@ void Game::_drawUI() {
     // Desenam textul cu numarul de monede
     m_coinText.setString("Coins: " + std::to_string(m_i_collectedCoins) + " / " + std::to_string(m_i_coinsNeededToPass));
     window.draw(m_coinText); // Desenam textul cu numarul de monede
+
+    // Desenam textul cu numarul de morti
+    m_deathCountText.setString("Deaths: " + std::to_string(m_i_deathCount));
+    window.draw(m_deathCountText); // Desenam textul cu numarul de morti
 }
 
 void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
@@ -285,43 +295,48 @@ void Game::_checkUnlockLevelTriggerCollision(Player &player, std::vector<UnlockL
 }
 
 void Game::_updateHearts(int health) {
-    if (health > 70) {
+    /// 1 HEART => 0 < H <= 25
+    /// 2 HEARTS => 25 < H <= 50
+    /// 3 HEARTS => 50 < H <= 75
+    /// 4 HEARTS => 75 < H <= 100
+    if (health > 75 && health <= 100) {
+        heartSprites.clear();
+        for(int i = 0; i < 4; i ++) {
+            sf::Sprite heart(m_texture_heartTexture);
+            heart.setPosition({WINDOW_WIDTH - 300.f + i * 50.f, 5.f});
+            heart.setScale({2.f, 2.f});
+            heartSprites.push_back(heart);
+        }
+    }
+    else if (health > 50 && health <= 75) {
         heartSprites.clear();
         for(int i = 0; i < 3; i ++) {
             sf::Sprite heart(m_texture_heartTexture);
-            heart.setPosition({5.f + i * 50.f, 5.f});
+            heart.setPosition({WINDOW_WIDTH - 300.f + i * 50.f, 5.f});
             heart.setScale({2.f, 2.f});
             heartSprites.push_back(heart);
         }
     }
-    else if (health > 30 && health <= 70) {
+    else if (health > 25 && health <= 50) {
         heartSprites.clear();
         for(int i = 0; i < 2; i ++) {
             sf::Sprite heart(m_texture_heartTexture);
-            heart.setPosition({5.f + i * 50.f, 5.f});
+            heart.setPosition({WINDOW_WIDTH - 300.f + i * 50.f, 5.f});
             heart.setScale({2.f, 2.f});
             heartSprites.push_back(heart);
         }
     }
-    else if (health > 0 && health <= 30) {
+    else if (health > 0 && health <= 25) {
         heartSprites.clear();
         for(int i = 0; i < 1; i ++) {
             sf::Sprite heart(m_texture_heartTexture);
-            heart.setPosition({5.f + i * 50.f, 5.f});
+            heart.setPosition({WINDOW_WIDTH - 300.f + i * 50.f, 5.f});
             heart.setScale({2.f, 2.f});
             heartSprites.push_back(heart);
         }
     }
     else if (health <= 0) {
         heartSprites.clear();
-        health = 0; // Set health to 0 to avoid negative health
-    }
-
-
-    if (health == 0) {
-        // Game over logic here
-        std::cout << "Game Over!" << std::endl;
-        _resetPlayerPositionAndHealth(); // Reset player position and health
     }
 }
 
