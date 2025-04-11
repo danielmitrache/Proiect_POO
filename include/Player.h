@@ -17,7 +17,7 @@ private:
     float m_f_verticalSpeed = 0.0f; // Vertical speed of the player
     float m_f_horizontalSpeed = 0.0f; // Horizontal speed of the player
 
-    float m_f_jumpForce = 11.0f; // Jump force
+    float m_f_jumpForce = 13.0f; // Jump force
     bool m_b_canJump = false;
 
     PlayerMode m_playerMode = PlayerMode::Platformer;

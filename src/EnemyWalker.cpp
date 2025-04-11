@@ -11,6 +11,34 @@ EnemyWalker::EnemyWalker(const sf::Vector2f& position, float speed, float damage
     setHeight(50.f); // Set height of the enemy walker
 }
 
+EnemyWalker::EnemyWalker(const sf::Vector2f& position, const sf::Vector2f& size, float speed, float damage)
+    : Actor(position.x, position.y), Killer(damage) {
+    m_f_speed = speed;
+    m_v_direction = sf::Vector2f(1.f, 0.f); // Default direction to the right
+    m_shape.setFillColor(sf::Color(139, 0, 0)); // Set the color of the enemy walker
+    m_shape.setPosition(position); // Set the position of the enemy walker
+    m_shape.setSize(size); // Set size of the enemy walker
+    setWidth(size.x); // Set width of the enemy walker
+    setHeight(size.y); // Set height of the enemy walker
+}
+
+EnemyWalker::EnemyWalker(const sf::Vector2f& position, const sf::Vector2f& size, sf::Texture* texture, float speed, float damage)
+    : Actor(position.x, position.y), Killer(damage) {
+    m_f_speed = speed;
+    m_v_direction = sf::Vector2f(1.f, 0.f); // Default direction to the right
+    m_shape.setFillColor(sf::Color::White); // Set the color of the enemy walker
+    m_shape.setPosition(position); // Set the position of the enemy walker
+    m_shape.setSize(size); // Set size of the enemy walker
+    setWidth(size.x); // Set width of the enemy walker
+    setHeight(size.y); // Set height of the enemy walker
+    
+
+    if ( texture ) {
+        m_texture = texture;
+        m_shape.setTexture(m_texture); // Set the texture of the enemy walker
+    }
+}
+
 EnemyWalker::~EnemyWalker() {}
 
 void EnemyWalker::update() {
@@ -26,4 +54,13 @@ void EnemyWalker::reverseDirection() {
 
 void EnemyWalker::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(m_shape, states); // Draw the enemy walker shape
+}
+
+sf::Vector2f EnemyWalker::getDirection() const {
+    return m_v_direction; // Return the direction of the enemy walker
+}
+
+void EnemyWalker::setTexture(sf::Texture* texture) {
+    m_texture = texture; // Set the texture of the enemy walker
+    m_shape.setTexture(m_texture); // Set the texture of the enemy walker shape
 }

@@ -79,7 +79,7 @@ Platform::Platform(sf::Vector2f position, sf::Vector2f size, bool isSticky, sf::
     setX(position.x);
     setY(position.y);
     m_shape.setSize(size);
-    m_shape.setFillColor(sf::Color::Green);
+    m_shape.setFillColor(sf::Color::White);
     m_shape.setPosition(position);
     m_b_isSticky = isSticky;
     

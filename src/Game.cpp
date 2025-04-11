@@ -24,6 +24,14 @@ Game::Game()
         std::cerr << "Error loading tileset texture!" << std::endl;
     }
 
+    ///Load enemy textures
+    if (!m_texture_enemyTexture_left.loadFromFile("D:/ProiectPOO/assets/textures/enemy_left.png")) {
+        std::cerr << "Error loading enemy texture!" << std::endl;
+    }
+    if (!m_texture_enemyTexture_right.loadFromFile("D:/ProiectPOO/assets/textures/enemy_right.png")) {
+        std::cerr << "Error loading enemy texture!" << std::endl;
+    }
+
     /// Load the heart texture
     if(!m_texture_heartTexture.loadFromFile("D:/ProiectPOO/assets/textures/heart.png")) {
         std::cerr << "Error loading heart texture" << std::endl;
@@ -53,7 +61,7 @@ Game::~Game() {}
 
 // Loop-ul principal al jocului
 void Game::run() {
-    _loadPlatformerLevel("D:/ProiectPOO/assets/level_layouts/level0.txt");
+    _loadPlatformerLevel("D:/ProiectPOO/assets/level_layouts/level0.txt", 64.f);
     player.setHasGravity(true);
     player.setMode(PlayerMode::Platformer);
     while (window.isOpen()) {
@@ -103,7 +111,7 @@ void Game::_render() {
         _centerCameraOnPlayer(0.f, -50.f);
         background.setScale({4 * WINDOW_WIDTH, 4 * WINDOW_HEIGHT}); // Setam dimensiunea fundalului in functie de camera
         float parallaxFactor = 0.5f;
-        background.setPosition(sf::Vector2f(-1000.f, -1 * m_f_levelHeight - 500.f) + sf::Vector2f(player.getX() * parallaxFactor, player.getY() * parallaxFactor)); // Setam pozitia fundalului in functie de camera
+        background.setPosition(sf::Vector2f(-1000.f, -1 * m_f_levelHeight) + sf::Vector2f(player.getX() * parallaxFactor, player.getY() * parallaxFactor)); // Setam pozitia fundalului in functie de camera
     }
 
     if (!m_b_cameraFollowsPlayer) {
@@ -170,6 +178,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
     m_b_cameraFollowsPlayer = doesCameraFollowPlayer;
 
     std::string line;
+    std::vector<int> prevRow, currentRow;
     int lineNumber = 0, columnNumber = 0;
     while(std::getline(file, line)) {
         std::istringstream iss(line);
@@ -178,6 +187,8 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
         while (iss >> token) {
             int tileType = std::stoi(token);
 
+            currentRow.push_back(tileType);
+
             if (tileType == 0){
                 columnNumber ++;
                 continue;
@@ -185,14 +196,13 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
             sf::Vector2f position(columnNumber * tileSize, lineNumber * tileSize);
             sf::Vector2f size(tileSize, tileSize);
             if (tileType == 1) {
-                std::random_device rd;
-                std::mt19937 gen(rd());
-                std::uniform_int_distribution<int> dist(0, 1);
-                int randomTile = dist(gen);
-                if (randomTile == 0) {
-                    platforms.push_back(std::make_unique<Platform>(position, size, &m_texture_tilesetTexture, wallNormalTile));
-                } else {
+                if (lineNumber == 0 || lineNumber > 0 && prevRow[columnNumber] != 1 && prevRow[columnNumber] != 2 && prevRow[columnNumber] != 3) {
                     platforms.push_back(std::make_unique<Platform>(position, size, &m_texture_tilesetTexture, grassNormalTile));
+                    // Daca nu avem platforma deasupra, adaugam platforma cu iarba
+                }
+                else {
+                    platforms.push_back(std::make_unique<Platform>(position, size, &m_texture_tilesetTexture, wallNormalTile));
+                    // Daca avem platforma deasupra, adaugam platforma fara iarba
                 }
             }
             else if (tileType == 2)
@@ -200,7 +210,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
             else if (tileType == 3)
                 platforms.push_back(std::make_unique<Platform>(position, size, true, &m_texture_tilesetTexture, stickyTile));
             else if (tileType == 4) {
-                player.move(position);
+                if (levelPath[levelPath.length() - 5] == '0') player.move(position); // Daca e primul nivel
                 player.setLastSpawn(position);
             }
             else if (tileType == 5) {
@@ -213,10 +223,14 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
                 m_i_coinsNeededToPass ++;
             }
             else if (tileType == 7) {
-                enemyWalkers.push_back(EnemyWalker(position, 3.f, 30.f));
+                enemyWalkers.push_back(EnemyWalker(position, {tileSize, tileSize}, &m_texture_enemyTexture_right, 3.f, 30.f));
             }
             columnNumber ++;
         }
+
+        prevRow = currentRow;
+        currentRow.clear();
+
         lineNumber ++;
     }
 
@@ -296,7 +310,7 @@ void Game::_solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<
 
 void Game::_checkNextLevelTriggerCollision(Player &player, NextLevelTrigger &nextLevelTrigger, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {
     if (Colisions::checkColision(player, nextLevelTrigger) && unlockLevelTriggers.empty()) {
-        _loadPlatformerLevel(nextLevelTrigger.getNextLevelPath());
+        _loadPlatformerLevel(nextLevelTrigger.getNextLevelPath(), 64.f);
     }
 }
 
@@ -389,6 +403,11 @@ void Game::_moveEnemyWalkers(std::vector<EnemyWalker> &enemyWalkers, std::vector
         for (auto& platform : platforms) {
             if (Colisions::checkColision(enemyWalker, *platform)) {
                 enemyWalker.reverseDirection(); // Inversam directia inamicului
+                if (enemyWalker.getDirection().x < 0.f) {
+                    enemyWalker.setTexture(&m_texture_enemyTexture_left); // Set texture to left
+                } else {
+                    enemyWalker.setTexture(&m_texture_enemyTexture_right); // Set texture to right
+                }
             }
         }
     }

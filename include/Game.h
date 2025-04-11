@@ -37,6 +37,7 @@ private:
     sf::Text m_deathCountText; // Textul pentru numarul de morti
 
     sf::Texture m_texture_tilesetTexture; // Textura pentru tileset
+    sf::Texture m_texture_enemyTexture_left, m_texture_enemyTexture_right; // Textura pentru inamic
 public:
     Game();               
     ~Game();               
