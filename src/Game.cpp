@@ -26,8 +26,6 @@ Game::Game()
         heart.setScale({2.f, 2.f});
         heartSprites.push_back(heart);
     }
-
-    nextLevelTrigger.setNextLevelID(-1); // Set the next level ID to 1
 }
 
 Game::~Game() {}
@@ -157,7 +155,8 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
             }
             else if (tileType == 5) {
                 nextLevelTrigger.move(position);
-                nextLevelTrigger.setNextLevelID(nextLevelTrigger.getNextLevelID() + 1);  
+                nextLevelTrigger.setNextLevelID(nextLevelTrigger.getNextLevelID() + 1);
+                std::cout << "Next Level ID: " << nextLevelTrigger.getNextLevelID() << std::endl;
             }
             else if (tileType == 6) {
                 unlockLevelTriggers.push_back(UnlockLevelTrigger(position));
