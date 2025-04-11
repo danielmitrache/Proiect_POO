@@ -11,21 +11,35 @@ Game::Game()
     player({50.f, 200.f}),
     nextLevelTrigger(),
     background("D:/ProiectPOO/assets/textures/Backgrounds/2.png"),
-    m_f_playerInvincibilityTime(0.f)
+    m_f_playerInvincibilityTime(0.f),
+    m_coinText(m_font)
 {
     this->window.setFramerateLimit(60);
     background.setScale({WINDOW_WIDTH, WINDOW_HEIGHT});
 
+    /// Load the heart texture
     if(!m_texture_heartTexture.loadFromFile("D:/ProiectPOO/assets/textures/heart.png")) {
         std::cerr << "Error loading heart texture" << std::endl;
     }
 
+    /// Initialize the heart sprites
     for(int i = 0; i < 3; i ++) {
         sf::Sprite heart(m_texture_heartTexture);
         heart.setPosition({5.f + i * 50.f, 5.f});
         heart.setScale({2.f, 2.f});
         heartSprites.push_back(heart);
     }
+
+
+    /// Load the font
+    if (!m_font.openFromFile("D:/ProiectPOO/assets/fonts/airstrike.ttf")) {
+        std::cerr << "Error loading font" << std::endl;
+    }
+    m_coinText = sf::Text(m_font);
+    m_coinText.setCharacterSize(30);
+    m_coinText.setFillColor(sf::Color(255, 215, 0));
+    m_coinText.setPosition({50.f, 90.f});
+    m_coinText.setString("Coins: 0 / 0");
 }
 
 Game::~Game() {}
@@ -112,6 +126,10 @@ void Game::_drawUI() {
     for (auto& heart : heartSprites) {
         window.draw(heart); // Desenam inimile
     }
+
+    // Desenam textul cu numarul de monede
+    m_coinText.setString("Coins: " + std::to_string(m_i_collectedCoins) + " / " + std::to_string(m_i_coinsNeededToPass));
+    window.draw(m_coinText); // Desenam textul cu numarul de monede
 }
 
 void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
@@ -160,6 +178,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
             }
             else if (tileType == 6) {
                 unlockLevelTriggers.push_back(UnlockLevelTrigger(position));
+                m_i_coinsNeededToPass ++;
             }
             else if (tileType == 7) {
                 enemyWalkers.push_back(EnemyWalker(position, 3.f, 30.f));
@@ -259,6 +278,7 @@ void Game::_checkUnlockLevelTriggerCollision(Player &player, std::vector<UnlockL
     for (size_t i = 0; i < unlockLevelTriggers.size(); ++i) {
         if (Colisions::checkColision(player, unlockLevelTriggers[i])) {
             unlockLevelTriggers.erase(unlockLevelTriggers.begin() + i);
+            m_i_collectedCoins ++;
             i --;
         }
     }

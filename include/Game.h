@@ -20,6 +20,7 @@ private:
 
     Player player;           // Jucatorul
     float m_f_playerInvincibilityTime = 0.f; // Timpul de invincibilitate al jucatorului
+    int m_i_collectedCoins = 0, m_i_coinsNeededToPass = 0; // Numarul de monede colectate
 
     std::vector<std::unique_ptr<Platform>> platforms; // Platformele
     NextLevelTrigger nextLevelTrigger; // Trigger pentru nivelul urmator
@@ -28,6 +29,9 @@ private:
 
     sf::Texture m_texture_heartTexture; // Textura pentru inimile jucatorului
     std::vector<sf::Sprite> heartSprites; // Inimile jucatorului
+
+    sf::Font m_font; // Fontul pentru text
+    sf::Text m_coinText;
 public:
     Game();               
     ~Game();               
