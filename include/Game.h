@@ -2,6 +2,7 @@
 #define GAME_H
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include <random>
 #include "Player.h"
 #include "Platform.h"
 #include "Gravity.h"
@@ -34,6 +35,8 @@ private:
     sf::Font m_font; // Fontul pentru text
     sf::Text m_coinText;
     sf::Text m_deathCountText; // Textul pentru numarul de morti
+
+    sf::Texture m_texture_tilesetTexture; // Textura pentru tileset
 public:
     Game();               
     ~Game();               

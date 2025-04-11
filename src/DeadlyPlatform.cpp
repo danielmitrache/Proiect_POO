@@ -9,6 +9,15 @@ DeadlyPlatform::DeadlyPlatform(const sf::Vector2f& position, const sf::Vector2f&
         }
     }
 
+DeadlyPlatform::DeadlyPlatform(const sf::Vector2f& position, const sf::Vector2f& size, float damage, sf::Texture* texture, const sf::IntRect& textureRect, bool isVisible)
+    : Platform(position, size, texture, textureRect), Killer(damage) 
+    {
+        setColor(sf::Color::Red);
+        if (isVisible == false) {
+            turnInvisible();
+        }
+    }
+
 DeadlyPlatform::~DeadlyPlatform() {}
 
 bool DeadlyPlatform::isDeadly() const {

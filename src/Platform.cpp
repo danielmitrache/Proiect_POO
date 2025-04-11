@@ -66,3 +66,43 @@ bool Platform::isSticky() const {
 void Platform::setSticky(bool isSticky) {
     m_b_isSticky = isSticky;
 }
+
+void Platform::setTexture(sf::Texture* texture, const sf::IntRect& textureRect) {
+    m_texture = texture;
+    m_shape.setTexture(m_texture);
+    m_shape.setTextureRect(textureRect);
+}
+
+Platform::Platform(sf::Vector2f position, sf::Vector2f size, bool isSticky, sf::Texture* texture, const sf::IntRect& textureRect) {
+    setWidth(size.x);
+    setHeight(size.y);
+    setX(position.x);
+    setY(position.y);
+    m_shape.setSize(size);
+    m_shape.setFillColor(sf::Color::Green);
+    m_shape.setPosition(position);
+    m_b_isSticky = isSticky;
+    
+    if(texture) {
+        setTexture(texture, textureRect);
+    }
+}
+
+Platform::Platform(sf::Vector2f position, sf::Vector2f size, sf::Texture* texture, const sf::IntRect& textureRect) {
+    setWidth(size.x);
+    setHeight(size.y);
+    setX(position.x);
+    setY(position.y);
+    m_shape.setSize(size);
+    m_shape.setFillColor(sf::Color::White);
+    m_shape.setPosition(position);
+    
+    if(texture) {
+        m_texture = texture;
+        m_shape.setTexture(texture);
+        m_shape.setTextureRect(textureRect);
+        std::cout << "Texture set successfully!" << std::endl;
+    } else {
+        std::cerr << "Error: Texture is null!" << std::endl;
+    }
+}

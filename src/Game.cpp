@@ -19,6 +19,11 @@ Game::Game()
     this->window.setFramerateLimit(60);
     background.setScale({WINDOW_WIDTH, WINDOW_HEIGHT});
 
+    /// Load tile textures
+    if (!m_texture_tilesetTexture.loadFromFile("D:/ProiectPOO/assets/textures/tileset_new.png")) {
+        std::cerr << "Error loading tileset texture!" << std::endl;
+    }
+
     /// Load the heart texture
     if(!m_texture_heartTexture.loadFromFile("D:/ProiectPOO/assets/textures/heart.png")) {
         std::cerr << "Error loading heart texture" << std::endl;
@@ -28,6 +33,8 @@ Game::Game()
     if (!m_font.openFromFile("D:/ProiectPOO/assets/fonts/airstrike.ttf")) {
         std::cerr << "Error loading font" << std::endl;
     }
+
+    /// INITIALIZE TEXTS
     m_coinText = sf::Text(m_font);
     m_coinText.setCharacterSize(40);
     m_coinText.setFillColor(sf::Color(255, 215, 0));
@@ -38,6 +45,7 @@ Game::Game()
     m_deathCountText.setFillColor(sf::Color::Red);
     m_deathCountText.setPosition({50.f, 5.f});
     m_deathCountText.setString("Deaths: 0");
+    /// END INITIALIZE TEXTS
 
 }
 
@@ -152,6 +160,11 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
         return;
     }
 
+    sf::IntRect grassNormalTile({0, 0}, {512, 512});
+    sf::IntRect wallNormalTile({512, 0}, {512, 512});
+    sf::IntRect deadlyTile({0, 512}, {512, 512});
+    sf::IntRect stickyTile({512, 512}, {512, 512});
+
     bool doesCameraFollowPlayer = true;
     file >> doesCameraFollowPlayer;
     m_b_cameraFollowsPlayer = doesCameraFollowPlayer;
@@ -171,12 +184,21 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
             }
             sf::Vector2f position(columnNumber * tileSize, lineNumber * tileSize);
             sf::Vector2f size(tileSize, tileSize);
-            if (tileType == 1)
-                platforms.push_back(std::make_unique<Platform>(position, size));
+            if (tileType == 1) {
+                std::random_device rd;
+                std::mt19937 gen(rd());
+                std::uniform_int_distribution<int> dist(0, 1);
+                int randomTile = dist(gen);
+                if (randomTile == 0) {
+                    platforms.push_back(std::make_unique<Platform>(position, size, &m_texture_tilesetTexture, wallNormalTile));
+                } else {
+                    platforms.push_back(std::make_unique<Platform>(position, size, &m_texture_tilesetTexture, grassNormalTile));
+                }
+            }
             else if (tileType == 2)
-                platforms.push_back(std::make_unique<DeadlyPlatform>(position, size, 10.f));
+                platforms.push_back(std::make_unique<DeadlyPlatform>(position, size, 10.f, &m_texture_tilesetTexture, deadlyTile));
             else if (tileType == 3)
-                platforms.push_back(std::make_unique<Platform>(position, size, true));
+                platforms.push_back(std::make_unique<Platform>(position, size, true, &m_texture_tilesetTexture, stickyTile));
             else if (tileType == 4) {
                 player.move(position);
                 player.setLastSpawn(position);
