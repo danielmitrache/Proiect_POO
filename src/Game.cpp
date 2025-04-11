@@ -303,7 +303,7 @@ void Game::_updateHearts(int health) {
         heartSprites.clear();
         for(int i = 0; i < 4; i ++) {
             sf::Sprite heart(m_texture_heartTexture);
-            heart.setPosition({WINDOW_WIDTH - 300.f + i * 50.f, 5.f});
+            heart.setPosition({WINDOW_WIDTH - 150.f - i * 50.f, 5.f});
             heart.setScale({2.f, 2.f});
             heartSprites.push_back(heart);
         }
@@ -312,7 +312,7 @@ void Game::_updateHearts(int health) {
         heartSprites.clear();
         for(int i = 0; i < 3; i ++) {
             sf::Sprite heart(m_texture_heartTexture);
-            heart.setPosition({WINDOW_WIDTH - 300.f + i * 50.f, 5.f});
+            heart.setPosition({WINDOW_WIDTH - 150.f - i * 50.f, 5.f});
             heart.setScale({2.f, 2.f});
             heartSprites.push_back(heart);
         }
@@ -321,7 +321,7 @@ void Game::_updateHearts(int health) {
         heartSprites.clear();
         for(int i = 0; i < 2; i ++) {
             sf::Sprite heart(m_texture_heartTexture);
-            heart.setPosition({WINDOW_WIDTH - 300.f + i * 50.f, 5.f});
+            heart.setPosition({WINDOW_WIDTH - 150.f - i * 50.f, 5.f});
             heart.setScale({2.f, 2.f});
             heartSprites.push_back(heart);
         }
@@ -330,7 +330,7 @@ void Game::_updateHearts(int health) {
         heartSprites.clear();
         for(int i = 0; i < 1; i ++) {
             sf::Sprite heart(m_texture_heartTexture);
-            heart.setPosition({WINDOW_WIDTH - 300.f + i * 50.f, 5.f});
+            heart.setPosition({WINDOW_WIDTH - 150.f - i * 50.f, 5.f});
             heart.setScale({2.f, 2.f});
             heartSprites.push_back(heart);
         }
