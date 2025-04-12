@@ -6,7 +6,7 @@ Game::Game()
     : window(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "My game!"),
     player({50.f, 200.f}),
     nextLevelTrigger(),
-    background("D:/ProiectPOO/assets/textures/Backgrounds/2.png"),
+    background("D:/ProiectPOO/assets/textures/Backgrounds/1.png"),
     m_f_playerInvincibilityTime(0.f),
     m_coinText(m_font), m_deathCountText(m_font), m_levelNumberText(m_font),
     m_i_deathCount(0),
@@ -141,7 +141,7 @@ void Game::_drawUI() {
     window.draw(m_deathCountText); // Desenam textul cu numarul de morti
 
     // Desenam textul cu numarul nivelului curent
-    m_levelNumberText.setString("Level: 1");
+    m_levelNumberText.setString("Chapter: " + std::to_string(m_i_currentChapter));
     window.draw(m_levelNumberText); // Desenam textul cu numarul nivelului curent
 }
 
@@ -163,6 +163,9 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
     bool doesCameraFollowPlayer = true;
     file >> doesCameraFollowPlayer;
     m_b_cameraFollowsPlayer = doesCameraFollowPlayer;
+
+    file >> m_i_currentChapter;
+    background.setTexture("D:/ProiectPOO/assets/textures/Backgrounds/" + std::to_string(m_i_currentChapter) + ".png");
 
     std::string line;
     std::vector<int> prevRow, currentRow;
@@ -380,7 +383,8 @@ void Game::_checkEnemyCollisions(Player &player, std::vector<EnemyWalker> &enemy
             }
             if (player.getVerticalSpeed() > 0.f) {
                 // Player jumps on the enemy
-                player.setVerticalSpeed(std::max(-player.getVerticalSpeed() * 1.3f, -30.f)); // Bounce off the enemy
+                player.setVerticalSpeed(std::max(-player.getVerticalSpeed() * 1.3f, -25.f)); // Bounce off the enemy
+                enemyWalker.setTakeDamageTimer(); // Set the take damage timer to 0.2 seconds
                 continue; // Skip the rest of the loop
             } 
             player.setHealth(player.getHealth() - enemyWalker.getDamage());
@@ -392,7 +396,7 @@ void Game::_checkEnemyCollisions(Player &player, std::vector<EnemyWalker> &enemy
 void Game::_moveEnemyWalkers(std::vector<EnemyWalker> &enemyWalkers, std::vector<std::unique_ptr<Platform>> &platforms) {
     for (auto& enemyWalker : enemyWalkers) {
         enemyWalker.update();
-
+        enemyWalker.updateTakeDamageTimer(1.f / 60.f); // Update the take damage timer
         // Check if the enemy walker has a platform to walk on
         bool hasPlatformBelow = false;
         sf::Vector2f edgePosition = enemyWalker.getPosition();

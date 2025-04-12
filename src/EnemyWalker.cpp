@@ -84,3 +84,24 @@ void EnemyWalker::setTexture(sf::Texture* texture, const sf::IntRect& rect) {
         m_shape.setTextureRect(rect); // Set the texture rectangle of the enemy walker shape
     }
 }
+
+void EnemyWalker::setTextureRect(const sf::IntRect& rect) {
+    m_shape.setTextureRect(rect); // Set the texture rectangle of the enemy walker shape
+}
+void EnemyWalker::setColor(const sf::Color& color) {
+    m_shape.setFillColor(color); // Set the color of the enemy walker shape
+}
+
+void EnemyWalker::updateTakeDamageTimer(float deltaTime) {
+    if (m_f_takeDamageTimer > 0.f) {
+        m_f_takeDamageTimer -= deltaTime; // Decrease the take damage timer
+        if (m_f_takeDamageTimer <= 0.f) {
+            m_shape.setFillColor(sf::Color::White); // Reset the color of the enemy walker shape
+        }
+    }
+}
+
+void EnemyWalker::setTakeDamageTimer(float duration) {
+    m_f_takeDamageTimer = duration; // Set the take damage timer to 0.5 seconds
+    m_shape.setFillColor(ColorHelpers::blendColors(sf::Color::White, sf::Color::Red, 0.3f)); // Set the color of the enemy walker shape to red
+}

@@ -22,6 +22,8 @@
 
 class Game {
 private:
+    int m_i_currentChapter;
+
     bool m_b_cameraFollowsPlayer;
     float m_f_levelWidth, m_f_levelHeight; // Dimensiunile nivelului curent
     sf::RenderWindow window; // Fereastra jocului
