@@ -12,6 +12,7 @@
 #include "UnlockLevelTrigger.h"
 #include "EnemyWalker.h"
 #include "TexturesManager.h"
+#include "AnimationManager.h"
 
 class Game {
 private:
@@ -37,10 +38,6 @@ private:
     sf::Text m_deathCountText; // Textul pentru numarul de morti
 
     TexturesManager m_texturesManager; // Managerul de texturi
-    std::vector<sf::IntRect> m_starAnimationRects = {sf::IntRect({0, 0}, {32, 32}), sf::IntRect({32, 0}, {32, 32}), sf::IntRect({64, 0}, {32, 32}), sf::IntRect({96, 0}, {32, 32})};
-    std::vector<sf::IntRect> m_coinAnimationRects = {sf::IntRect({0, 36}, {18, 18}), sf::IntRect({18, 36}, {18, 18}), sf::IntRect({36, 36}, {18, 18}), sf::IntRect({54, 36}, {18, 18}), sf::IntRect({72, 36}, {18, 18}), sf::IntRect({90, 36}, {18, 18})};
-    int m_i_starAnimationIndex = 0, m_i_coinAnimationIndex = 0; // Indexul pentru animatia stelei / monedei
-    float m_f_animationTimer = 0.f; // Timpul pentru animatia stelei
 public:
     Game();               
     ~Game();               
@@ -93,6 +90,9 @@ private:
 
     // Function that resets player position and health
     void _resetPlayerPositionAndHealth();
+
+    // Function that updates all animations
+    void _updateAnimations();
 };
 
 #endif // GAME_H
