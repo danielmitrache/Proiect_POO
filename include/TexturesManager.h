@@ -10,6 +10,8 @@ private:
     sf::Texture m_texture_playerTexture; // Texture for the player
     sf::Texture m_texture_nextLevelTriggerTexture; // Texture for the next level trigger
     sf::Texture m_texture_unlockLevelTriggerTexture; // Texture for the unlock level trigger
+    sf::Texture m_texture_enemyWalkerTexture; // Texture for the enemy walker (default)
+
 public:
     TexturesManager();
     ~TexturesManager();

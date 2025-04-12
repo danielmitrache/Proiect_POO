@@ -17,9 +17,22 @@ void RedOverlay::setPosition(sf::Vector2f position) {
 }
 
 void RedOverlay::setAlpha(float alpha) {
-    m_redOverlay.setFillColor(sf::Color(255, 0, 0, alpha)); // Set the alpha value for the overlay
+    m_redOverlay.setFillColor(sf::Color(
+        m_redOverlay.getFillColor().r, // Keep the red component
+        m_redOverlay.getFillColor().g, // Keep the green component
+        m_redOverlay.getFillColor().b, // Keep the blue component
+        static_cast<uint8_t>(alpha) // Set the alpha value
+    )); // Set the alpha value for the overlay
 }
 
 float RedOverlay::getAlpha() const {
     return m_redOverlay.getFillColor().a; // Get the current alpha value of the overlay
+}
+
+void RedOverlay::setColor(sf::Color color) {
+    m_redOverlay.setFillColor(color); // Set the color of the overlay
+}
+
+sf::Color RedOverlay::getColor() const {
+    return m_redOverlay.getFillColor(); // Get the current color of the overlay
 }

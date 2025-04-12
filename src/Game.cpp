@@ -74,10 +74,13 @@ void Game::_update() {
         m_i_deathCount ++; // Increment death count
         _resetPlayerPositionAndHealth(); // Reset player position and health
 
-        m_redOverlay.setAlpha(180); // Set red overlay to fully opaque
+        m_Overlay.setColor(sf::Color(255, 0, 0, 180)); // Set red overlay color to red with full opacity
     }
-    if (m_redOverlay.getAlpha() > 0) {
-        m_redOverlay.setAlpha(m_redOverlay.getAlpha() - 3.f); // Fade out the red overlay
+
+
+    // Fade out the overlay if it is visible
+    if (m_Overlay.getAlpha() > 0) {
+        m_Overlay.setAlpha(m_Overlay.getAlpha() - 3.f); // Fade out the overlay
     }
 }
 
@@ -127,7 +130,7 @@ void Game::_drawUI() {
     }
 
     // Desenam overlay-ul rosu
-    window.draw(m_redOverlay); // Desenam overlay-ul rosu
+    window.draw(m_Overlay); // Desenam overlay-ul 
 
     // Desenam textul cu numarul de monede
     m_coinText.setString("Coins: " + std::to_string(m_i_collectedCoins) + " / " + std::to_string(m_i_coinsNeededToPass));
@@ -206,7 +209,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
                 m_i_coinsNeededToPass ++;
             }
             else if (tileType == 7) {
-                enemyWalkers.push_back(EnemyWalker(position, {tileSize, tileSize}, &m_texturesManager.getEnemyWalkerTextureRight(), 3.f, 30.f));
+                enemyWalkers.push_back(EnemyWalker(position, {tileSize, tileSize}, &m_texturesManager.getEnemyWalkerTextureRight(), sf::IntRect({4, 4}, {32, 32}), 3.f, 30.f));
             }
             columnNumber ++;
         }
@@ -299,6 +302,9 @@ void Game::_solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<
 void Game::_checkNextLevelTriggerCollision(Player &player, NextLevelTrigger &nextLevelTrigger, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {
     if (Colisions::checkColision(player, nextLevelTrigger) && unlockLevelTriggers.empty()) {
         _loadPlatformerLevel(nextLevelTrigger.getNextLevelPath(), 64.f);
+
+        // Yellow overlay for a split second
+        m_Overlay.setColor(sf::Color(255, 255, 0, 120)); // Set yellow overlay color to yellow with full opacity
     }
 }
 

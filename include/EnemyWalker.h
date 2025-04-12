@@ -16,12 +16,14 @@ public:
     EnemyWalker(const sf::Vector2f& position, float speed = 10.f, float damage = 10.f);
     EnemyWalker(const sf::Vector2f& position, const sf::Vector2f& size, float speed = 10.f, float damage = 10.f);
     EnemyWalker(const sf::Vector2f& position, const sf::Vector2f& size, sf::Texture* texture, float speed = 10.f, float damage = 10.f);
+    EnemyWalker(const sf::Vector2f& position, const sf::Vector2f& size, sf::Texture* texture, const sf::IntRect& textureRect, float speed = 10.f, float damage = 10.f);
+
     ~EnemyWalker() override;
     void update();
     void reverseDirection();
     sf::Vector2f getDirection() const;
     void draw(sf::RenderTarget& targer, sf::RenderStates states) const override;
-    void setTexture(sf::Texture* texture);
+    void setTexture(sf::Texture* texture, const sf::IntRect& rect = sf::IntRect({-1, -1} , {-1, -1}));
 };
 
 #endif // ENEMYWALKER_H

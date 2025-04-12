@@ -13,10 +13,10 @@ void TexturesManager::loadTextures() {
     if (!m_texture_heartTexture.loadFromFile("D:/ProiectPOO/assets/textures/heart.png")) {
         std::cerr << "Error loading heart texture" << std::endl;
     }
-    if (!m_texture_enemyWalkerTexture_left.loadFromFile("D:/ProiectPOO/assets/textures/enemy_left.png")) {
+    if (!m_texture_enemyWalkerTexture_left.loadFromFile("D:/ProiectPOO/assets/textures/enemy.png")) {
         std::cerr << "Error loading enemy walker left texture" << std::endl;
     }
-    if (!m_texture_enemyWalkerTexture_right.loadFromFile("D:/ProiectPOO/assets/textures/enemy_right.png")) {
+    if (!m_texture_enemyWalkerTexture_right.loadFromFile("D:/ProiectPOO/assets/textures/enemy.png")) {
         std::cerr << "Error loading enemy walker right texture" << std::endl;
     }
     if (!m_texture_playerTexture.loadFromFile("D:/ProiectPOO/assets/textures/player_heart.png")) {

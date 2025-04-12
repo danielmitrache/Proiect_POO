@@ -39,6 +39,23 @@ EnemyWalker::EnemyWalker(const sf::Vector2f& position, const sf::Vector2f& size,
     }
 }
 
+EnemyWalker::EnemyWalker(const sf::Vector2f& position, const sf::Vector2f& size, sf::Texture* texture, const sf::IntRect& rect, float speed, float damage)
+    : Actor(position.x, position.y), Killer(damage) {
+    m_f_speed = speed;
+    m_v_direction = sf::Vector2f(1.f, 0.f); // Default direction to the right
+    m_shape.setFillColor(sf::Color::White); // Set the color of the enemy walker
+    m_shape.setPosition(position); // Set the position of the enemy walker
+    m_shape.setSize(size); // Set size of the enemy walker
+    setWidth(size.x); // Set width of the enemy walker
+    setHeight(size.y); // Set height of the enemy walker
+
+    if (texture) {
+        m_texture = texture;
+        m_shape.setTexture(m_texture); // Set the texture of the enemy walker
+        m_shape.setTextureRect(rect); // Set the texture rectangle of the enemy walker shape
+    }
+}
+
 EnemyWalker::~EnemyWalker() {}
 
 void EnemyWalker::update() {
@@ -60,7 +77,10 @@ sf::Vector2f EnemyWalker::getDirection() const {
     return m_v_direction; // Return the direction of the enemy walker
 }
 
-void EnemyWalker::setTexture(sf::Texture* texture) {
+void EnemyWalker::setTexture(sf::Texture* texture, const sf::IntRect& rect) {
     m_texture = texture; // Set the texture of the enemy walker
     m_shape.setTexture(m_texture); // Set the texture of the enemy walker shape
+    if (rect != sf::IntRect({-1, -1}, {-1, -1})) {
+        m_shape.setTextureRect(rect); // Set the texture rectangle of the enemy walker shape
+    }
 }

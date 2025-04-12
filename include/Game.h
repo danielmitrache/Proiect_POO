@@ -46,7 +46,7 @@ private:
 
     TexturesManager m_texturesManager; // Managerul de texturi
 
-    RedOverlay m_redOverlay; // Overlay rosu pentru efecte vizuale
+    RedOverlay m_Overlay; // Overlay rosu pentru efecte vizuale
 
     float m_f_backgroundHue = 0.f;
 public:
