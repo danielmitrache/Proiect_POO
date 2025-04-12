@@ -55,10 +55,6 @@ sf::Color Platform::getColor() const {
     return m_shape.getFillColor();
 }
 
-bool Platform::isDeadly() const {
-    return false;
-}
-
 bool Platform::isSticky() const {
     return m_b_isSticky;
 }

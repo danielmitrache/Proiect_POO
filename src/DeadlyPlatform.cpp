@@ -20,10 +20,6 @@ DeadlyPlatform::DeadlyPlatform(const sf::Vector2f& position, const sf::Vector2f&
 
 DeadlyPlatform::~DeadlyPlatform() {}
 
-bool DeadlyPlatform::isDeadly() const {
-    return true;
-}
-
 void DeadlyPlatform::turnInvisible() {
     setColor(sf::Color::Transparent);
 }

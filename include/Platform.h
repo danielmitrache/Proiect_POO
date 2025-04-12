@@ -26,8 +26,6 @@ public:
     void setColor(const sf::Color& color);
     sf::Color getColor() const;
 
-    virtual bool isDeadly() const;
-
     bool isSticky() const;
     void setSticky(bool isSticky);
 

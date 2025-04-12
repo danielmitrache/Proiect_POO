@@ -196,7 +196,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
                 }
             }
             else if (tileType == 2)
-                platforms.push_back(std::make_unique<DeadlyPlatform>(position, size, 10.f, &m_texturesManager.getTilesetTexture(), deadlyTile));
+                platforms.push_back(std::make_unique<DeadlyPlatform>(position, size, 50.f, &m_texturesManager.getTilesetTexture(), deadlyTile));
             else if (tileType == 3)
                 platforms.push_back(std::make_unique<Platform>(position, size, true, &m_texturesManager.getTilesetTexture(), stickyTile));
             else if (tileType == 4) {
@@ -248,12 +248,12 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
 void Game::_solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<Platform>> &platforms) {
     for (auto& platform : platforms) {
         if (Colisions::checkColision(player, *platform)) {
-
-            if (platform -> isDeadly()) {
-                // Resetam nivelul
-                //nextLevelTrigger.setNextLevelID(nextLevelTrigger.getNextLevelID() - 1);
-                //_loadPlatformerLevel(nextLevelTrigger.getNextLevelPath());
-                player.setHealth(-1.f); // Set health to 0 to trigger game over
+            
+            DeadlyPlatform* deadlyPlatform = dynamic_cast<DeadlyPlatform*>(platform.get());
+            if (deadlyPlatform && m_f_playerInvincibilityTime <= 0.f) {
+                player.setHealth(player.getHealth() - deadlyPlatform -> getDamage());
+                m_f_playerInvincibilityTime = 1.f; // Set invincibility time to 1 second
+                m_Overlay.setColor(sf::Color(255, 0, 0, 60)); // Set red overlay color to red with full opacity
                 continue;
             }
 
