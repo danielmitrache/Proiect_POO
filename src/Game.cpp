@@ -386,6 +386,38 @@ void Game::_checkEnemyCollisions(Player &player, std::vector<EnemyWalker> &enemy
 void Game::_moveEnemyWalkers(std::vector<EnemyWalker> &enemyWalkers, std::vector<std::unique_ptr<Platform>> &platforms) {
     for (auto& enemyWalker : enemyWalkers) {
         enemyWalker.update();
+
+        // Check if the enemy walker has a platform to walk on
+        bool hasPlatformBelow = false;
+        sf::Vector2f edgePosition = enemyWalker.getPosition();
+
+        // Determine the edge position based on the direction
+        if (enemyWalker.getDirection().x < 0.f) {
+            // Moving left, check the bottom-left corner
+            edgePosition.x -= 1.f; // Slightly outside the left edge
+        } else {
+            // Moving right, check the bottom-right corner
+            edgePosition.x += enemyWalker.getWidth() + 1.f; // Slightly outside the right edge
+        }
+        edgePosition.y += enemyWalker.getHeight() + 1.f; // Slightly below the bottom edge
+
+        // Check if there is a platform below the edge
+        for (auto& platform : platforms) {
+            if (sf::FloatRect({platform -> getX(), platform ->getY()}, {platform->getWidth(), platform ->getHeight() }).contains(edgePosition)) {
+                hasPlatformBelow = true;
+                break;
+            }
+        }
+
+        if (!hasPlatformBelow) {
+            enemyWalker.reverseDirection();
+            if (enemyWalker.getDirection().x < 0.f) {
+                enemyWalker.setTexture(&m_texturesManager.getEnemyWalkerTextureLeft()); // Setam textura inamicului
+            } else {
+                enemyWalker.setTexture(&m_texturesManager.getEnemyWalkerTextureRight()); // Setam textura inamicului
+            }
+        }
+
         for (auto& platform : platforms) {
             if (Colisions::checkColision(enemyWalker, *platform)) {
                 enemyWalker.reverseDirection(); // Inversam directia inamicului
