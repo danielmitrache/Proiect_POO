@@ -11,7 +11,7 @@ Game::Game()
     player({50.f, 200.f}),
     nextLevelTrigger(),
     background("D:/ProiectPOO/assets/textures/Backgrounds/2.png"),
-    m_f_playerInvincibilityTime(0.f),
+    m_f_playerInvincibilityTime(0.f), m_f_animationTimer(0.f),
     m_coinText(m_font),
     m_deathCountText(m_font),
     m_i_deathCount(0),
@@ -90,6 +90,34 @@ void Game::_update() {
         m_i_deathCount ++; // Increment death count
         _resetPlayerPositionAndHealth(); // Reset player position and health
     }
+
+    /// ANIMATIONS
+    m_f_animationTimer += 1.f / 60.f; // Increment the animation timer
+    if (m_f_animationTimer > 0.1f) {
+        m_f_animationTimer = 0; // Increment the animation timer
+        if (m_i_starAnimationIndex < m_starAnimationRects.size()) {
+            nextLevelTrigger.setTextureRect(m_starAnimationRects[m_i_starAnimationIndex]);
+            m_i_starAnimationIndex ++;
+        }
+        else {
+            nextLevelTrigger.setTextureRect(m_starAnimationRects[0]);
+            m_i_starAnimationIndex = 0;
+        }
+        
+        if (m_i_coinAnimationIndex < m_coinAnimationRects.size()) {
+            for (auto& unlockLevelTrigger : unlockLevelTriggers) {
+                unlockLevelTrigger.setTextureRect(m_coinAnimationRects[m_i_coinAnimationIndex]);
+            }
+            m_i_coinAnimationIndex ++;
+        }
+        else {
+            for (auto& unlockLevelTrigger : unlockLevelTriggers) {
+                unlockLevelTrigger.setTextureRect(m_coinAnimationRects[0]);
+            }
+            m_i_coinAnimationIndex = 0;
+        }
+    }
+    /// END ANIMATIONS
 }
 
 void Game::_render() {

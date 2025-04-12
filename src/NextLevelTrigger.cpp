@@ -47,6 +47,10 @@ void NextLevelTrigger::setTexture(const sf::Texture* texture, const sf::IntRect&
     m_shape.setTexture(texture); // Set the texture for the trigger area
 }
 
+void NextLevelTrigger::setTextureRect(const sf::IntRect& textureRect) {
+    m_shape.setTextureRect(textureRect); // Set the texture rectangle for the trigger area
+}
+
 void NextLevelTrigger::setColor(const sf::Color& color) {
     m_shape.setFillColor(color); // Set the color of the trigger area
 }

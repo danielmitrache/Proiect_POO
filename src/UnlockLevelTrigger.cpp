@@ -37,6 +37,10 @@ void UnlockLevelTrigger::setTexture(const sf::Texture* texture, const sf::IntRec
     }
 }
 
+void UnlockLevelTrigger::setTextureRect(const sf::IntRect& rect) {
+    m_shape.setTextureRect(rect);
+}
+
 void UnlockLevelTrigger::setColor(const sf::Color& color) {
     m_shape.setFillColor(color);
 }   

@@ -16,6 +16,7 @@ public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     void setTexture(const sf::Texture* texture, const sf::IntRect& rect = sf::IntRect({-1, -1}, {-1, -1}));
+    void setTextureRect(const sf::IntRect& rect);
     void setColor(const sf::Color& color);
 };
 

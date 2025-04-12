@@ -30,6 +30,9 @@ public:
     // Set texture for the trigger area
     void setTexture(const sf::Texture* texture, const sf::IntRect& textureRect = sf::IntRect({-1, -1}, {-1, -1}));
 
+    // Set texure rect for the trigger area
+    void setTextureRect(const sf::IntRect& textureRect);
+
     // Set the color of the trigger area
     void setColor(const sf::Color& color);
 };
