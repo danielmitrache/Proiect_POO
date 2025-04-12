@@ -101,7 +101,6 @@ Platform::Platform(sf::Vector2f position, sf::Vector2f size, sf::Texture* textur
         m_texture = texture;
         m_shape.setTexture(texture);
         m_shape.setTextureRect(textureRect);
-        std::cout << "Texture set successfully!" << std::endl;
     } else {
         std::cerr << "Error: Texture is null!" << std::endl;
     }

@@ -1,6 +1,7 @@
 #ifndef ENEMYWALKER_H
 #define ENEMYWALKER_H
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "Killer.h"
 #include "Actor.h"
 

@@ -11,6 +11,7 @@
 #include "Background.h"
 #include "UnlockLevelTrigger.h"
 #include "EnemyWalker.h"
+#include "TexturesManager.h"
 
 class Game {
 private:
@@ -29,15 +30,13 @@ private:
     std::vector<UnlockLevelTrigger> unlockLevelTriggers; // Trigger pentru deblocarea nivelului
     std::vector<EnemyWalker> enemyWalkers; // Inamicii
 
-    sf::Texture m_texture_heartTexture; // Textura pentru inimile jucatorului
     std::vector<sf::Sprite> heartSprites; // Inimile jucatorului
 
     sf::Font m_font; // Fontul pentru text
     sf::Text m_coinText;
     sf::Text m_deathCountText; // Textul pentru numarul de morti
 
-    sf::Texture m_texture_tilesetTexture; // Textura pentru tileset
-    sf::Texture m_texture_enemyTexture_left, m_texture_enemyTexture_right; // Textura pentru inamic
+    TexturesManager m_texturesManager; // Managerul de texturi
 public:
     Game();               
     ~Game();               

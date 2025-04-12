@@ -14,28 +14,11 @@ Game::Game()
     m_f_playerInvincibilityTime(0.f),
     m_coinText(m_font),
     m_deathCountText(m_font),
-    m_i_deathCount(0)
+    m_i_deathCount(0),
+    m_texturesManager()
 {
     this->window.setFramerateLimit(60);
     background.setScale({WINDOW_WIDTH, WINDOW_HEIGHT});
-
-    /// Load tile textures
-    if (!m_texture_tilesetTexture.loadFromFile("D:/ProiectPOO/assets/textures/tileset_new.png")) {
-        std::cerr << "Error loading tileset texture!" << std::endl;
-    }
-
-    ///Load enemy textures
-    if (!m_texture_enemyTexture_left.loadFromFile("D:/ProiectPOO/assets/textures/enemy_left.png")) {
-        std::cerr << "Error loading enemy texture!" << std::endl;
-    }
-    if (!m_texture_enemyTexture_right.loadFromFile("D:/ProiectPOO/assets/textures/enemy_right.png")) {
-        std::cerr << "Error loading enemy texture!" << std::endl;
-    }
-
-    /// Load the heart texture
-    if(!m_texture_heartTexture.loadFromFile("D:/ProiectPOO/assets/textures/heart.png")) {
-        std::cerr << "Error loading heart texture" << std::endl;
-    }
 
     /// Load the font
     if (!m_font.openFromFile("D:/ProiectPOO/assets/fonts/airstrike.ttf")) {
@@ -197,18 +180,18 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
             sf::Vector2f size(tileSize, tileSize);
             if (tileType == 1) {
                 if (lineNumber == 0 || lineNumber > 0 && prevRow[columnNumber] != 1 && prevRow[columnNumber] != 2 && prevRow[columnNumber] != 3) {
-                    platforms.push_back(std::make_unique<Platform>(position, size, &m_texture_tilesetTexture, grassNormalTile));
+                    platforms.push_back(std::make_unique<Platform>(position, size, &m_texturesManager.getTilesetTexture(), grassNormalTile));
                     // Daca nu avem platforma deasupra, adaugam platforma cu iarba
                 }
                 else {
-                    platforms.push_back(std::make_unique<Platform>(position, size, &m_texture_tilesetTexture, wallNormalTile));
+                    platforms.push_back(std::make_unique<Platform>(position, size, &m_texturesManager.getTilesetTexture(), wallNormalTile));
                     // Daca avem platforma deasupra, adaugam platforma fara iarba
                 }
             }
             else if (tileType == 2)
-                platforms.push_back(std::make_unique<DeadlyPlatform>(position, size, 10.f, &m_texture_tilesetTexture, deadlyTile));
+                platforms.push_back(std::make_unique<DeadlyPlatform>(position, size, 10.f, &m_texturesManager.getTilesetTexture(), deadlyTile));
             else if (tileType == 3)
-                platforms.push_back(std::make_unique<Platform>(position, size, true, &m_texture_tilesetTexture, stickyTile));
+                platforms.push_back(std::make_unique<Platform>(position, size, true, &m_texturesManager.getTilesetTexture(), stickyTile));
             else if (tileType == 4) {
                 if (levelPath[levelPath.length() - 5] == '0') player.move(position); // Daca e primul nivel
                 player.setLastSpawn(position);
@@ -216,14 +199,13 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
             else if (tileType == 5) {
                 nextLevelTrigger.move(position);
                 nextLevelTrigger.setNextLevelID(nextLevelTrigger.getNextLevelID() + 1);
-                std::cout << "Next Level ID: " << nextLevelTrigger.getNextLevelID() << std::endl;
             }
             else if (tileType == 6) {
                 unlockLevelTriggers.push_back(UnlockLevelTrigger(position));
                 m_i_coinsNeededToPass ++;
             }
             else if (tileType == 7) {
-                enemyWalkers.push_back(EnemyWalker(position, {tileSize, tileSize}, &m_texture_enemyTexture_right, 3.f, 30.f));
+                enemyWalkers.push_back(EnemyWalker(position, {tileSize, tileSize}, &m_texturesManager.getEnemyWalkerTextureRight(), 3.f, 30.f));
             }
             columnNumber ++;
         }
@@ -338,7 +320,7 @@ void Game::_updateHearts(int health) {
     if (health > 75 && health <= 100) {
         heartSprites.clear();
         for(int i = 0; i < 4; i ++) {
-            sf::Sprite heart(m_texture_heartTexture);
+            sf::Sprite heart(m_texturesManager.getHeartTexture());
             heart.setPosition({WINDOW_WIDTH - 150.f - i * 50.f, 5.f});
             heart.setScale({2.f, 2.f});
             heartSprites.push_back(heart);
@@ -347,7 +329,7 @@ void Game::_updateHearts(int health) {
     else if (health > 50 && health <= 75) {
         heartSprites.clear();
         for(int i = 0; i < 3; i ++) {
-            sf::Sprite heart(m_texture_heartTexture);
+            sf::Sprite heart(m_texturesManager.getHeartTexture());
             heart.setPosition({WINDOW_WIDTH - 150.f - i * 50.f, 5.f});
             heart.setScale({2.f, 2.f});
             heartSprites.push_back(heart);
@@ -356,7 +338,7 @@ void Game::_updateHearts(int health) {
     else if (health > 25 && health <= 50) {
         heartSprites.clear();
         for(int i = 0; i < 2; i ++) {
-            sf::Sprite heart(m_texture_heartTexture);
+            sf::Sprite heart(m_texturesManager.getHeartTexture());
             heart.setPosition({WINDOW_WIDTH - 150.f - i * 50.f, 5.f});
             heart.setScale({2.f, 2.f});
             heartSprites.push_back(heart);
@@ -365,7 +347,7 @@ void Game::_updateHearts(int health) {
     else if (health > 0 && health <= 25) {
         heartSprites.clear();
         for(int i = 0; i < 1; i ++) {
-            sf::Sprite heart(m_texture_heartTexture);
+            sf::Sprite heart(m_texturesManager.getHeartTexture());
             heart.setPosition({WINDOW_WIDTH - 150.f - i * 50.f, 5.f});
             heart.setScale({2.f, 2.f});
             heartSprites.push_back(heart);
@@ -404,9 +386,9 @@ void Game::_moveEnemyWalkers(std::vector<EnemyWalker> &enemyWalkers, std::vector
             if (Colisions::checkColision(enemyWalker, *platform)) {
                 enemyWalker.reverseDirection(); // Inversam directia inamicului
                 if (enemyWalker.getDirection().x < 0.f) {
-                    enemyWalker.setTexture(&m_texture_enemyTexture_left); // Set texture to left
+                    enemyWalker.setTexture(&m_texturesManager.getEnemyWalkerTextureLeft()); // Setam textura inamicului
                 } else {
-                    enemyWalker.setTexture(&m_texture_enemyTexture_right); // Set texture to right
+                    enemyWalker.setTexture(&m_texturesManager.getEnemyWalkerTextureRight()); // Setam textura inamicului
                 }
             }
         }
@@ -417,7 +399,7 @@ void Game::_resetPlayerPositionAndHealth() {
     player.move(player.getLastSpawn());
     player.setHealth(100); // Reset health to 100
     for(int i = 0; i < 3; i ++) {
-        sf::Sprite heart(m_texture_heartTexture);
+        sf::Sprite heart(m_texturesManager.getHeartTexture());
         heart.setPosition({5.f + i * 50.f, 5.f});
         heart.setScale({2.f, 2.f});
         heartSprites.push_back(heart);
