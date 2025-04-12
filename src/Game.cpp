@@ -1,8 +1,4 @@
 #include "../include/Game.h"
-#include "../include/Colisions.h"
-#include <iostream>
-#include <fstream>
-#include <algorithm>
 
 const unsigned int WINDOW_WIDTH = 1400u;
 const unsigned int WINDOW_HEIGHT = 800u;
@@ -92,6 +88,11 @@ void Game::_update() {
         std::cout << "Game Over!" << std::endl;
         m_i_deathCount ++; // Increment death count
         _resetPlayerPositionAndHealth(); // Reset player position and health
+
+        m_redOverlay.setAlpha(180); // Set red overlay to fully opaque
+    }
+    if (m_redOverlay.getAlpha() > 0) {
+        m_redOverlay.setAlpha(m_redOverlay.getAlpha() - 3.f); // Fade out the red overlay
     }
 }
 
@@ -139,6 +140,9 @@ void Game::_drawUI() {
     for (auto& heart : heartSprites) {
         window.draw(heart); // Desenam inimile
     }
+
+    // Desenam overlay-ul rosu
+    window.draw(m_redOverlay); // Desenam overlay-ul rosu
 
     // Desenam textul cu numarul de monede
     m_coinText.setString("Coins: " + std::to_string(m_i_collectedCoins) + " / " + std::to_string(m_i_coinsNeededToPass));

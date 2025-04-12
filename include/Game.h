@@ -1,10 +1,14 @@
 #ifndef GAME_H
 #define GAME_H
 #include <vector>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
 #include <SFML/Graphics.hpp>
 #include <random>
 #include "Player.h"
 #include "Platform.h"
+#include "Colisions.h"
 #include "Gravity.h"
 #include "DeadlyPlatform.h"
 #include "NextLevelTrigger.h"
@@ -13,6 +17,7 @@
 #include "EnemyWalker.h"
 #include "TexturesManager.h"
 #include "AnimationManager.h"
+#include "RedOverlay.h"
 
 class Game {
 private:
@@ -38,6 +43,8 @@ private:
     sf::Text m_deathCountText; // Textul pentru numarul de morti
 
     TexturesManager m_texturesManager; // Managerul de texturi
+
+    RedOverlay m_redOverlay; // Overlay rosu pentru efecte vizuale
 public:
     Game();               
     ~Game();               
