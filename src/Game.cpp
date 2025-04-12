@@ -91,7 +91,7 @@ void Game::_render() {
         _centerCameraOnPlayer(0.f, -50.f);
         background.setScale({4 * WINDOW_WIDTH, 4 * WINDOW_HEIGHT}); // Setam dimensiunea fundalului in functie de camera
         float parallaxFactor = 0.5f;
-        background.setPosition(sf::Vector2f(-1000.f, -1 * m_f_levelHeight) + sf::Vector2f(player.getX() * parallaxFactor, player.getY() * parallaxFactor)); // Setam pozitia fundalului in functie de camera
+        background.setPosition(sf::Vector2f(-1000.f, -1 * m_f_levelHeight + 200.f) + sf::Vector2f(player.getX() * parallaxFactor, player.getY() * parallaxFactor)); // Setam pozitia fundalului in functie de camera
     }
 
     if (!m_b_cameraFollowsPlayer) {
