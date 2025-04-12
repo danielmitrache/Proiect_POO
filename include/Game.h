@@ -37,6 +37,8 @@ private:
     sf::Text m_deathCountText; // Textul pentru numarul de morti
 
     TexturesManager m_texturesManager; // Managerul de texturi
+    std::vector<sf::IntRect> m_starAnimationRects = {sf::IntRect({0, 0}, {32, 32}), sf::IntRect({32, 0}, {32, 32}), sf::IntRect({64, 0}, {32, 32}), sf::IntRect({96, 0}, {32, 32})};
+    int m_i_starAnimationIndex = 0; // Indexul pentru animatia stelei
 public:
     Game();               
     ~Game();               

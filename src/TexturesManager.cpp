@@ -25,6 +25,9 @@ void TexturesManager::loadTextures() {
     if (!m_texture_nextLevelTriggerTexture.loadFromFile("D:/ProiectPOO/assets/textures/star.png")) {
         std::cerr << "Error loading next level trigger texture" << std::endl;
     }
+    if (!m_texture_unlockLevelTriggerTexture.loadFromFile("D:/ProiectPOO/assets/textures/coins.png")) {
+        std::cerr << "Error loading unlock level trigger texture" << std::endl;
+    }
 }
 
 void TexturesManager::setTilesetTexture(const std::string& path) {
@@ -60,5 +63,11 @@ void TexturesManager::setPlayerTexture(const std::string& path) {
 void TexturesManager::setNextLevelTriggerTexture(const std::string& path) {
     if (!m_texture_nextLevelTriggerTexture.loadFromFile(path)) {
         std::cerr << "Error loading next level trigger texture from: " << path << std::endl;
+    }
+}
+
+void TexturesManager::setUnlockLevelTriggerTexture(const std::string& path) {
+    if (!m_texture_unlockLevelTriggerTexture.loadFromFile(path)) {
+        std::cerr << "Error loading unlock level trigger texture from: " << path << std::endl;
     }
 }

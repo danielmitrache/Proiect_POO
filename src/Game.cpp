@@ -206,7 +206,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
                 nextLevelTrigger.setNextLevelID(nextLevelTrigger.getNextLevelID() + 1);
             }
             else if (tileType == 6) {
-                unlockLevelTriggers.push_back(UnlockLevelTrigger(position));
+                unlockLevelTriggers.push_back(UnlockLevelTrigger(position + sf::Vector2f(16.f, 16.f), {32.f, 32.f}));
                 m_i_coinsNeededToPass ++;
             }
             else if (tileType == 7) {
@@ -233,6 +233,11 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
 
     m_f_levelHeight = lineNumber * tileSize;
     m_f_levelWidth = columnNumber * tileSize;
+
+    for (auto& unlockLevelTrigger : unlockLevelTriggers) {
+        unlockLevelTrigger.setTexture(&m_texturesManager.getUnlockLevelTriggerTexture(), sf::IntRect({0, 36}, {18, 18}));
+        unlockLevelTrigger.setColor(sf::Color::White); // Set color to white
+    }
 
     file.close();
     std::cout << "Level loaded from: " << levelPath << std::endl;
