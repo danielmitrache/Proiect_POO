@@ -41,6 +41,7 @@ private:
     sf::Font m_font; // Fontul pentru text
     sf::Text m_coinText;
     sf::Text m_deathCountText; // Textul pentru numarul de morti
+    sf::Text m_levelNumberText; // Textul pentru numarul nivelului curent
 
     TexturesManager m_texturesManager; // Managerul de texturi
 
@@ -100,6 +101,9 @@ private:
 
     // Function that updates all animations
     void _updateAnimations();
+
+    // Function that initializez text elements for the UI
+    void _initTextElements();
 };
 
 #endif // GAME_H

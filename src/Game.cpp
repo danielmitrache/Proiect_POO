@@ -8,31 +8,14 @@ Game::Game()
     nextLevelTrigger(),
     background("D:/ProiectPOO/assets/textures/Backgrounds/2.png"),
     m_f_playerInvincibilityTime(0.f),
-    m_coinText(m_font),
-    m_deathCountText(m_font),
+    m_coinText(m_font), m_deathCountText(m_font), m_levelNumberText(m_font),
     m_i_deathCount(0),
     m_texturesManager()
 {
     this->window.setFramerateLimit(60);
     background.setScale({WINDOW_WIDTH, WINDOW_HEIGHT});
 
-    /// Load the font
-    if (!m_font.openFromFile("D:/ProiectPOO/assets/fonts/airstrike.ttf")) {
-        std::cerr << "Error loading font" << std::endl;
-    }
-
-    /// INITIALIZE TEXTS
-    m_coinText = sf::Text(m_font);
-    m_coinText.setCharacterSize(40);
-    m_coinText.setFillColor(sf::Color(255, 215, 0));
-    m_coinText.setPosition({50.f, 45.f});
-    m_coinText.setString("Coins: 0 / 0");
-    m_deathCountText = sf::Text(m_font);
-    m_deathCountText.setCharacterSize(40);
-    m_deathCountText.setFillColor(sf::Color::Red);
-    m_deathCountText.setPosition({50.f, 5.f});
-    m_deathCountText.setString("Deaths: 0");
-    /// END INITIALIZE TEXTS
+    _initTextElements(); // Initialize text elements
 
     player.setTexture(&m_texturesManager.getPlayerTexture());
     player.setColor(sf::Color::Blue);
@@ -151,6 +134,10 @@ void Game::_drawUI() {
     // Desenam textul cu numarul de morti
     m_deathCountText.setString("Deaths: " + std::to_string(m_i_deathCount));
     window.draw(m_deathCountText); // Desenam textul cu numarul de morti
+
+    // Desenam textul cu numarul nivelului curent
+    m_levelNumberText.setString("Level: 1");
+    window.draw(m_levelNumberText); // Desenam textul cu numarul nivelului curent
 }
 
 void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
@@ -437,3 +424,28 @@ void Game::_updateAnimations() {
         AnimationManager::nextCoinAnimationFrame(); // Update the animation frame for the coin
     }
 }
+
+void Game::_initTextElements() {
+    /// Load the font
+    if (!m_font.openFromFile("D:/ProiectPOO/assets/fonts/airstrike.ttf")) {
+        std::cerr << "Error loading font" << std::endl;
+    }
+
+    /// INITIALIZE TEXTS
+    m_coinText = sf::Text(m_font);
+    m_coinText.setCharacterSize(40);
+    m_coinText.setFillColor(sf::Color(200, 200, 200));
+    m_coinText.setPosition({50.f, 45.f});
+    m_coinText.setString("Coins: 0 / 0");
+    m_deathCountText = sf::Text(m_font);
+    m_deathCountText.setCharacterSize(40);
+    m_deathCountText.setFillColor(sf::Color::Red);
+    m_deathCountText.setPosition({50.f, 5.f});
+    m_deathCountText.setString("Deaths: 0");
+    m_levelNumberText = sf::Text(m_font);
+    m_levelNumberText.setCharacterSize(40);
+    m_levelNumberText.setFillColor(sf::Color::Black);
+    m_levelNumberText.setPosition({50.f, 85.f});
+    /// END INITIALIZE TEXTS
+}
+
