@@ -46,3 +46,11 @@ void Background::setPositionToView(const sf::View& view) {
     m_sprite.setPosition(topLeft);
 }
 
+void Background::setColor(const sf::Color& color) {
+    m_sprite.setColor(color);
+}
+
+sf::Color Background::getColor() const {
+    return m_sprite.getColor();
+}
+

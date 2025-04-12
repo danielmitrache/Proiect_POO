@@ -66,6 +66,8 @@ void Game::_update() {
     /// ANIMATIONS
     _updateAnimations();
     
+    m_f_backgroundHue ++;
+    background.setColor(ColorHelpers::blendColors(sf::Color::White, ColorHelpers::hsvToRgb(fmod(m_f_backgroundHue, 360.f), 0.5f, 0.5f), 0.5f)); // Setam culoarea fundalului in functie de unghiul de rotatie
 
     if (player.getHealth() <= 0) {
         std::cout << "Game Over!" << std::endl;
@@ -371,13 +373,11 @@ void Game::_checkEnemyCollisions(Player &player, std::vector<EnemyWalker> &enemy
                 continue;
             }
             if (player.getVerticalSpeed() > 0.f) {
-                std::cout << "Player jumped on enemy!" << std::endl;
                 // Player jumps on the enemy
-                player.setVerticalSpeed(-player.getVerticalSpeed() * 1.3f); // Bounce off the enemy
+                player.setVerticalSpeed(std::max(-player.getVerticalSpeed() * 1.3f, -30.f)); // Bounce off the enemy
                 continue; // Skip the rest of the loop
             } 
             player.setHealth(player.getHealth() - enemyWalker.getDamage());
-            std::cout << "Player hit by enemy! Health: " << player.getHealth() << std::endl;
             m_f_playerInvincibilityTime = 1.f; // Set invincibility time to 1 second
         }
     }
@@ -427,7 +427,7 @@ void Game::_updateAnimations() {
 
 void Game::_initTextElements() {
     /// Load the font
-    if (!m_font.openFromFile("D:/ProiectPOO/assets/fonts/airstrike.ttf")) {
+    if (!m_font.openFromFile("D:/ProiectPOO/assets/fonts/airstrikechrome.ttf")) {
         std::cerr << "Error loading font" << std::endl;
     }
 

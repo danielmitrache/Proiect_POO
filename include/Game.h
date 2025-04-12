@@ -18,6 +18,7 @@
 #include "TexturesManager.h"
 #include "AnimationManager.h"
 #include "RedOverlay.h"
+#include "ColorHelpers.h"
 
 class Game {
 private:
@@ -46,6 +47,8 @@ private:
     TexturesManager m_texturesManager; // Managerul de texturi
 
     RedOverlay m_redOverlay; // Overlay rosu pentru efecte vizuale
+
+    float m_f_backgroundHue = 0.f;
 public:
     Game();               
     ~Game();               

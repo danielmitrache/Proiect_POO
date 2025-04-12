@@ -21,6 +21,10 @@ public:
 
     void setPositionToView(const sf::View& view);
 
+    void setColor(const sf::Color& color);
+
+    sf::Color getColor() const;
+
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 
