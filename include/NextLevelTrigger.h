@@ -6,7 +6,7 @@
 class NextLevelTrigger : public Triggers, public sf::Drawable {
 private:
     int m_i_nextLevelID = 0; // Next level ID
-    sf::CircleShape m_shape; // Shape for the trigger area
+    sf::RectangleShape m_shape; // Shape for the trigger area
 public:
     NextLevelTrigger(); // Default constructor
     NextLevelTrigger(sf::Vector2f position, int nextLevelID); // Constructor with position and level id
@@ -26,6 +26,12 @@ public:
 
     // Build the next level path
     std::string getNextLevelPath(std::string BASE_PATH = "D:/ProiectPOO/assets/level_layouts/") const;
+
+    // Set texture for the trigger area
+    void setTexture(const sf::Texture* texture, const sf::IntRect& textureRect = sf::IntRect({-1, -1}, {-1, -1}));
+
+    // Set the color of the trigger area
+    void setColor(const sf::Color& color);
 };
 
 #endif // NEXTLEVELTRIGGER_H

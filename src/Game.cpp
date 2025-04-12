@@ -38,6 +38,11 @@ Game::Game()
     m_deathCountText.setString("Deaths: 0");
     /// END INITIALIZE TEXTS
 
+    player.setTexture(&m_texturesManager.getPlayerTexture());
+    player.setColor(sf::Color::Blue);
+
+    nextLevelTrigger.setTexture(&m_texturesManager.getNextLevelTriggerTexture(), sf::IntRect({0, 0}, {32, 32}));
+    nextLevelTrigger.setColor(sf::Color::White); 
 }
 
 Game::~Game() {}

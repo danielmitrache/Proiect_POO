@@ -25,9 +25,15 @@ private:
     sf::Vector2f m_v2f_lastSpawn{0.f, 0.f}; // Last spawn position
 
     float m_f_health = 100.f; // Health of the player
+
+    /////////////////////////////
+
+    // Texture for the player
+    sf::Texture* m_texture;
 public:
     Player();
     Player(sf::Vector2f position);
+    Player(sf::Vector2f position, sf::Texture* texture);
     ~Player();
 
     // Draw the payer
@@ -59,6 +65,10 @@ public:
     /// PLAYER HEALTH ///
     void setHealth(float health);
     float getHealth() const;
+
+    /// PLAYER TEXTURE ///
+    void setTexture(sf::Texture* texture);
+    void setColor(sf::Color color);
 private:
     /// JUMPING ///
     // If it can jump, apply the jump force

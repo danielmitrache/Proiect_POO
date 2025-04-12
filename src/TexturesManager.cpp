@@ -19,6 +19,12 @@ void TexturesManager::loadTextures() {
     if (!m_texture_enemyWalkerTexture_right.loadFromFile("D:/ProiectPOO/assets/textures/enemy_right.png")) {
         std::cerr << "Error loading enemy walker right texture" << std::endl;
     }
+    if (!m_texture_playerTexture.loadFromFile("D:/ProiectPOO/assets/textures/player_heart.png")) {
+        std::cerr << "Error loading player texture" << std::endl;
+    }
+    if (!m_texture_nextLevelTriggerTexture.loadFromFile("D:/ProiectPOO/assets/textures/star.png")) {
+        std::cerr << "Error loading next level trigger texture" << std::endl;
+    }
 }
 
 void TexturesManager::setTilesetTexture(const std::string& path) {
@@ -42,5 +48,17 @@ void TexturesManager::setEnemyWalkerTextureLeft(const std::string& path) {
 void TexturesManager::setEnemyWalkerTextureRight(const std::string& path) {
     if (!m_texture_enemyWalkerTexture_right.loadFromFile(path)) {
         std::cerr << "Error loading enemy walker right texture from: " << path << std::endl;
+    }
+}
+
+void TexturesManager::setPlayerTexture(const std::string& path) {
+    if (!m_texture_playerTexture.loadFromFile(path)) {
+        std::cerr << "Error loading player texture from: " << path << std::endl;
+    }
+}
+
+void TexturesManager::setNextLevelTriggerTexture(const std::string& path) {
+    if (!m_texture_nextLevelTriggerTexture.loadFromFile(path)) {
+        std::cerr << "Error loading next level trigger texture from: " << path << std::endl;
     }
 }

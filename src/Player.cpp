@@ -22,6 +22,21 @@ Player::Player(sf::Vector2f position) {
     m_v2f_lastSpawn = position;
 }
 
+Player::Player(sf::Vector2f position, sf::Texture* texture) {
+    setWidth(50.f);
+    setHeight(50.f);
+    setX(position.x);
+    setY(position.y);
+    m_shape.setSize(sf::Vector2f(50.f, 50.f));
+    m_shape.setFillColor(sf::Color::White);
+    m_shape.setPosition(position);
+    m_v2f_lastSpawn = position;
+    if (texture){
+        m_texture = texture;
+        m_shape.setTexture(m_texture);
+    }
+}
+
 Player::~Player() { }
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -141,4 +156,13 @@ void Player::setHealth(float health) {
 
 float Player::getHealth() const {
     return m_f_health;
+}
+
+void Player::setTexture(sf::Texture* texture) {
+    m_texture = texture;
+    m_shape.setTexture(m_texture);
+}
+
+void Player::setColor(sf::Color color) {
+    m_shape.setFillColor(color);
 }
