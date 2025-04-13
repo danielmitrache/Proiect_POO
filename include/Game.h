@@ -83,7 +83,7 @@ private:
     void _drawUI();
 
     // Platformer level loader
-    void _loadPlatformerLevel(const std::string& levelPath, float tileSize = 64.f);
+    void _loadPlatformerLevel(const std::string& levelPath, bool comingFromMenu = false ,float tileSize = 64.f);
 
     // Function that makes sure the player does not go through walls and platforms
     void _solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<Platform>> &platforms);

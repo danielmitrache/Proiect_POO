@@ -170,7 +170,7 @@ void Game::_drawUI() {
     window.draw(m_levelNumberText); // Desenam textul cu numarul nivelului curent
 }
 
-void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
+void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMenu, float tileSize) {
     // Stergem nivelul curent
     _deleteCurrentLevel();
 
@@ -192,7 +192,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
     int previousChapter = m_i_currentChapter;
     file >> m_i_currentChapter;
     background.setTexture("D:/ProiectPOO/assets/textures/Backgrounds/" + std::to_string(m_i_currentChapter) + ".png");
-    if (previousChapter != m_i_currentChapter) {
+    if (previousChapter != m_i_currentChapter && !comingFromMenu) {
         /// NEW CHAPTER
         std::cout << "New chapter: " << m_i_currentChapter << std::endl;
         m_Overlay.setColor(sf::Color(255, 255, 255, 210)); // Set white overlay color to white with full opacity
@@ -200,6 +200,12 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
         m_i_coinsNeededToPass = 0;
         m_i_deathCount = 0;
         ProgressManager::saveChapterToFile(m_i_currentChapter); // Save the current chapter to the file
+
+        /// Go back to the start menu
+        m_b_isInStartMenu = true;
+        std::vector<int> availableChapters = ProgressManager::loadSavedChaptersFromFile(); // Get available chapters from ProgressManager
+        _loadStartMenu(availableChapters); // Load the start menu
+        return;
     }
     
 
@@ -622,7 +628,7 @@ void Game::_loadChapter(int chapterID) {
     int levelID = _getLevelIDFromChapterID(chapterID);
 
     // We load the level based on the level ID
-    _loadPlatformerLevel("D:/ProiectPOO/assets/level_layouts/level" + std::to_string(levelID) + ".txt", 64.f);
+    _loadPlatformerLevel("D:/ProiectPOO/assets/level_layouts/level" + std::to_string(levelID) + ".txt", true, 64.f);
     nextLevelTrigger.setNextLevelID(levelID + 1); // Set the next level ID to the next level
 }
 
