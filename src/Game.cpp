@@ -8,7 +8,7 @@ Game::Game()
     nextLevelTrigger({-9999.f, -9999.f}, 0),
     background("./assets/textures/Backgrounds/1.png"),
     m_f_playerInvincibilityTime(0.f),
-    m_coinText(m_font), m_deathCountText(m_font), m_levelNumberText(m_font),
+    m_coinText(m_font), m_deathCountText(m_font), m_levelNumberText(m_font), m_wantToExitText(m_font),
     m_i_deathCount(0),
     m_texturesManager(),
     m_soundsManager()
@@ -46,11 +46,39 @@ void Game::run() {
 }
 
 // Proceseaza input-ul utilizatorului
+float escTimer = 0.f;
 void Game::_processEvents() {
+    if (escTimer > 0.f) {
+        escTimer -= 1.f / 60.f;
+    }
     while (const std::optional event = window.pollEvent())
     {
         if (event->is<sf::Event::Closed>())
             window.close();
+
+        if (event->is<sf::Event::KeyPressed>()) {
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
+                if (escTimer <= 0.f) {
+                    escTimer = 2.f;
+                    if (m_b_isInStartMenu) {
+                        m_wantToExitText.setString("Exit the game? Press ESC again to confirm.");
+                    }
+                    else {
+                        m_wantToExitText.setString("Exit to main menu? Press ESC again to confirm.");
+                    }
+                }
+                else {
+                    if (!m_b_isInStartMenu) {
+                        std::vector<int> availableChapters = ProgressManager::loadSavedChaptersFromFile(); // Get available chapters from ProgressManager
+                        m_b_isInStartMenu = true; // Set the flag to true
+                        _loadStartMenu(availableChapters); // Load the start menu
+                    }
+                    else {
+                        window.close(); // Close the game window
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -143,32 +171,37 @@ void Game::_drawActors() {
 }
 
 void Game::_drawUI() {
+
     if (m_b_isInStartMenu) { // Desenam UI-ul din start menu
         for (auto& text : m_startMenuTexts) {
             window.draw(text); // Desenam textul din start menu
         }
-        return;
+    }
+    else {
+        window.setView(window.getDefaultView()); // Setam camera la pozitia initiala
+        for (auto& heart : heartSprites) {
+            window.draw(heart); // Desenam inimile
+        }
+
+        // Desenam overlay-ul rosu
+        window.draw(m_Overlay); // Desenam overlay-ul 
+
+        // Desenam textul cu numarul de monede
+        m_coinText.setString("Coins: " + std::to_string(m_i_collectedCoins) + " / " + std::to_string(m_i_coinsNeededToPass));
+        window.draw(m_coinText); // Desenam textul cu numarul de monede
+
+        // Desenam textul cu numarul de morti
+        m_deathCountText.setString("Deaths: " + std::to_string(m_i_deathCount));
+        window.draw(m_deathCountText); // Desenam textul cu numarul de morti
+
+        // Desenam textul cu numarul nivelului curent
+        m_levelNumberText.setString("Chapter: " + std::to_string(m_i_currentChapter));
+        window.draw(m_levelNumberText); // Desenam textul cu numarul nivelului curent
     }
 
-    window.setView(window.getDefaultView()); // Setam camera la pozitia initiala
-    for (auto& heart : heartSprites) {
-        window.draw(heart); // Desenam inimile
+    if(escTimer > 0.f) {
+        window.draw(m_wantToExitText); // Desenam textul pentru a iesi din joc
     }
-
-    // Desenam overlay-ul rosu
-    window.draw(m_Overlay); // Desenam overlay-ul 
-
-    // Desenam textul cu numarul de monede
-    m_coinText.setString("Coins: " + std::to_string(m_i_collectedCoins) + " / " + std::to_string(m_i_coinsNeededToPass));
-    window.draw(m_coinText); // Desenam textul cu numarul de monede
-
-    // Desenam textul cu numarul de morti
-    m_deathCountText.setString("Deaths: " + std::to_string(m_i_deathCount));
-    window.draw(m_deathCountText); // Desenam textul cu numarul de morti
-
-    // Desenam textul cu numarul nivelului curent
-    m_levelNumberText.setString("Chapter: " + std::to_string(m_i_currentChapter));
-    window.draw(m_levelNumberText); // Desenam textul cu numarul nivelului curent
 }
 
 void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMenu, float tileSize) {
@@ -622,20 +655,26 @@ void Game::_initTextElements() {
     }
 
     /// INITIALIZE TEXTS
-    m_coinText = sf::Text(m_font);
-    m_coinText.setCharacterSize(40);
+    m_coinText = sf::Text(m_pixelFont);
+    m_coinText.setCharacterSize(30);
     m_coinText.setFillColor(sf::Color(200, 200, 200));
     m_coinText.setPosition({50.f, 45.f});
     m_coinText.setString("Coins: 0 / 0");
-    m_deathCountText = sf::Text(m_font);
-    m_deathCountText.setCharacterSize(40);
+    m_deathCountText = sf::Text(m_pixelFont);
+    m_deathCountText.setCharacterSize(30);
     m_deathCountText.setFillColor(sf::Color::Red);
     m_deathCountText.setPosition({50.f, 5.f});
     m_deathCountText.setString("Deaths: 0");
-    m_levelNumberText = sf::Text(m_font);
-    m_levelNumberText.setCharacterSize(40);
+    m_levelNumberText = sf::Text(m_pixelFont);
+    m_levelNumberText.setCharacterSize(30);
     m_levelNumberText.setFillColor(sf::Color::Black);
     m_levelNumberText.setPosition({50.f, 85.f});
+
+    m_wantToExitText = sf::Text(m_pixelFont);
+    m_wantToExitText.setCharacterSize(20);
+    m_wantToExitText.setFillColor(sf::Color(200, 200, 200));
+    m_wantToExitText.setPosition({WINDOW_WIDTH / 2.f - 300.f, 30.f});
+
     /// END INITIALIZE TEXTS
 }
 

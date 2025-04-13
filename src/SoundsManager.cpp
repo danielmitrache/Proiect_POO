@@ -10,8 +10,8 @@ SoundsManager::SoundsManager() {
     loadBackgroundMusic("chapter1", "./assets/sounds/chapter1.ogg");
     loadBackgroundMusic("chapter2", "./assets/sounds/chapter2.ogg");
 
-    setAllSfxSoundsVolume(20.f); // Set default volume for all sounds
-    setAllBackgroundMusicVolume(20.f); // Set default volume for all background music
+    setAllSfxSoundsVolume(40.f); // Set default volume for all sounds
+    setAllBackgroundMusicVolume(40.f); // Set default volume for all background music
 }
 
 SoundsManager::~SoundsManager() {}

@@ -51,7 +51,8 @@ private:
     sf::Text m_coinText;
     sf::Text m_deathCountText; // Textul pentru numarul de morti
     sf::Text m_levelNumberText; // Textul pentru numarul nivelului curent
-    std::vector<sf::Text> m_startMenuTexts; // Vector de texte pentru UI
+    sf::Text m_wantToExitText; // Textul pentru a iesi din joc
+    std::vector<sf::Text> m_startMenuTexts; // Vector de texte pentru UI-ul din start menu
 
     TexturesManager m_texturesManager; // Managerul de texturi
 
