@@ -28,7 +28,13 @@ Game::~Game() {}
 
 // Loop-ul principal al jocului
 void Game::run() {
-    _loadPlatformerLevel("D:/ProiectPOO/assets/level_layouts/level0.txt", 64.f);
+    ProgressManager::saveChapterToFile(1);
+    std::vector<int> availableChapters = ProgressManager::loadSavedChaptersFromFile(); // Get available chapters from ProgressManager
+    std::cout << "Available chapters: ";
+    for (const auto& chapter : availableChapters) {
+        std::cout << chapter << " ";
+    }
+    _loadStartMenu(); // Load the start menu
     player.setHasGravity(true);
     player.setMode(PlayerMode::Platformer);
     while (window.isOpen()) {
@@ -56,6 +62,10 @@ void Game::_update() {
         m_f_playerInvincibilityTime -= 1.f / 60.f; // Scadem timpul de invincibilitate
     }
 
+    if (m_b_isInStartMenu) { // Daca suntem in start menu
+        _checkStartMenuTriggersCollision(player, nextLevelTriggers); // Verificam coliziunile cu triggerele din start menu
+    }
+
     _moveEnemyWalkers(enemyWalkers, platforms);
     _solvePlatformCollisions(player, platforms);
     _checkUnlockLevelTriggerCollision(player, unlockLevelTriggers);
@@ -65,10 +75,12 @@ void Game::_update() {
 
     /// ANIMATIONS
     _updateAnimations();
-    
-    m_f_backgroundHue ++;
-    background.setColor(ColorHelpers::blendColors(sf::Color::White, ColorHelpers::hsvToRgb(fmod(m_f_backgroundHue, 360.f), 0.5f, 0.5f), 0.5f)); // Setam culoarea fundalului in functie de unghiul de rotatie
-
+   
+    if (!m_b_isInStartMenu) {
+        m_f_backgroundHue ++;
+        background.setColor(ColorHelpers::blendColors(sf::Color::White, ColorHelpers::hsvToRgb(fmod(m_f_backgroundHue, 360.f), 0.5f, 0.5f), 0.5f)); // Setam culoarea fundalului in functie de unghiul de rotatie    
+    }
+ 
     if (player.getHealth() <= 0) {
         std::cout << "Game Over!" << std::endl;
         m_i_deathCount ++; // Increment death count
@@ -113,6 +125,12 @@ void Game::_centerCameraOnPlayer(float offsetX, float offsetY) {
 }
 
 void Game::_drawActors() {
+    if (m_b_isInStartMenu) { // Desenam actorii din start menu
+        for (auto& nextLevelTrigger : nextLevelTriggers) {
+            window.draw(nextLevelTrigger);
+        }
+    }
+
     window.draw(player);
     window.draw(nextLevelTrigger);
     for (auto& platform : platforms)
@@ -124,6 +142,13 @@ void Game::_drawActors() {
 }
 
 void Game::_drawUI() {
+    if (m_b_isInStartMenu) { // Desenam UI-ul din start menu
+        for (auto& text : m_startMenuTexts) {
+            window.draw(text); // Desenam textul din start menu
+        }
+        return;
+    }
+
     window.setView(window.getDefaultView()); // Setam camera la pozitia initiala
     for (auto& heart : heartSprites) {
         window.draw(heart); // Desenam inimile
@@ -164,8 +189,18 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
     file >> doesCameraFollowPlayer;
     m_b_cameraFollowsPlayer = doesCameraFollowPlayer;
 
+    int previousChapter = m_i_currentChapter;
     file >> m_i_currentChapter;
     background.setTexture("D:/ProiectPOO/assets/textures/Backgrounds/" + std::to_string(m_i_currentChapter) + ".png");
+    if (previousChapter != m_i_currentChapter) {
+        /// NEW CHAPTER
+        std::cout << "New chapter: " << m_i_currentChapter << std::endl;
+        m_i_collectedCoins = 0;
+        m_i_coinsNeededToPass = 0;
+        m_i_deathCount = 0;
+        ProgressManager::saveChapterToFile(m_i_currentChapter); // Save the current chapter to the file
+    }
+    
 
     std::string line;
     std::vector<int> prevRow, currentRow;
@@ -200,7 +235,9 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
             else if (tileType == 3)
                 platforms.push_back(std::make_unique<Platform>(position, size, true, &m_texturesManager.getTilesetTexture(), stickyTile));
             else if (tileType == 4) {
-                if (levelPath[levelPath.length() - 5] == '0') player.move(position); // Daca e primul nivel
+                if (levelPath[levelPath.length() - 5] == '0' || previousChapter != m_i_currentChapter) 
+                    player.move(position); // Daca e primul nivel sau capitol nou
+                
                 player.setLastSpawn(position);
             }
             else if (tileType == 5) {
@@ -243,6 +280,70 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
 
     file.close();
     std::cout << "Level loaded from: " << levelPath << std::endl;
+}
+
+void Game::_loadStartMenu() {
+    m_b_isInStartMenu = true;
+    m_b_cameraFollowsPlayer = true;
+    const float tileSize = 64.f;    
+    background.setColor(ColorHelpers::blendColors(sf::Color::White, sf::Color::Black, 0.5f)); // Set background color to black with 50% opacity
+    _deleteCurrentLevel(); // Delete the current level
+
+    std::ifstream file("D:/ProiectPOO/assets/level_layouts/startmenu.txt");
+    if (!file.is_open()) {
+        std::cerr << "Could not open file: startmenu.txt" << std::endl;
+        return;
+    }
+
+    sf::IntRect grassNormalTile({0, 0}, {512, 512});
+
+    int currentChapterTrigger = 0;
+
+    std::string line;
+    int lineNumber = 0, columnNumber = 0;
+    while(std::getline(file, line)) {
+        std::istringstream iss(line);
+        std::string token;
+        columnNumber = 0;
+        while (iss >> token) {
+            int tileType = std::stoi(token);
+
+            if (tileType == 0){
+                columnNumber ++;
+                continue;
+            }
+            sf::Vector2f position(columnNumber * tileSize, lineNumber * tileSize);
+            sf::Vector2f size(tileSize, tileSize);
+            if (tileType == 1) {
+                platforms.push_back(std::make_unique<Platform>(position, size, &m_texturesManager.getTilesetTexture(), grassNormalTile));
+                platforms.back()->setColor(ColorHelpers::blendColors(sf::Color::White, sf::Color::Black, 0.5f)); // Set color to gray
+            }
+            else if (tileType == 4) {
+                player.move(position);
+                player.setLastSpawn(position);
+            }
+            else if (tileType == 5) {
+                currentChapterTrigger ++;
+                nextLevelTriggers.push_back(NextLevelTrigger(position, currentChapterTrigger));
+                nextLevelTriggers.back().setTexture(&m_texturesManager.getNextLevelTriggerTexture(), sf::IntRect({0, 0}, {32, 32}));
+                nextLevelTriggers.back().setColor(sf::Color::White); // Set color to white
+
+                // Write text with chapter number above the trigger
+                sf::Text chapterText(m_font, std::to_string(currentChapterTrigger));
+                chapterText.setCharacterSize(60);
+                chapterText.setFillColor(sf::Color::White); // Set text color to white
+                chapterText.setPosition({position.x + 5.f, position.y - 60.f}); // Set text position above the trigger
+                m_startMenuTexts.push_back(chapterText); // Add the text to the vector
+            }
+            columnNumber ++;
+        }
+        lineNumber ++;
+    }
+    // Add platform that kills the player if it falls into the void
+    platforms.push_back(std::make_unique<DeadlyPlatform>(sf::Vector2f(-9999.f, lineNumber * tileSize + 400.f), sf::Vector2f(99999999.f, 10.f), 999999.f, false));
+    m_f_levelHeight = lineNumber * tileSize;
+    m_f_levelWidth = columnNumber * tileSize;
+    file.close();
 }
 
 void Game::_solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<Platform>> &platforms) {
@@ -491,3 +592,36 @@ void Game::_initTextElements() {
     /// END INITIALIZE TEXTS
 }
 
+void Game::_loadChapter(int chapterID) {
+    // We determine the level ID
+    int levelID = _getLevelIDFromChapterID(chapterID);
+
+    // We load the level based on the level ID
+    _loadPlatformerLevel("D:/ProiectPOO/assets/level_layouts/level" + std::to_string(levelID) + ".txt", 64.f);
+    nextLevelTrigger.setNextLevelID(levelID + 1); // Set the next level ID to the next level
+}
+
+int Game::_getLevelIDFromChapterID(int chapterID) const {
+    // We determine the level ID based on the chapter ID
+    int levelID = -1;
+    switch(chapterID) {
+        case 1:
+            levelID = 0;
+            break;
+        case 2:
+            levelID = 7;
+            break;
+    }
+    return levelID;
+}
+
+void Game::_checkStartMenuTriggersCollision(Player &player, std::vector<NextLevelTrigger> &nextLevelTriggers) {
+    for (size_t i = 0; i < nextLevelTriggers.size(); ++i) {
+        if (Colisions::checkColision(player, nextLevelTriggers[i])) {
+            _loadChapter(nextLevelTriggers[i].getNextLevelID()); // Load the chapter based on the trigger ID
+            m_b_isInStartMenu = false; // Exit the start menu
+            m_Overlay.setColor(sf::Color(255, 255, 255, 210));
+            nextLevelTriggers.clear();
+        }
+    }
+}
