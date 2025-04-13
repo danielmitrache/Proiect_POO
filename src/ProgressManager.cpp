@@ -2,7 +2,7 @@
 
 namespace ProgressManager {
     void saveChapterToFile(int chapterToSave) {
-        std::ifstream in("D:/ProiectPOO/assets/gameinfo/unlockedchapters.txt");
+        std::ifstream in("./assets/gameinfo/unlockedchapters.txt");
         if (!in.is_open()) {
             std::cerr << "Could not save progress to file" << std::endl;
             return;
@@ -19,7 +19,7 @@ namespace ProgressManager {
         if (chapters[0] == 0) chapters.erase(chapters.begin()); // Remove 0 if it exists
         in.close();
         
-        std::ofstream out("D:/ProiectPOO/assets/gameinfo/unlockedchapters.txt");
+        std::ofstream out("./assets/gameinfo/unlockedchapters.txt");
         if (!out.is_open()) {
             std::cerr << "Could not save progress to file" << std::endl;
             return;
@@ -33,7 +33,7 @@ namespace ProgressManager {
     }
 
     std::vector<int> loadSavedChaptersFromFile(){
-        std::ifstream file("D:/ProiectPOO/assets/gameinfo/unlockedchapters.txt");
+        std::ifstream file("./assets/gameinfo/unlockedchapters.txt");
         if (!file.is_open()) {
             std::cerr << "Could not load progress from file" << std::endl;
             return {};

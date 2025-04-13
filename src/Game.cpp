@@ -6,7 +6,7 @@ Game::Game()
     : window(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "My game!"),
     player({50.f, 200.f}),
     nextLevelTrigger({-9999.f, -9999.f}, 0),
-    background("D:/ProiectPOO/assets/textures/Backgrounds/1.png"),
+    background("./assets/textures/Backgrounds/1.png"),
     m_f_playerInvincibilityTime(0.f),
     m_coinText(m_font), m_deathCountText(m_font), m_levelNumberText(m_font),
     m_i_deathCount(0),
@@ -192,7 +192,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
 
     int previousChapter = m_i_currentChapter;
     file >> m_i_currentChapter;
-    background.setTexture("D:/ProiectPOO/assets/textures/Backgrounds/" + std::to_string(m_i_currentChapter) + ".png");
+    background.setTexture("./assets/textures/Backgrounds/" + std::to_string(m_i_currentChapter) + ".png");
     // std::cout << "Previous chapter: " << previousChapter << std::endl;
     // std::cout << "Current chapter: " << m_i_currentChapter << std::endl;
     // std::cout << "Coming from menu: " << comingFromMenu << std::endl;
@@ -300,10 +300,10 @@ void Game::_loadStartMenu(std::vector<int> &availableChapters) {
     m_b_cameraFollowsPlayer = true;
     const float tileSize = 64.f; 
     background.setColor(ColorHelpers::blendColors(sf::Color::White, sf::Color::Black, 0.5f)); // Set background color to black with 50% opacity
-    background.setTexture("D:/ProiectPOO/assets/textures/Backgrounds/startmenu.png"); // Set background texture to start menu texture
+    background.setTexture("./assets/textures/Backgrounds/startmenu.png"); // Set background texture to start menu texture
     _deleteCurrentLevel(); // Delete the current level
 
-    std::ifstream file("D:/ProiectPOO/assets/level_layouts/startmenu.txt");
+    std::ifstream file("./assets/level_layouts/startmenu.txt");
     if (!file.is_open()) {
         std::cerr << "Could not open file: startmenu.txt" << std::endl;
         return;
@@ -613,11 +613,11 @@ void Game::_updateAnimations() {
 
 void Game::_initTextElements() {
     /// Load the font
-    if (!m_font.openFromFile("D:/ProiectPOO/assets/fonts/airstrikechrome.ttf")) {
+    if (!m_font.openFromFile("./assets/fonts/airstrikechrome.ttf")) {
         std::cerr << "Error loading font" << std::endl;
     }
 
-    if (!m_pixelFont.openFromFile("D:/ProiectPOO/assets/fonts/DePixelHalbfett.ttf")) {
+    if (!m_pixelFont.openFromFile("./assets/fonts/DePixelHalbfett.ttf")) {
         std::cerr << "Error loading font" << std::endl;
     }
 
@@ -647,7 +647,7 @@ void Game::_loadChapter(int chapterID) {
     int levelID = _getLevelIDFromChapterID(chapterID);
 
     // We load the level based on the level ID
-    _loadPlatformerLevel("D:/ProiectPOO/assets/level_layouts/level" + std::to_string(levelID) + ".txt", true, 64.f);
+    _loadPlatformerLevel("./assets/level_layouts/level" + std::to_string(levelID) + ".txt", true, 64.f);
     nextLevelTrigger.setNextLevelID(levelID + 1); // Set the next level ID to the next level
 }
 

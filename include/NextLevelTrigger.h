@@ -26,7 +26,7 @@ public:
     void move(const sf::Vector2f);
 
     // Build the next level path
-    std::string getNextLevelPath(std::string BASE_PATH = "D:/ProiectPOO/assets/level_layouts/") const;
+    std::string getNextLevelPath(std::string BASE_PATH = "./assets/level_layouts/") const;
 
     // Set texture for the trigger area
     void setTexture(const sf::Texture* texture, const sf::IntRect& textureRect = sf::IntRect({-1, -1}, {-1, -1}));
