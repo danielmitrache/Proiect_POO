@@ -193,6 +193,9 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
     int previousChapter = m_i_currentChapter;
     file >> m_i_currentChapter;
     background.setTexture("D:/ProiectPOO/assets/textures/Backgrounds/" + std::to_string(m_i_currentChapter) + ".png");
+    std::cout << "Previous chapter: " << previousChapter << std::endl;
+    std::cout << "Current chapter: " << m_i_currentChapter << std::endl;
+    std::cout << "Coming from menu: " << comingFromMenu << std::endl;
     if (previousChapter != m_i_currentChapter && !comingFromMenu) {
         /// NEW CHAPTER
         std::cout << "New chapter: " << m_i_currentChapter << std::endl;
@@ -381,6 +384,7 @@ void Game::_solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<
             DeadlyPlatform* deadlyPlatform = dynamic_cast<DeadlyPlatform*>(platform.get());
             if (deadlyPlatform && m_f_playerInvincibilityTime <= 0.f) {
                 player.setHealth(player.getHealth() - deadlyPlatform -> getDamage());
+                m_soundsManager.playSound("hit"); // Play sound when player collides with a deadly platform
                 m_f_playerInvincibilityTime = 1.f; // Set invincibility time to 1 second
                 m_Overlay.setColor(sf::Color(255, 0, 0, 60)); // Set red overlay color to red with full opacity
                 continue;
@@ -433,7 +437,8 @@ void Game::_solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<
 
 void Game::_checkNextLevelTriggerCollision(Player &player, NextLevelTrigger &nextLevelTrigger, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {
     if (Colisions::checkColision(player, nextLevelTrigger) && unlockLevelTriggers.empty()) {
-        _loadPlatformerLevel(nextLevelTrigger.getNextLevelPath(), 64.f);
+        m_soundsManager.playSound("collideWithStar"); // Play sound when player collides with the next level trigger
+        _loadPlatformerLevel(nextLevelTrigger.getNextLevelPath(), false, 64.f);
 
         // Yellow overlay for a split second
         m_Overlay.setColor(sf::Color(255, 255, 0, 120)); // Set yellow overlay color to yellow with full opacity
@@ -449,6 +454,7 @@ void Game::_deleteCurrentLevel() {
 void Game::_checkUnlockLevelTriggerCollision(Player &player, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {
     for (size_t i = 0; i < unlockLevelTriggers.size(); ++i) {
         if (Colisions::checkColision(player, unlockLevelTriggers[i])) {
+            m_soundsManager.playSound("pickupCoin"); // Play sound when player collects a coin
             unlockLevelTriggers.erase(unlockLevelTriggers.begin() + i);
             m_i_collectedCoins ++;
             i --;
