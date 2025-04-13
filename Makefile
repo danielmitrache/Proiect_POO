@@ -1,7 +1,23 @@
 # Compile settings
 CXX = g++
 CXXFLAGS = -I"C:/SFML/SFML-3.0.0/include" -DSFML_STATIC
-LDFLAGS = -L"C:/SFML/SFML-3.0.0/lib" -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lopengl32 -lfreetype -lwinmm -lgdi32
+LDFLAGS = -L"C:/SFML/SFML-3.0.0/lib" \
+          -lsfml-graphics-s \
+          -lsfml-audio-s \
+          -lsfml-window-s \
+          -lsfml-system-s \
+          -lfreetype \
+          -lFLAC \
+          -lvorbisenc \
+          -lvorbisfile \
+          -lvorbis \
+          -logg \
+          -lwinmm \
+          -lgdi32 \
+          -lopengl32 \
+          -lole32 \
+          -lws2_32
+
 
 # Get all source files and object files
 SRC_DIR = src
@@ -22,10 +38,9 @@ all: $(TARGET) clean_objs
 $(TARGET): $(OBJ_FILES)
 	$(CXX) $^ -o $@ $(LDFLAGS)
 
-# Delete all object files
+# Clean rules remain the same
 clean_objs:
 	del /F $(OBJ_FILES)
 
-# Clean everything
 clean:
 	del /F $(OBJ_FILES) $(TARGET)

@@ -5,6 +5,7 @@
 #include <fstream>
 #include <algorithm>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <random>
 #include "Player.h"
 #include "Platform.h"
@@ -20,6 +21,7 @@
 #include "RedOverlay.h"
 #include "ColorHelpers.h"
 #include "ProgressManager.h"
+#include "SoundsManager.h"
 
 class Game {
 private:
@@ -52,6 +54,8 @@ private:
     std::vector<sf::Text> m_startMenuTexts; // Vector de texte pentru UI
 
     TexturesManager m_texturesManager; // Managerul de texturi
+
+    SoundsManager m_soundsManager; // Managerul de sunete
 
     RedOverlay m_Overlay; // Overlay rosu pentru efecte vizuale
 

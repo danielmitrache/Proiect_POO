@@ -10,7 +10,8 @@ Game::Game()
     m_f_playerInvincibilityTime(0.f),
     m_coinText(m_font), m_deathCountText(m_font), m_levelNumberText(m_font),
     m_i_deathCount(0),
-    m_texturesManager()
+    m_texturesManager(),
+    m_soundsManager()
 {
     this->window.setFramerateLimit(60);
     background.setScale({WINDOW_WIDTH, WINDOW_HEIGHT});
@@ -656,6 +657,7 @@ int Game::_getLevelIDFromChapterID(int chapterID) const {
 void Game::_checkStartMenuTriggersCollision(Player &player, std::vector<NextLevelTrigger> &nextLevelTriggers) {
     for (size_t i = 0; i < nextLevelTriggers.size(); ++i) {
         if (Colisions::checkColision(player, nextLevelTriggers[i]) && nextLevelTriggers[i].isInteractable()) {
+            m_soundsManager.playSound("selectLevel");
             _loadChapter(nextLevelTriggers[i].getNextLevelID()); // Load the chapter based on the trigger ID
             m_b_isInStartMenu = false; // Exit the start menu
             m_Overlay.setColor(sf::Color(255, 255, 255, 210));
