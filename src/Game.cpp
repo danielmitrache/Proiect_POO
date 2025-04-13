@@ -363,6 +363,13 @@ void Game::_loadStartMenu(std::vector<int> &availableChapters) {
     platforms.push_back(std::make_unique<DeadlyPlatform>(sf::Vector2f(-9999.f, lineNumber * tileSize + 400.f), sf::Vector2f(99999999.f, 10.f), 999999.f, false));
     m_f_levelHeight = lineNumber * tileSize;
     m_f_levelWidth = columnNumber * tileSize;
+
+    sf::Text startMenuText(m_pixelFont, "Inherit the Stars");
+    startMenuText.setCharacterSize(60);
+    startMenuText.setFillColor(sf::Color::White); 
+    startMenuText.setPosition({m_f_levelWidth / 2.f - 1600.f, m_f_levelHeight / 2.f}); // Set text position above the trigger
+    m_startMenuTexts.push_back(startMenuText); // Add the text to the vector
+
     file.close();
 }
 
