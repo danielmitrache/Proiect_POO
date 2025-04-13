@@ -283,7 +283,7 @@ void Game::_loadStartMenu(std::vector<int> &availableChapters) {
     m_b_cameraFollowsPlayer = true;
     const float tileSize = 64.f;    
     background.setColor(ColorHelpers::blendColors(sf::Color::White, sf::Color::Black, 0.5f)); // Set background color to black with 50% opacity
-    background.setTexture("D:/ProiectPOO/assets/textures/Clouds/Clouds 3/1.png"); // Set background texture to start menu texture
+    background.setTexture("D:/ProiectPOO/assets/textures/Backgrounds/startmenu.png"); // Set background texture to start menu texture
     _deleteCurrentLevel(); // Delete the current level
 
     std::ifstream file("D:/ProiectPOO/assets/level_layouts/startmenu.txt");
@@ -571,6 +571,13 @@ void Game::_updateAnimations() {
             unlockLevelTrigger.setTexture(&m_texturesManager.getUnlockLevelTriggerTexture(), AnimationManager::getCoinAnimationRect()); // Update the texture of the unlock level trigger
         }
         AnimationManager::nextCoinAnimationFrame(); // Update the animation frame for the coin
+
+        if (m_b_isInStartMenu) {
+            for (auto& nLT : nextLevelTriggers) {
+                if (nLT.isInteractable())
+                    nLT.setTexture(&m_texturesManager.getNextLevelTriggerTexture(), AnimationManager::getStarAnimationRect()); // Update the texture of the next level trigger
+            }
+        }
     }
 }
 
