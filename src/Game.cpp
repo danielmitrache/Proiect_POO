@@ -294,6 +294,8 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
 }
 
 void Game::_loadStartMenu(std::vector<int> &availableChapters) {
+    m_soundsManager.stopAllBackgroundMusic(); // Stop the current background music
+    m_soundsManager.playBackgroundMusic("mainMenuMusic");
     m_b_isInStartMenu = true;
     m_b_cameraFollowsPlayer = true;
     const float tileSize = 64.f;    
@@ -384,7 +386,7 @@ void Game::_solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<
             DeadlyPlatform* deadlyPlatform = dynamic_cast<DeadlyPlatform*>(platform.get());
             if (deadlyPlatform && m_f_playerInvincibilityTime <= 0.f) {
                 player.setHealth(player.getHealth() - deadlyPlatform -> getDamage());
-                m_soundsManager.playSound("hit"); // Play sound when player collides with a deadly platform
+                m_soundsManager.playSfxSound("hit"); // Play sound when player collides with a deadly platform
                 m_f_playerInvincibilityTime = 1.f; // Set invincibility time to 1 second
                 m_Overlay.setColor(sf::Color(255, 0, 0, 60)); // Set red overlay color to red with full opacity
                 continue;
@@ -437,7 +439,7 @@ void Game::_solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<
 
 void Game::_checkNextLevelTriggerCollision(Player &player, NextLevelTrigger &nextLevelTrigger, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {
     if (Colisions::checkColision(player, nextLevelTrigger) && unlockLevelTriggers.empty()) {
-        m_soundsManager.playSound("collideWithStar"); // Play sound when player collides with the next level trigger
+        m_soundsManager.playSfxSound("collideWithStar"); // Play sound when player collides with the next level trigger
         _loadPlatformerLevel(nextLevelTrigger.getNextLevelPath(), false, 64.f);
 
         // Yellow overlay for a split second
@@ -454,7 +456,7 @@ void Game::_deleteCurrentLevel() {
 void Game::_checkUnlockLevelTriggerCollision(Player &player, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {
     for (size_t i = 0; i < unlockLevelTriggers.size(); ++i) {
         if (Colisions::checkColision(player, unlockLevelTriggers[i])) {
-            m_soundsManager.playSound("pickupCoin"); // Play sound when player collects a coin
+            m_soundsManager.playSfxSound("pickupCoin"); // Play sound when player collects a coin
             unlockLevelTriggers.erase(unlockLevelTriggers.begin() + i);
             m_i_collectedCoins ++;
             i --;
@@ -639,6 +641,8 @@ void Game::_initTextElements() {
 
 void Game::_loadChapter(int chapterID) {
     // We determine the level ID
+    m_soundsManager.stopAllBackgroundMusic(); // Stop the current background music
+
     int levelID = _getLevelIDFromChapterID(chapterID);
 
     // We load the level based on the level ID
@@ -663,7 +667,7 @@ int Game::_getLevelIDFromChapterID(int chapterID) const {
 void Game::_checkStartMenuTriggersCollision(Player &player, std::vector<NextLevelTrigger> &nextLevelTriggers) {
     for (size_t i = 0; i < nextLevelTriggers.size(); ++i) {
         if (Colisions::checkColision(player, nextLevelTriggers[i]) && nextLevelTriggers[i].isInteractable()) {
-            m_soundsManager.playSound("selectLevel");
+            m_soundsManager.playSfxSound("selectLevel");
             _loadChapter(nextLevelTriggers[i].getNextLevelID()); // Load the chapter based on the trigger ID
             m_b_isInStartMenu = false; // Exit the start menu
             m_Overlay.setColor(sf::Color(255, 255, 255, 210));
