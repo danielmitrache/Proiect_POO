@@ -45,6 +45,7 @@ private:
     std::vector<sf::Sprite> heartSprites; // Inimile jucatorului
 
     sf::Font m_font; // Fontul pentru text
+    sf::Font m_pixelFont;
     sf::Text m_coinText;
     sf::Text m_deathCountText; // Textul pentru numarul de morti
     sf::Text m_levelNumberText; // Textul pentru numarul nivelului curent
@@ -118,7 +119,7 @@ private:
     void _loadChapter(int chapterID);
 
     // Function that loads the start menu
-    void _loadStartMenu();
+    void _loadStartMenu(std::vector<int> &availableChapters);
 
     // Function that determines the levelID based on chapterID
     int _getLevelIDFromChapterID(int chapterID) const;

@@ -9,12 +9,13 @@ NextLevelTrigger::NextLevelTrigger() : Triggers() {
     setHeight(64.f); // Set the height of the trigger area
 }
 
-NextLevelTrigger::NextLevelTrigger(sf::Vector2f position, int nextLevel) : Triggers(position), m_i_nextLevelID(nextLevel) {
+NextLevelTrigger::NextLevelTrigger(sf::Vector2f position, int nextLevel, bool canInteract) : Triggers(position), m_i_nextLevelID(nextLevel) {
     m_shape.setSize({64.f, 64.f}); 
     m_shape.setFillColor(sf::Color::Blue); // Set the color of the trigger area
     m_shape.setPosition(position); // Set the position of the trigger area
     setWidth(64.f); // Set the width of the trigger area
     setHeight(64.f); // Set the height of the trigger area
+    m_b_canInteract = canInteract; // Set the interaction flag
 }
 
 NextLevelTrigger::~NextLevelTrigger() { }
@@ -53,4 +54,8 @@ void NextLevelTrigger::setTextureRect(const sf::IntRect& textureRect) {
 
 void NextLevelTrigger::setColor(const sf::Color& color) {
     m_shape.setFillColor(color); // Set the color of the trigger area
+}
+
+bool NextLevelTrigger::isInteractable() const {
+    return m_b_canInteract; // Return if the trigger is interactable
 }

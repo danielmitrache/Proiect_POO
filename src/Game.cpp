@@ -5,7 +5,7 @@ const unsigned int WINDOW_HEIGHT = 800u;
 Game::Game() 
     : window(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "My game!"),
     player({50.f, 200.f}),
-    nextLevelTrigger(),
+    nextLevelTrigger({-9999.f, -9999.f}, 0),
     background("D:/ProiectPOO/assets/textures/Backgrounds/1.png"),
     m_f_playerInvincibilityTime(0.f),
     m_coinText(m_font), m_deathCountText(m_font), m_levelNumberText(m_font),
@@ -30,11 +30,7 @@ Game::~Game() {}
 void Game::run() {
     ProgressManager::saveChapterToFile(1);
     std::vector<int> availableChapters = ProgressManager::loadSavedChaptersFromFile(); // Get available chapters from ProgressManager
-    std::cout << "Available chapters: ";
-    for (const auto& chapter : availableChapters) {
-        std::cout << chapter << " ";
-    }
-    _loadStartMenu(); // Load the start menu
+    _loadStartMenu(availableChapters); // Load the start menu
     player.setHasGravity(true);
     player.setMode(PlayerMode::Platformer);
     while (window.isOpen()) {
@@ -282,11 +278,12 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
     std::cout << "Level loaded from: " << levelPath << std::endl;
 }
 
-void Game::_loadStartMenu() {
+void Game::_loadStartMenu(std::vector<int> &availableChapters) {
     m_b_isInStartMenu = true;
     m_b_cameraFollowsPlayer = true;
     const float tileSize = 64.f;    
     background.setColor(ColorHelpers::blendColors(sf::Color::White, sf::Color::Black, 0.5f)); // Set background color to black with 50% opacity
+    background.setTexture("D:/ProiectPOO/assets/textures/Clouds/Clouds 3/1.png"); // Set background texture to start menu texture
     _deleteCurrentLevel(); // Delete the current level
 
     std::ifstream file("D:/ProiectPOO/assets/level_layouts/startmenu.txt");
@@ -324,15 +321,24 @@ void Game::_loadStartMenu() {
             }
             else if (tileType == 5) {
                 currentChapterTrigger ++;
-                nextLevelTriggers.push_back(NextLevelTrigger(position, currentChapterTrigger));
+                if (std::find(availableChapters.begin(), availableChapters.end(), currentChapterTrigger) != availableChapters.end()) {
+                    nextLevelTriggers.push_back(NextLevelTrigger(position, currentChapterTrigger, true));
+                    nextLevelTriggers.back().setColor(sf::Color::White); // Set color to white
+                } else {
+                    nextLevelTriggers.push_back(NextLevelTrigger(position, currentChapterTrigger, false));
+                    nextLevelTriggers.back().setColor(ColorHelpers::blendColors(sf::Color::White, sf::Color::Black, 0.5f)); // Set color to red with full opacity
+                }
                 nextLevelTriggers.back().setTexture(&m_texturesManager.getNextLevelTriggerTexture(), sf::IntRect({0, 0}, {32, 32}));
-                nextLevelTriggers.back().setColor(sf::Color::White); // Set color to white
 
                 // Write text with chapter number above the trigger
-                sf::Text chapterText(m_font, std::to_string(currentChapterTrigger));
-                chapterText.setCharacterSize(60);
-                chapterText.setFillColor(sf::Color::White); // Set text color to white
-                chapterText.setPosition({position.x + 5.f, position.y - 60.f}); // Set text position above the trigger
+                sf::Text chapterText(m_pixelFont, std::to_string(currentChapterTrigger));
+                chapterText.setCharacterSize(30);
+                if (std::find(availableChapters.begin(), availableChapters.end(), currentChapterTrigger) != availableChapters.end()) 
+                    chapterText.setFillColor(sf::Color::White); // Set text color to white
+                else
+                    chapterText.setFillColor(sf::Color(128, 128, 128)); // Set text color to red
+                
+                chapterText.setPosition({position.x + 20.f, position.y - 40.f}); // Set text position above the trigger
                 m_startMenuTexts.push_back(chapterText); // Add the text to the vector
             }
             columnNumber ++;
@@ -574,6 +580,10 @@ void Game::_initTextElements() {
         std::cerr << "Error loading font" << std::endl;
     }
 
+    if (!m_pixelFont.openFromFile("D:/ProiectPOO/assets/fonts/DePixelHalbfett.ttf")) {
+        std::cerr << "Error loading font" << std::endl;
+    }
+
     /// INITIALIZE TEXTS
     m_coinText = sf::Text(m_font);
     m_coinText.setCharacterSize(40);
@@ -617,7 +627,7 @@ int Game::_getLevelIDFromChapterID(int chapterID) const {
 
 void Game::_checkStartMenuTriggersCollision(Player &player, std::vector<NextLevelTrigger> &nextLevelTriggers) {
     for (size_t i = 0; i < nextLevelTriggers.size(); ++i) {
-        if (Colisions::checkColision(player, nextLevelTriggers[i])) {
+        if (Colisions::checkColision(player, nextLevelTriggers[i]) && nextLevelTriggers[i].isInteractable()) {
             _loadChapter(nextLevelTriggers[i].getNextLevelID()); // Load the chapter based on the trigger ID
             m_b_isInStartMenu = false; // Exit the start menu
             m_Overlay.setColor(sf::Color(255, 255, 255, 210));

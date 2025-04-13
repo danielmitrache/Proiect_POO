@@ -6,10 +6,11 @@
 class NextLevelTrigger : public Triggers, public sf::Drawable {
 private:
     int m_i_nextLevelID = 0; // Next level ID
+    bool m_b_canInteract = false; // Flag for interaction
     sf::RectangleShape m_shape; // Shape for the trigger area
 public:
     NextLevelTrigger(); // Default constructor
-    NextLevelTrigger(sf::Vector2f position, int nextLevelID); // Constructor with position and level id
+    NextLevelTrigger(sf::Vector2f position, int nextLevelID, bool canInteract = true); // Constructor with position and level id
     ~NextLevelTrigger(); // Destructor
 
     // Set the next level path
@@ -35,6 +36,9 @@ public:
 
     // Set the color of the trigger area
     void setColor(const sf::Color& color);
+
+    // Get if the trigger is interactable
+    bool isInteractable() const;
 };
 
 #endif // NEXTLEVELTRIGGER_H
