@@ -193,9 +193,9 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
     int previousChapter = m_i_currentChapter;
     file >> m_i_currentChapter;
     background.setTexture("D:/ProiectPOO/assets/textures/Backgrounds/" + std::to_string(m_i_currentChapter) + ".png");
-    std::cout << "Previous chapter: " << previousChapter << std::endl;
-    std::cout << "Current chapter: " << m_i_currentChapter << std::endl;
-    std::cout << "Coming from menu: " << comingFromMenu << std::endl;
+    // std::cout << "Previous chapter: " << previousChapter << std::endl;
+    // std::cout << "Current chapter: " << m_i_currentChapter << std::endl;
+    // std::cout << "Coming from menu: " << comingFromMenu << std::endl;
     if (previousChapter != m_i_currentChapter && !comingFromMenu) {
         /// NEW CHAPTER
         std::cout << "New chapter: " << m_i_currentChapter << std::endl;
@@ -246,7 +246,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
             else if (tileType == 3)
                 platforms.push_back(std::make_unique<Platform>(position, size, true, &m_texturesManager.getTilesetTexture(), stickyTile));
             else if (tileType == 4) {
-                if (levelPath[levelPath.length() - 5] == '0' || previousChapter != m_i_currentChapter) 
+                if (comingFromMenu) 
                     player.move(position); // Daca e primul nivel sau capitol nou
                 
                 player.setLastSpawn(position);
@@ -295,10 +295,10 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
 
 void Game::_loadStartMenu(std::vector<int> &availableChapters) {
     m_soundsManager.stopAllBackgroundMusic(); // Stop the current background music
-    m_soundsManager.playBackgroundMusic("mainMenuMusic");
+    m_soundsManager.playBackgroundMusic("mainMenuMusic", sf::seconds(4.f));
     m_b_isInStartMenu = true;
     m_b_cameraFollowsPlayer = true;
-    const float tileSize = 64.f;    
+    const float tileSize = 64.f; 
     background.setColor(ColorHelpers::blendColors(sf::Color::White, sf::Color::Black, 0.5f)); // Set background color to black with 50% opacity
     background.setTexture("D:/ProiectPOO/assets/textures/Backgrounds/startmenu.png"); // Set background texture to start menu texture
     _deleteCurrentLevel(); // Delete the current level
@@ -642,6 +642,7 @@ void Game::_initTextElements() {
 void Game::_loadChapter(int chapterID) {
     // We determine the level ID
     m_soundsManager.stopAllBackgroundMusic(); // Stop the current background music
+    m_soundsManager.playBackgroundMusic("chapter" + std::to_string(chapterID), sf::seconds(4.f)); // Play the chapter music
 
     int levelID = _getLevelIDFromChapterID(chapterID);
 

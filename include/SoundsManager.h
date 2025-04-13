@@ -41,7 +41,7 @@ public:
     void loadBackgroundMusic(const std::string& name, const std::string& filePath);
 
     // Play background music by its name
-    void playBackgroundMusic(const std::string& name);
+    void playBackgroundMusic(const std::string& name, sf::Time loopCutoff, sf::Time loopStart = sf::Time::Zero);
 
     // Stop background music by its name
     void stopBackgroundMusic(const std::string& name);

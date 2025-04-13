@@ -7,6 +7,8 @@ SoundsManager::SoundsManager() {
     loadSfxSound("selectLevel", "./assets/sounds/selectLevel.wav");
 
     loadBackgroundMusic("mainMenuMusic", "./assets/sounds/mainMenuMusic.ogg");
+    loadBackgroundMusic("chapter1", "./assets/sounds/chapter1.ogg");
+    loadBackgroundMusic("chapter2", "./assets/sounds/chapter2.ogg");
 
     setAllSfxSoundsVolume(20.f); // Set default volume for all sounds
     setAllBackgroundMusicVolume(20.f); // Set default volume for all background music
@@ -71,15 +73,15 @@ void SoundsManager::loadBackgroundMusic(const std::string& name, const std::stri
     m_backgroundMusics[name] = std::move(music); // Store the unique_ptr in the map
 }
 
-void SoundsManager::playBackgroundMusic(const std::string& name) {
+void SoundsManager::playBackgroundMusic(const std::string& name, sf::Time loopStart, sf::Time loopCutoff) {
     auto it = m_backgroundMusics.find(name);
     if (it != m_backgroundMusics.end()) {
         sf::Music* music = it->second.get();
 
         // Set loop points to loop the entire music
         sf::Time duration = music->getDuration();
-        music->setLoopPoints({sf::Time::Zero, duration - sf::seconds(0.2f)}); // Set loop points to avoid a small gap at the end
-
+        music->setLoopPoints({loopStart, duration - loopCutoff}); // Set loop points to avoid a small gap at the end
+        music->setLooping(true);
         music->play(); // Play the music
     } else {
         std::cerr << "Background music not found: " << name << std::endl;
