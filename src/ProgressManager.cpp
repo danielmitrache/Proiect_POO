@@ -16,6 +16,7 @@ namespace ProgressManager {
         chapters.push_back(chapterToSave);
         std::sort(chapters.begin(), chapters.end());
         chapters.erase(std::unique(chapters.begin(), chapters.end()), chapters.end()); // Remove duplicates
+        if (chapters[0] == 0) chapters.erase(chapters.begin()); // Remove 0 if it exists
         in.close();
         
         std::ofstream out("D:/ProiectPOO/assets/gameinfo/unlockedchapters.txt");

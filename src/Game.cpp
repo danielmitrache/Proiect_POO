@@ -30,6 +30,10 @@ Game::~Game() {}
 void Game::run() {
     ProgressManager::saveChapterToFile(1);
     std::vector<int> availableChapters = ProgressManager::loadSavedChaptersFromFile(); // Get available chapters from ProgressManager
+    // Set the player color based on how many chapters he has unlocked
+    float playerFadeFactor = std::min(1.f, ((availableChapters.size() - 1) * 0.12f));
+    player.setColor(ColorHelpers::blendColors(sf::Color::Blue, sf::Color::White, playerFadeFactor)); // Set player color based on the number of unlocked chapters
+
     _loadStartMenu(availableChapters); // Load the start menu
     player.setHasGravity(true);
     player.setMode(PlayerMode::Platformer);
@@ -324,10 +328,10 @@ void Game::_loadStartMenu(std::vector<int> &availableChapters) {
                 currentChapterTrigger ++;
                 if (std::find(availableChapters.begin(), availableChapters.end(), currentChapterTrigger) != availableChapters.end()) {
                     nextLevelTriggers.push_back(NextLevelTrigger(position, currentChapterTrigger, true));
-                    nextLevelTriggers.back().setColor(sf::Color::White); // Set color to white
+                    nextLevelTriggers.back().setColor(sf::Color(34,244,218)); // Set color to white
                 } else {
                     nextLevelTriggers.push_back(NextLevelTrigger(position, currentChapterTrigger, false));
-                    nextLevelTriggers.back().setColor(ColorHelpers::blendColors(sf::Color::White, sf::Color::Black, 0.5f)); // Set color to red with full opacity
+                    nextLevelTriggers.back().setColor(ColorHelpers::blendColors(sf::Color(34,244,218), sf::Color::Black, 0.5f)); // Set color to red with full opacity
                 }
                 nextLevelTriggers.back().setTexture(&m_texturesManager.getNextLevelTriggerTexture(), sf::IntRect({0, 0}, {32, 32}));
 
