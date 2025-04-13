@@ -23,7 +23,7 @@
 
 class Game {
 private:
-    int m_i_currentChapter;
+    int m_i_currentChapter = 1;
     bool m_b_isInStartMenu; // Flag for start menu
 
     bool m_b_cameraFollowsPlayer;

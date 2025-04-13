@@ -191,6 +191,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, float tileSize) {
     if (previousChapter != m_i_currentChapter) {
         /// NEW CHAPTER
         std::cout << "New chapter: " << m_i_currentChapter << std::endl;
+        m_Overlay.setColor(sf::Color(255, 255, 255, 210)); // Set white overlay color to white with full opacity
         m_i_collectedCoins = 0;
         m_i_coinsNeededToPass = 0;
         m_i_deathCount = 0;
@@ -340,6 +341,9 @@ void Game::_loadStartMenu(std::vector<int> &availableChapters) {
                 
                 chapterText.setPosition({position.x + 20.f, position.y - 40.f}); // Set text position above the trigger
                 m_startMenuTexts.push_back(chapterText); // Add the text to the vector
+            }
+            else if( tileType == 2) {
+                platforms.push_back(std::make_unique<DeadlyPlatform>(position, size, 9999.f, false));
             }
             columnNumber ++;
         }
@@ -642,3 +646,4 @@ void Game::_checkStartMenuTriggersCollision(Player &player, std::vector<NextLeve
         }
     }
 }
+
