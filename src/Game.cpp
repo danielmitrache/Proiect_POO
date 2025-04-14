@@ -565,7 +565,7 @@ void Game::_checkEnemyCollisions(Player &player, std::vector<EnemyWalker> &enemy
 
 void Game::_moveEnemyWalkers(std::vector<EnemyWalker> &enemyWalkers, std::vector<std::unique_ptr<Platform>> &platforms) {
     for (auto& enemyWalker : enemyWalkers) {
-        enemyWalker.update();
+        enemyWalker.walk();
         enemyWalker.updateTakeDamageTimer(1.f / 60.f); // Update the take damage timer
         // Check if the enemy walker has a platform to walk on
         bool hasPlatformBelow = false;
