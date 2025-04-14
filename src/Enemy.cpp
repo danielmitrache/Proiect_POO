@@ -63,10 +63,6 @@ void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(m_shape, states); // Draw the enemy walker shape
 }
 
-sf::Vector2f Enemy::getDirection() const {
-    return m_v_direction; // Return the direction of the enemy walker
-}
-
 void Enemy::setTexture(sf::Texture* texture, const sf::IntRect& rect) {
     m_texture = texture; // Set the texture of the enemy walker
     m_shape.setTexture(m_texture); // Set the texture of the enemy walker shape
@@ -94,4 +90,30 @@ void Enemy::updateTakeDamageTimer(float deltaTime) {
 void Enemy::setTakeDamageTimer(float duration) {
     m_f_takeDamageTimer = duration; // Set the take damage timer to 0.5 seconds
     m_shape.setFillColor(ColorHelpers::blendColors(sf::Color::White, sf::Color::Red, 0.3f)); // Set the color of the enemy walker shape to red
+}
+
+void Enemy::setSpeed(float speed) {
+    m_f_speed = speed; // Set the speed of the enemy walker
+}
+
+float Enemy::getSpeed() const {
+    return m_f_speed; // Return the speed of the enemy walker
+}
+
+void Enemy::setDirection( sf::Vector2f& direction) {
+    m_v_direction = direction; // Set the direction of the enemy walker
+}
+
+sf::Vector2f Enemy::getDirection() const {
+    return m_v_direction; // Return the direction of the enemy walker
+}
+
+void Enemy::setSize( sf::Vector2f& size) {
+    m_shape.setSize(size); // Set the size of the enemy walker shape
+    setWidth(size.x); // Set width of the enemy walker
+    setHeight(size.y); // Set height of the enemy walker
+}
+
+sf::Vector2f Enemy::getSize() const {
+    return m_shape.getSize(); // Return the size of the enemy walker shape
 }

@@ -28,6 +28,12 @@ void TexturesManager::loadTextures() {
     if (!m_texture_unlockLevelTriggerTexture.loadFromFile("./assets/textures/coins.png")) {
         std::cerr << "Error loading unlock level trigger texture" << std::endl;
     }
+    if (!m_texture_enemyShooterTexture_right.loadFromFile("./assets/textures/shootingEnemy.png")) {
+        std::cerr << "Error loading enemy shooter texture" << std::endl;
+    }
+    if (!m_texture_enemyShooterTexture_left.loadFromFile("./assets/textures/shootingEnemyLeft.png")) {
+        std::cerr << "Error loading enemy shooter left texture" << std::endl;
+    }
 }
 
 void TexturesManager::setTilesetTexture(const std::string& path) {
@@ -69,5 +75,17 @@ void TexturesManager::setNextLevelTriggerTexture(const std::string& path) {
 void TexturesManager::setUnlockLevelTriggerTexture(const std::string& path) {
     if (!m_texture_unlockLevelTriggerTexture.loadFromFile(path)) {
         std::cerr << "Error loading unlock level trigger texture from: " << path << std::endl;
+    }
+}
+
+void TexturesManager::setEnemyShooterRightTexture(const std::string& path) {
+    if (!m_texture_enemyShooterTexture_right.loadFromFile(path)) {
+        std::cerr << "Error loading enemy shooter texture from: " << path << std::endl;
+    }
+}
+
+void TexturesManager::setEnemyShooterLeftTexture(const std::string& path) {
+    if (!m_texture_enemyShooterTexture_left.loadFromFile(path)) {
+        std::cerr << "Error loading enemy shooter left texture from: " << path << std::endl;
     }
 }

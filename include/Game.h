@@ -22,6 +22,7 @@
 #include "ColorHelpers.h"
 #include "ProgressManager.h"
 #include "SoundsManager.h"
+#include "EnemyShooter.h"
 
 class Game {
 private:
@@ -42,7 +43,8 @@ private:
     NextLevelTrigger nextLevelTrigger; // Trigger pentru nivelul urmator
     std::vector<NextLevelTrigger> nextLevelTriggers; // Triggere pentru start menu
     std::vector<UnlockLevelTrigger> unlockLevelTriggers; // Trigger pentru deblocarea nivelului
-    std::vector<EnemyWalker> enemyWalkers; // Inamicii
+    std::vector<EnemyWalker> enemyWalkers; // Inamicii care se misca
+    std::vector<EnemyShooter> enemyShooters; // Inamicii care trag
 
     std::vector<sf::Sprite> heartSprites; // Inimile jucatorului
 
@@ -131,6 +133,9 @@ private:
 
     // Function that checks if the player is in the trigger area of the start menu triggers
     void _checkStartMenuTriggersCollision(Player &player, std::vector<NextLevelTrigger> &nextLevelTriggers);
+
+    // Function that updates the enemy shooters
+    void _updateEnemyShooters(std::vector<EnemyShooter> &enemyShooters, Player &player);
 };
 
 #endif // GAME_H

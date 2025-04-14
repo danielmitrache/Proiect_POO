@@ -96,6 +96,7 @@ void Game::_update() {
     }
 
     _moveEnemyWalkers(enemyWalkers, platforms);
+    _updateEnemyShooters(enemyShooters, player);
     _solvePlatformCollisions(player, platforms);
     _checkUnlockLevelTriggerCollision(player, unlockLevelTriggers);
     _checkNextLevelTriggerCollision(player, nextLevelTrigger, unlockLevelTriggers);
@@ -168,6 +169,8 @@ void Game::_drawActors() {
         window.draw(unlockLevelTrigger);
     for (auto& enemyWalker : enemyWalkers)
         window.draw(enemyWalker);
+    for (auto& enemyShooter : enemyShooters)
+        window.draw(enemyShooter);
 }
 
 void Game::_drawUI() {
@@ -294,6 +297,9 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
             }
             else if (tileType == 7) {
                 enemyWalkers.push_back(EnemyWalker(position, {tileSize, tileSize}, &m_texturesManager.getEnemyWalkerTextureRight(), sf::IntRect({4, 4}, {32, 32}), 3.f, 30.f));
+            }
+            else if (tileType == 8) {
+                enemyShooters.push_back(EnemyShooter(position, {tileSize, tileSize}, &m_texturesManager.getEnemyShooterLeftTexture(), sf::IntRect({0, 0}, {44, 44}), 0.f, 25.f, 1.f, 100.f));
             }
             columnNumber ++;
         }
@@ -713,6 +719,13 @@ void Game::_checkStartMenuTriggersCollision(Player &player, std::vector<NextLeve
             m_Overlay.setColor(sf::Color(255, 255, 255, 210));
             nextLevelTriggers.clear();
         }
+    }
+}
+
+void Game::_updateEnemyShooters(std::vector<EnemyShooter> &enemyShooters, Player &player) {
+    for (auto& enemyShooter : enemyShooters) {
+        sf::Vector2f playerPosition = player.getPosition();
+        enemyShooter.turnToPlayer(playerPosition, m_texturesManager.getEnemyShooterLeftTexture(), m_texturesManager.getEnemyShooterRightTexture()); // Turn to player
     }
 }
 
