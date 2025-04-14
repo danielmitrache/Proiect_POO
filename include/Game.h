@@ -136,6 +136,9 @@ private:
 
     // Function that updates the enemy shooters
     void _updateEnemyShooters(std::vector<EnemyShooter> &enemyShooters, Player &player);
+
+    // Function for when the player gets hit
+    void _playerHit(Player &player, float damage);
 };
 
 #endif // GAME_H

@@ -169,8 +169,12 @@ void Game::_drawActors() {
         window.draw(unlockLevelTrigger);
     for (auto& enemyWalker : enemyWalkers)
         window.draw(enemyWalker);
-    for (auto& enemyShooter : enemyShooters)
+    for (auto& enemyShooter : enemyShooters){
         window.draw(enemyShooter);
+        for (auto& bullet : enemyShooter.m_bullets) {
+            window.draw(bullet); // Desenam gloantele
+        }
+    }
 }
 
 void Game::_drawUI() {
@@ -299,7 +303,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
                 enemyWalkers.push_back(EnemyWalker(position, {tileSize, tileSize}, &m_texturesManager.getEnemyWalkerTextureRight(), sf::IntRect({4, 4}, {32, 32}), 3.f, 30.f));
             }
             else if (tileType == 8) {
-                enemyShooters.push_back(EnemyShooter(position, {tileSize, tileSize}, &m_texturesManager.getEnemyShooterLeftTexture(), sf::IntRect({0, 0}, {44, 44}), 0.f, 25.f, 1.f, 100.f));
+                enemyShooters.push_back(EnemyShooter(position, {tileSize, tileSize}, &m_texturesManager.getEnemyShooterLeftTexture(), sf::IntRect({0, 0}, {44, 44}), 0.f, 25.f, 0.5f, 100.f));
             }
             columnNumber ++;
         }
@@ -424,10 +428,7 @@ void Game::_solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<
             
             DeadlyPlatform* deadlyPlatform = dynamic_cast<DeadlyPlatform*>(platform.get());
             if (deadlyPlatform && m_f_playerInvincibilityTime <= 0.f) {
-                player.setHealth(player.getHealth() - deadlyPlatform -> getDamage());
-                m_soundsManager.playSfxSound("hit"); // Play sound when player collides with a deadly platform
-                m_f_playerInvincibilityTime = 1.f; // Set invincibility time to 1 second
-                m_Overlay.setColor(sf::Color(255, 0, 0, 60)); // Set red overlay color to red with full opacity
+                _playerHit(player, deadlyPlatform->getDamage()); // Player hit by deadly platform
                 continue;
             }
 
@@ -490,6 +491,7 @@ void Game::_deleteCurrentLevel() {
     platforms.clear();
     unlockLevelTriggers.clear();
     enemyWalkers.clear();
+    enemyShooters.clear();
 }
 
 void Game::_checkUnlockLevelTriggerCollision(Player &player, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {
@@ -553,18 +555,34 @@ void Game::_checkEnemyCollisions(Player &player, std::vector<EnemyWalker> &enemy
     for (size_t i = 0; i < enemyWalkers.size(); ++i) {
         EnemyWalker& enemyWalker = enemyWalkers[i];
         if (Colisions::checkColision(player, enemyWalker)) {
-            if (m_f_playerInvincibilityTime > 0.f) {
-                // Player is invincible, ignore the hit
-                continue;
-            }
+
             if (player.getVerticalSpeed() > 0.f) {
                 // Player jumps on the enemy
                 player.setVerticalSpeed(std::max(-player.getVerticalSpeed() * 1.3f, -25.f)); // Bounce off the enemy
                 enemyWalker.setTakeDamageTimer(); // Set the take damage timer to 0.2 seconds
                 continue; // Skip the rest of the loop
             } 
-            player.setHealth(player.getHealth() - enemyWalker.getDamage());
-            m_f_playerInvincibilityTime = 1.f; // Set invincibility time to 1 second
+            if (m_f_playerInvincibilityTime > 0.f) {
+                // Player is invincible, ignore the hit
+                continue;
+            }
+            _playerHit(player, enemyWalker.getDamage()); // Player hit by enemy
+        }
+    }
+
+
+    for (auto & enemyShooter : enemyShooters) {
+        for (size_t i = 0; i < enemyShooter.m_bullets.size(); ++ i) {
+            Bullet& bullet = enemyShooter.m_bullets[i];
+            if (Colisions::checkColision(player, bullet)) {
+                if (m_f_playerInvincibilityTime > 0.f) {
+                    // Player is invincible, ignore the hit
+                    continue;
+                }
+                _playerHit(player, bullet.getDamage()); // Player hit by bullet
+                enemyShooter.m_bullets.erase(enemyShooter.m_bullets.begin() + i); // Remove the bullet from the vector
+                i --;
+            }
         }
     }
 }
@@ -726,6 +744,15 @@ void Game::_updateEnemyShooters(std::vector<EnemyShooter> &enemyShooters, Player
     for (auto& enemyShooter : enemyShooters) {
         sf::Vector2f playerPosition = player.getPosition();
         enemyShooter.turnToPlayer(playerPosition, m_texturesManager.getEnemyShooterLeftTexture(), m_texturesManager.getEnemyShooterRightTexture()); // Turn to player
+        enemyShooter.update(playerPosition); // Update the enemy shooter
     }
 }
 
+void Game::_playerHit(Player &player, float damage) {
+    if (m_f_playerInvincibilityTime <= 0.f) {
+        player.setHealth(player.getHealth() - damage);
+        m_soundsManager.playSfxSound("hit"); // Play sound when player collides with a deadly platform
+        m_f_playerInvincibilityTime = 2.f; // Set invincibility time to 1 second
+        m_Overlay.setColor(sf::Color(255, 0, 0, 60)); // Set red overlay color to red with full opacity
+    }
+}

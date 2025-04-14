@@ -9,6 +9,7 @@ private:
 public:
     Actor();
     Actor(float x, float y);
+    Actor(sf::Vector2f position, sf::Vector2f size);
     ~Actor();
     
     float getX() const;

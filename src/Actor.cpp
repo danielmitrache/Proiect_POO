@@ -11,6 +11,13 @@ Actor::Actor(float x, float y) {
     m_f_y = y;
 }
 
+Actor::Actor(sf::Vector2f position, sf::Vector2f size) {
+    m_f_x = position.x;
+    m_f_y = position.y;
+    m_f_width = size.x;
+    m_f_height = size.y;
+}
+
 Actor::~Actor() { }
 
 float Actor::getX() const {
