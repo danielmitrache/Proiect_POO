@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Actor.h"
 #include "Gravity.h"
+#include <iostream>
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -30,6 +31,14 @@ private:
 
     // Texture for the player
     sf::Texture* m_texture;
+
+
+    ///////////////////////////////
+
+    // Attack
+    bool m_b_canAttack = false;
+    float m_f_attackCooldown = 1.f; // Attack cooldown
+    bool m_b_isAttacking = false; // Is the player attacking
 public:
     Player();
     Player(sf::Vector2f position);
@@ -69,6 +78,14 @@ public:
     /// PLAYER TEXTURE ///
     void setTexture(sf::Texture* texture);
     void setColor(sf::Color color);
+
+    void setCanAttack(bool canAttack);
+    bool getCanAttack() const;
+
+    void setAttackCooldown(float attackCooldown);
+    float getAttackCooldown() const;
+
+    bool getIsAttacking() const;
 private:
     /// JUMPING ///
     // If it can jump, apply the jump force

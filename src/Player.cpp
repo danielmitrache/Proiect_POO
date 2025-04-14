@@ -20,6 +20,9 @@ Player::Player(sf::Vector2f position) {
     m_shape.setFillColor(sf::Color::White);
     m_shape.setPosition(position);
     m_v2f_lastSpawn = position;
+    m_f_attackCooldown = 1.f; // Initialize attack cooldown
+    m_b_canAttack = false;
+    m_b_isAttacking = false;
 }
 
 Player::Player(sf::Vector2f position, sf::Texture* texture) {
@@ -35,6 +38,7 @@ Player::Player(sf::Vector2f position, sf::Texture* texture) {
         m_texture = texture;
         m_shape.setTexture(m_texture);
     }
+    m_f_attackCooldown = 1.f; // Initialize attack cooldown
 }
 
 Player::~Player() { }
@@ -94,6 +98,25 @@ void Player::update() {
     
         m_shape.move(sf::Vector2f(0.f, m_f_verticalSpeed));
         setY(m_shape.getPosition().y);
+    }
+
+
+    /// ATACK ///
+    if (m_f_attackCooldown > 0.f) {
+        m_f_attackCooldown -= 1.f / 60.f; // Decrease cooldown
+    } else {
+        m_b_canAttack = true; // Reset attack ability
+    }
+    if (m_b_isAttacking)
+        m_b_isAttacking = false; // Reset attacking state
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::K)) {
+        if (m_b_canAttack) {
+            m_b_canAttack = false;
+            m_f_attackCooldown = 1.f; // Reset cooldown
+
+            // Attack logic
+            m_b_isAttacking = true; // Set attacking state
+        }
     }
 }
 
@@ -165,4 +188,24 @@ void Player::setTexture(sf::Texture* texture) {
 
 void Player::setColor(sf::Color color) {
     m_shape.setFillColor(color);
+}
+
+void Player::setCanAttack(bool canAttack) {
+    m_b_canAttack = canAttack;
+}
+
+bool Player::getCanAttack() const {
+    return m_b_canAttack;
+}
+
+void Player::setAttackCooldown(float attackCooldown) {
+    m_f_attackCooldown = attackCooldown;
+}
+
+float Player::getAttackCooldown() const {
+    return m_f_attackCooldown;
+}
+
+bool Player::getIsAttacking() const {
+    return m_b_isAttacking;
 }

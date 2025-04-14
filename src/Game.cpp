@@ -87,6 +87,11 @@ void Game::_update() {
     player.update();
     player.setCanJump(false); // Presupunem ca nu putem sari pana cand nu verificam coliziunile
 
+    if (player.getIsAttacking()) {
+        std::cout << "Player is attacking!" << std::endl;
+        
+    }
+
     if (m_f_playerInvincibilityTime > 0.f) {
         m_f_playerInvincibilityTime -= 1.f / 60.f; // Scadem timpul de invincibilitate
     }
