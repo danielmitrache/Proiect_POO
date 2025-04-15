@@ -17,7 +17,6 @@ private:
     float m_f_fireRateCounter;
     float m_f_health;
     float m_f_damage;
-public:
     std::vector<Bullet> m_bullets; // Vector of bullets
 public:
     EnemyShooter(sf::Vector2f position, sf::Vector2f size, sf::Texture* texture, const sf::IntRect& textureRect, float speed, float damage, float fireRate, float health = 100.f);
@@ -29,6 +28,14 @@ public:
     void shootToPlayer(sf::Vector2f& playerPosition, float bulletSpeed, float bulletDamage);
 
     void update(sf::Vector2f& playerPosition);
+
+    std::vector<Bullet> getBullets() const { return m_bullets; }
+    void setBullets(const std::vector<Bullet>& bullets) { m_bullets = bullets; }
+    void removeBullet(size_t index) {
+        if (index < m_bullets.size()) {
+            m_bullets.erase(m_bullets.begin() + index); // Remove the bullet from the vector
+        }
+    }
 };
 
 #endif // ENEMYSHOOTER_H

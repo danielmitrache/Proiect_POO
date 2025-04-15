@@ -24,6 +24,7 @@
 #include "SoundsManager.h"
 #include "EnemyShooter.h"
 #include "KillAura.h"
+#include "Bullet.h"
 
 class Game {
 private:

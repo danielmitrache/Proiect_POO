@@ -34,7 +34,7 @@ void EnemyShooter::shootToPlayer(sf::Vector2f& playerPosition, float bulletSpeed
 void EnemyShooter::update(sf::Vector2f &playerPosition) {
     m_f_fireRateCounter += 1.f / 60.f; // Increment the fire rate counter
     if (m_f_fireRateCounter >= m_f_fireRate) {
-        shootToPlayer(playerPosition, 10.f, 5.f); // Shoot a bullet towards the player
+        shootToPlayer(playerPosition, 10.f, m_f_damage); // Shoot a bullet towards the player
         m_f_fireRateCounter = 0.0f; // Reset the fire rate counter
     }
 

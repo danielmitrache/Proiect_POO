@@ -85,6 +85,14 @@ void Game::_processEvents() {
 
 // Update logica joc
 void Game::_update() {
+    /// DEBUG
+    if (enemyShooters.size() > 0) {
+        EnemyShooter &enemyShooter = enemyShooters[0]; // Get the first enemy shooter
+        std::cout << enemyShooter.getBullets().size() << std::endl; // Print the number of bullets
+    }
+    /// END DEBUG
+
+
     player.update();
     player.setCanJump(false); // Presupunem ca nu putem sari pana cand nu verificam coliziunile
 
@@ -177,7 +185,8 @@ void Game::_drawActors() {
         window.draw(enemyWalker);
     for (auto& enemyShooter : enemyShooters){
         window.draw(enemyShooter);
-        for (auto& bullet : enemyShooter.m_bullets) {
+        std::vector<Bullet> bullets = enemyShooter.getBullets(); // Get the bullets from the enemy shooter
+        for (auto& bullet : bullets) {
             window.draw(bullet); // Desenam gloantele
         }
     }
@@ -309,7 +318,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
                 enemyWalkers.push_back(EnemyWalker(position, {tileSize, tileSize}, &m_texturesManager.getEnemyWalkerTextureRight(), sf::IntRect({4, 4}, {32, 32}), 3.f, 30.f));
             }
             else if (tileType == 8) {
-                enemyShooters.push_back(EnemyShooter(position, {tileSize, tileSize}, &m_texturesManager.getEnemyShooterLeftTexture(), sf::IntRect({0, 0}, {44, 44}), 0.f, 25.f, 0.5f, 100.f));
+                enemyShooters.push_back(EnemyShooter(position, {tileSize, tileSize}, &m_texturesManager.getEnemyShooterLeftTexture(), sf::IntRect({0, 0}, {44, 44}), 0.f, 25.f, 1.f, 100.f));
             }
             columnNumber ++;
         }
@@ -578,15 +587,15 @@ void Game::_checkEnemyCollisions(Player &player, std::vector<EnemyWalker> &enemy
 
 
     for (auto & enemyShooter : enemyShooters) {
-        for (size_t i = 0; i < enemyShooter.m_bullets.size(); ++ i) {
-            Bullet& bullet = enemyShooter.m_bullets[i];
+        for (size_t i = 0; i < enemyShooter.getBullets().size(); ++ i) {
+            Bullet& bullet = enemyShooter.getBullets()[i];
             if (Colisions::checkColision(player, bullet)) {
                 if (m_f_playerInvincibilityTime > 0.f) {
                     // Player is invincible, ignore the hit
                     continue;
                 }
                 _playerHit(player, bullet.getDamage()); // Player hit by bullet
-                enemyShooter.m_bullets.erase(enemyShooter.m_bullets.begin() + i); // Remove the bullet from the vector
+                enemyShooter.removeBullet(i); // Remove the bullet from the enemy shooter
                 i --;
             }
         }
@@ -763,11 +772,20 @@ void Game::_playerHit(Player &player, float damage) {
     }
 }
 
-void Game::_checkEnemyKillAuraCollision(KillAura killAura, std::vector<EnemyShooter> &enemyShooters) {
-    for (size_t i = 0; i < enemyShooters.size(); ++i) {
+void Game::_checkEnemyKillAuraCollision(KillAura killAura, std::vector<EnemyShooter>& enemyShooters) {
+    for (int i = enemyShooters.size() - 1; i >= 0; --i) {
         if (Colisions::checkColision(killAura, enemyShooters[i])) {
             enemyShooters.erase(enemyShooters.begin() + i); // Remove the enemy from the vector
-            i --;
+            continue; // Skip further processing for this enemy
+        }
+
+        EnemyShooter& enemyShooter = enemyShooters[i];
+
+        for (int j = enemyShooter.getBullets().size() - 1; j >= 0; --j) {
+            Bullet& bullet = enemyShooter.getBullets()[j];
+            if (Colisions::checkColision(killAura, bullet)) {
+                enemyShooter.removeBullet(j); // Safely remove the bullet
+            }
         }
     }
 }
