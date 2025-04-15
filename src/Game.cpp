@@ -86,10 +86,10 @@ void Game::_processEvents() {
 // Update logica joc
 void Game::_update() {
     /// DEBUG
-    if (enemyShooters.size() > 0) {
-        EnemyShooter &enemyShooter = enemyShooters[0]; // Get the first enemy shooter
-        std::cout << enemyShooter.getBullets().size() << std::endl; // Print the number of bullets
-    }
+    // if (enemyShooters.size() > 0) {
+    //     EnemyShooter &enemyShooter = enemyShooters[0]; // Get the first enemy shooter
+    //     std::cout << enemyShooter.getBullets().size() << std::endl; // Print the number of bullets
+    // }
     /// END DEBUG
 
 
@@ -113,8 +113,11 @@ void Game::_update() {
     _checkNextLevelTriggerCollision(player, nextLevelTrigger, unlockLevelTriggers);
     _checkEnemyCollisions(player, enemyWalkers);
     _updateHearts(player.getHealth());
-    _updateKillAura(killAura, player); // Update kill aura position and state
     _checkEnemyKillAuraCollision(killAura, enemyShooters); // Check if the player is killing an enemy
+
+    if (!m_b_isInStartMenu) {
+        _updateKillAura(killAura, player); // Update kill aura position and state
+    }
 
     /// ANIMATIONS
     _updateAnimations();
@@ -318,7 +321,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
                 enemyWalkers.push_back(EnemyWalker(position, {tileSize, tileSize}, &m_texturesManager.getEnemyWalkerTextureRight(), sf::IntRect({4, 4}, {32, 32}), 3.f, 30.f));
             }
             else if (tileType == 8) {
-                enemyShooters.push_back(EnemyShooter(position, {tileSize, tileSize}, &m_texturesManager.getEnemyShooterLeftTexture(), sf::IntRect({0, 0}, {44, 44}), 0.f, 25.f, 1.f, 100.f));
+                enemyShooters.push_back(EnemyShooter(position, {tileSize, tileSize}, &m_texturesManager.getEnemyShooterLeftTexture(), sf::IntRect({0, 0}, {44, 44}), 0.f, 10.f, 1.f, 100.f));
             }
             columnNumber ++;
         }
@@ -506,6 +509,9 @@ void Game::_deleteCurrentLevel() {
     platforms.clear();
     unlockLevelTriggers.clear();
     enemyWalkers.clear();
+    for (auto& enemyShooter : enemyShooters) {
+        enemyShooter.setBullets({}); // Clear the bullets of the enemy shooter
+    }
     enemyShooters.clear();
 }
 
@@ -594,7 +600,7 @@ void Game::_checkEnemyCollisions(Player &player, std::vector<EnemyWalker> &enemy
                     // Player is invincible, ignore the hit
                     continue;
                 }
-                _playerHit(player, bullet.getDamage()); // Player hit by bullet
+                _playerHit(player, enemyShooter.getDamage()); // Player hit by bullet
                 enemyShooter.removeBullet(i); // Remove the bullet from the enemy shooter
                 i --;
             }
@@ -798,6 +804,7 @@ void Game::_updateKillAura(KillAura &killAura, Player &player) {
         }
         killAura.setPosition({player.getX() - (killAura.getWidth() - player.getWidth()) / 2.f, player.getY() - (killAura.getHeight() - player.getHeight()) / 2.f}); // Set kill aura position to player position
         killAura.update(1.f / 60.f, player.getPosition()); // Update kill aura
+        player.setColor(sf::Color::White);
     } else{
         killAura.setPosition({-9999.f, -9999.f}); // Set kill aura position to offscreen
     }
