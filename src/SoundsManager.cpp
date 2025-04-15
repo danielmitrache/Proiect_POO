@@ -5,6 +5,7 @@ SoundsManager::SoundsManager() {
     loadSfxSound("hit", "./assets/sounds/hit.wav");
     loadSfxSound("pickupCoin", "./assets/sounds/pickupCoin.wav");
     loadSfxSound("selectLevel", "./assets/sounds/selectLevel.wav");
+    loadSfxSound("killAura", "./assets/sounds/killAura.wav");
 
     loadBackgroundMusic("mainMenuMusic", "./assets/sounds/mainMenuMusic.ogg");
     loadBackgroundMusic("chapter1", "./assets/sounds/chapter1.ogg");

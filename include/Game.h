@@ -141,6 +141,12 @@ private:
 
     // Function for when the player gets hit
     void _playerHit(Player &player, float damage);
+
+    // Function that checks if the player is killing an enemy
+    void _checkEnemyKillAuraCollision(KillAura killAura, std::vector<EnemyShooter> &enemyShooters);
+
+    // Function that updates kill aura position / animation
+    void _updateKillAura(KillAura &killAura, Player &player);
 };
 
 #endif // GAME_H

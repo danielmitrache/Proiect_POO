@@ -4,6 +4,7 @@
 #include "Actor.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <cmath>
 
 class KillAura : public Actor, public sf::Drawable {
 private:
@@ -15,6 +16,10 @@ private:
     // Texture for the kill aura
     sf::Texture* m_killAuraTexture;
     sf::IntRect m_killAuraTextureRect; // Texture rectangle for the kill aura
+
+    // Animation for the kill aura
+    float m_f_animationTimer = 0.f;
+    float m_f_animationDuration = 0.5f;
 
 public:
     KillAura(sf::Vector2f position, float radius, sf::Color color);
@@ -34,6 +39,8 @@ public:
     sf::Vector2f getPosition() const;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+    void update(float deltaTime, sf::Vector2f playerPosition);
 
 };
 

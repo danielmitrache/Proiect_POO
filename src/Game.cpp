@@ -88,11 +88,7 @@ void Game::_update() {
     player.update();
     player.setCanJump(false); // Presupunem ca nu putem sari pana cand nu verificam coliziunile
 
-    if (player.getAttackTimer() > 0.f) {
-        killAura.setPosition({player.getX() + player.getWidth() / 2.f, player.getY() + player.getHeight() / 2.f});
-    } else{
-        killAura.setPosition({-9999.f, -9999.f}); // Set kill aura position to offscreen
-    }
+
 
     if (m_f_playerInvincibilityTime > 0.f) {
         m_f_playerInvincibilityTime -= 1.f / 60.f; // Scadem timpul de invincibilitate
@@ -109,6 +105,8 @@ void Game::_update() {
     _checkNextLevelTriggerCollision(player, nextLevelTrigger, unlockLevelTriggers);
     _checkEnemyCollisions(player, enemyWalkers);
     _updateHearts(player.getHealth());
+    _updateKillAura(killAura, player); // Update kill aura position and state
+    _checkEnemyKillAuraCollision(killAura, enemyShooters); // Check if the player is killing an enemy
 
     /// ANIMATIONS
     _updateAnimations();
@@ -762,5 +760,27 @@ void Game::_playerHit(Player &player, float damage) {
         m_soundsManager.playSfxSound("hit"); // Play sound when player collides with a deadly platform
         m_f_playerInvincibilityTime = 2.f; // Set invincibility time to 1 second
         m_Overlay.setColor(sf::Color(255, 0, 0, 60)); // Set red overlay color to red with full opacity
+    }
+}
+
+void Game::_checkEnemyKillAuraCollision(KillAura killAura, std::vector<EnemyShooter> &enemyShooters) {
+    for (size_t i = 0; i < enemyShooters.size(); ++i) {
+        if (Colisions::checkColision(killAura, enemyShooters[i])) {
+            enemyShooters.erase(enemyShooters.begin() + i); // Remove the enemy from the vector
+            i --;
+        }
+    }
+}
+
+void Game::_updateKillAura(KillAura &killAura, Player &player) {
+    if (player.getAttackTimer() > 0.f) {
+        if (player.getAttackTimer() == 0.5) {
+            killAura.setIsActive(true); // Set kill aura to active
+            m_soundsManager.playSfxSound("killAura"); // Play attack sound
+        }
+        killAura.setPosition({player.getX() - (killAura.getWidth() - player.getWidth()) / 2.f, player.getY() - (killAura.getHeight() - player.getHeight()) / 2.f}); // Set kill aura position to player position
+        killAura.update(1.f / 60.f, player.getPosition()); // Update kill aura
+    } else{
+        killAura.setPosition({-9999.f, -9999.f}); // Set kill aura position to offscreen
     }
 }
