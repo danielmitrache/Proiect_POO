@@ -24,6 +24,8 @@ Game::Game()
 
     nextLevelTrigger.setTexture(&m_texturesManager.getNextLevelTriggerTexture(), sf::IntRect({0, 0}, {32, 32}));
     nextLevelTrigger.setColor(sf::Color::White); 
+
+    m_playerPositionHistory.push_back({0.f, 0.f}); // Add the initial position of the player to the history
 }
 
 Game::~Game() {}
@@ -94,6 +96,10 @@ void Game::_update() {
 
 
     player.update();
+    m_playerPositionHistory.push_back({player.getX(), player.getY()});
+    if(m_playerPositionHistory.size() > 15) {
+        m_playerPositionHistory.pop_front();
+    }
     player.setCanJump(false); // Presupunem ca nu putem sari pana cand nu verificam coliziunile
 
 
@@ -108,6 +114,7 @@ void Game::_update() {
 
     _moveEnemyWalkers(enemyWalkers, platforms);
     _updateEnemyShooters(enemyShooters, player);
+    _updateEnemyChasers(enemyChasers, player); // Update enemy chasers
     _solvePlatformCollisions(player, platforms);
     _checkUnlockLevelTriggerCollision(player, unlockLevelTriggers);
     _checkNextLevelTriggerCollision(player, nextLevelTrigger, unlockLevelTriggers);
@@ -519,6 +526,7 @@ void Game::_deleteCurrentLevel() {
         enemyShooter.setBullets({}); // Clear the bullets of the enemy shooter
     }
     enemyShooters.clear();
+    enemyChasers.clear();
 }
 
 void Game::_checkUnlockLevelTriggerCollision(Player &player, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {
@@ -610,6 +618,17 @@ void Game::_checkEnemyCollisions(Player &player, std::vector<EnemyWalker> &enemy
                 enemyShooter.removeBullet(i); // Remove the bullet from the enemy shooter
                 i --;
             }
+        }
+    }
+
+
+    for (auto & enemyChaser : enemyChasers) {
+        if (Colisions::checkColision(player, enemyChaser)) {
+            if (m_f_playerInvincibilityTime > 0.f) {
+                // Player is invincible, ignore the hit
+                continue;
+            }
+            _playerHit(player, enemyChaser.getDamage()); // Player hit by enemy chaser
         }
     }
 }
@@ -800,6 +819,13 @@ void Game::_checkEnemyKillAuraCollision(KillAura killAura, std::vector<EnemyShoo
             }
         }
     }
+
+    for (int i = enemyChasers.size() - 1; i >= 0; --i) {
+        if (Colisions::checkColision(killAura, enemyChasers[i])) {
+            enemyChasers.erase(enemyChasers.begin() + i); 
+            continue;
+        }
+    }
 }
 
 void Game::_updateKillAura(KillAura &killAura, Player &player) {
@@ -812,5 +838,11 @@ void Game::_updateKillAura(KillAura &killAura, Player &player) {
         killAura.update(1.f / 60.f, player.getPosition()); // Update kill aura
     } else{
         killAura.setPosition({-9999.f, -9999.f}); // Set kill aura position to offscreen
+    }
+}
+
+void Game::_updateEnemyChasers(std::vector<EnemyChaser> &enemyChasers, Player &player) {
+    for (auto& enemyChaser : enemyChasers) {
+        enemyChaser.update(m_playerPositionHistory.front()); // Update the enemy chaser
     }
 }

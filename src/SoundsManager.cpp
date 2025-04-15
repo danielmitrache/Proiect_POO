@@ -12,6 +12,7 @@ SoundsManager::SoundsManager() {
     loadBackgroundMusic("chapter2", "./assets/sounds/chapter2.ogg");
 
     setAllSfxSoundsVolume(40.f); // Set default volume for all sounds
+    setSfxVolume("collectCoin", 20.f); // Set default volume for collect coin sound
     setAllBackgroundMusicVolume(40.f); // Set default volume for all background music
 }
 

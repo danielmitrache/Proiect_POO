@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <deque>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <random>
@@ -37,6 +38,7 @@ private:
     sf::RenderWindow window; // Fereastra jocului
     Background background; // Fundalul jocului
 
+    std::deque<sf::Vector2f> m_playerPositionHistory;
     Player player;           // Jucatorul
     KillAura killAura;      // Aura de atac
     float m_f_playerInvincibilityTime = 0.f; // Timpul de invincibilitate al jucatorului
@@ -151,6 +153,9 @@ private:
 
     // Function that updates kill aura position / animation
     void _updateKillAura(KillAura &killAura, Player &player);
+
+    // Function that updates enemy chasers
+    void _updateEnemyChasers(std::vector<EnemyChaser> &enemyChasers, Player &player);
 };
 
 #endif // GAME_H
