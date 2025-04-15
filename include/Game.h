@@ -25,6 +25,7 @@
 #include "EnemyShooter.h"
 #include "KillAura.h"
 #include "Bullet.h"
+#include "EnemyChaser.h"
 
 class Game {
 private:
@@ -48,6 +49,8 @@ private:
     std::vector<UnlockLevelTrigger> unlockLevelTriggers; // Trigger pentru deblocarea nivelului
     std::vector<EnemyWalker> enemyWalkers; // Inamicii care se misca
     std::vector<EnemyShooter> enemyShooters; // Inamicii care trag
+    std::vector<EnemyChaser> enemyChasers; // Inamicii care urmaresc jucatorul
+
 
     std::vector<sf::Sprite> heartSprites; // Inimile jucatorului
 

@@ -14,6 +14,7 @@ private:
     sf::Texture m_texture_enemyShooterTexture_right; // Texture for the enemy shooter
     sf::Texture m_texture_enemyShooterTexture_left; // Texture for the enemy shooter (left)
     sf::Texture m_killAuraTexture; // Texture for the kill aura
+    sf::Texture m_enemyChaserTexture; // Texture for the enemy chaser
 
 public:
     TexturesManager();
@@ -29,6 +30,7 @@ public:
     sf::Texture& getEnemyShooterRightTexture() { return m_texture_enemyShooterTexture_right; }
     sf::Texture& getEnemyShooterLeftTexture() { return m_texture_enemyShooterTexture_left; } 
     sf::Texture& getKillAuraTexture() { return m_killAuraTexture; }
+    sf::Texture& getEnemyChaserTexture() { return m_enemyChaserTexture; }
     void setTilesetTexture(const std::string& path);
     void setHeartTexture(const std::string& path);
     void setEnemyWalkerTextureLeft(const std::string& path);
@@ -39,6 +41,7 @@ public:
     void setEnemyShooterRightTexture(const std::string& path);
     void setEnemyShooterLeftTexture(const std::string& path);
     void setKillAuraTexture(const std::string& path);
+    void setEnemyChaserTexture(const std::string& path);
 
     void loadTextures();
 };

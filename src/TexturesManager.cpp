@@ -37,6 +37,9 @@ void TexturesManager::loadTextures() {
     if (!m_killAuraTexture.loadFromFile("./assets/textures/killAura.png")) {
         std::cerr << "Error loading kill aura texture" << std::endl;
     }
+    if (!m_enemyChaserTexture.loadFromFile("./assets/textures/enemyChaser.png")) {
+        std::cerr << "Error loading enemy chaser texture" << std::endl;
+    }
 }
 
 void TexturesManager::setTilesetTexture(const std::string& path) {
@@ -96,5 +99,11 @@ void TexturesManager::setEnemyShooterLeftTexture(const std::string& path) {
 void TexturesManager::setKillAuraTexture(const std::string& path) {
     if (!m_killAuraTexture.loadFromFile(path)) {
         std::cerr << "Error loading kill aura texture from: " << path << std::endl;
+    }
+}
+
+void TexturesManager::setEnemyChaserTexture(const std::string& path) {
+    if (!m_enemyChaserTexture.loadFromFile(path)) {
+        std::cerr << "Error loading enemy chaser texture from: " << path << std::endl;
     }
 }

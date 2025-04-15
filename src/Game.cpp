@@ -86,10 +86,10 @@ void Game::_processEvents() {
 // Update logica joc
 void Game::_update() {
     /// DEBUG
-    // if (enemyShooters.size() > 0) {
-    //     EnemyShooter &enemyShooter = enemyShooters[0]; // Get the first enemy shooter
-    //     std::cout << enemyShooter.getBullets().size() << std::endl; // Print the number of bullets
-    // }
+    if (enemyShooters.size() > 0) {
+        EnemyShooter &enemyShooter = enemyShooters[0]; // Get the first enemy shooter
+        //std::cout << enemyShooter.getBullets().size() << std::endl; // Print the number of bullets
+    }
     /// END DEBUG
 
 
@@ -192,6 +192,9 @@ void Game::_drawActors() {
         for (auto& bullet : bullets) {
             window.draw(bullet); // Desenam gloantele
         }
+    }
+    for (auto& enemyChaser : enemyChasers) {
+        window.draw(enemyChaser);
     }
 }
 
@@ -322,6 +325,9 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
             }
             else if (tileType == 8) {
                 enemyShooters.push_back(EnemyShooter(position, {tileSize, tileSize}, &m_texturesManager.getEnemyShooterLeftTexture(), sf::IntRect({0, 0}, {44, 44}), 0.f, 10.f, 1.f, 100.f));
+            }
+            else if (tileType == 9) {
+                enemyChasers.push_back(EnemyChaser(position, {tileSize / 1.5f, tileSize / 1.5f}, &m_texturesManager.getEnemyChaserTexture(), sf::IntRect({6, 6}, {42, 42}), 3.f, 30.f));
             }
             columnNumber ++;
         }
@@ -804,7 +810,6 @@ void Game::_updateKillAura(KillAura &killAura, Player &player) {
         }
         killAura.setPosition({player.getX() - (killAura.getWidth() - player.getWidth()) / 2.f, player.getY() - (killAura.getHeight() - player.getHeight()) / 2.f}); // Set kill aura position to player position
         killAura.update(1.f / 60.f, player.getPosition()); // Update kill aura
-        player.setColor(sf::Color::White);
     } else{
         killAura.setPosition({-9999.f, -9999.f}); // Set kill aura position to offscreen
     }
