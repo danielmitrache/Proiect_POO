@@ -593,7 +593,7 @@ void Game::_checkEnemyCollisions(Player &player, std::vector<EnemyWalker> &enemy
 
             if (player.getVerticalSpeed() > 0.f) {
                 // Player jumps on the enemy
-                player.setVerticalSpeed(std::max(-player.getVerticalSpeed() * 1.3f, -25.f)); // Bounce off the enemy
+                player.setVerticalSpeed(std::max(-player.getVerticalSpeed() * 1.2f, -20.f)); // Bounce off the enemy
                 enemyWalker.setTakeDamageTimer(); // Set the take damage timer to 0.2 seconds
                 continue; // Skip the rest of the loop
             } 
