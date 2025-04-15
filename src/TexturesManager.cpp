@@ -34,6 +34,9 @@ void TexturesManager::loadTextures() {
     if (!m_texture_enemyShooterTexture_left.loadFromFile("./assets/textures/shootingEnemyLeft.png")) {
         std::cerr << "Error loading enemy shooter left texture" << std::endl;
     }
+    if (!m_killAuraTexture.loadFromFile("./assets/textures/killAura.png")) {
+        std::cerr << "Error loading kill aura texture" << std::endl;
+    }
 }
 
 void TexturesManager::setTilesetTexture(const std::string& path) {
@@ -87,5 +90,11 @@ void TexturesManager::setEnemyShooterRightTexture(const std::string& path) {
 void TexturesManager::setEnemyShooterLeftTexture(const std::string& path) {
     if (!m_texture_enemyShooterTexture_left.loadFromFile(path)) {
         std::cerr << "Error loading enemy shooter left texture from: " << path << std::endl;
+    }
+}
+
+void TexturesManager::setKillAuraTexture(const std::string& path) {
+    if (!m_killAuraTexture.loadFromFile(path)) {
+        std::cerr << "Error loading kill aura texture from: " << path << std::endl;
     }
 }

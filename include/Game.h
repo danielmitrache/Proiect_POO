@@ -23,6 +23,7 @@
 #include "ProgressManager.h"
 #include "SoundsManager.h"
 #include "EnemyShooter.h"
+#include "KillAura.h"
 
 class Game {
 private:
@@ -35,6 +36,7 @@ private:
     Background background; // Fundalul jocului
 
     Player player;           // Jucatorul
+    KillAura killAura;      // Aura de atac
     float m_f_playerInvincibilityTime = 0.f; // Timpul de invincibilitate al jucatorului
     int m_i_collectedCoins = 0, m_i_coinsNeededToPass = 0; // Numarul de monede colectate
     int m_i_deathCount = 0; // Numarul de morti al jucatorului

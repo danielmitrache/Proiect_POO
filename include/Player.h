@@ -38,7 +38,7 @@ private:
     // Attack
     bool m_b_canAttack = false;
     float m_f_attackCooldown = 1.f; // Attack cooldown
-    bool m_b_isAttacking = false; // Is the player attacking
+    float m_f_attackTimer = 0.f; // Attack timer
 public:
     Player();
     Player(sf::Vector2f position);
@@ -85,7 +85,7 @@ public:
     void setAttackCooldown(float attackCooldown);
     float getAttackCooldown() const;
 
-    bool getIsAttacking() const;
+    float getAttackTimer() const;
 private:
     /// JUMPING ///
     // If it can jump, apply the jump force

@@ -11,7 +11,8 @@ Game::Game()
     m_coinText(m_font), m_deathCountText(m_font), m_levelNumberText(m_font), m_wantToExitText(m_font),
     m_i_deathCount(0),
     m_texturesManager(),
-    m_soundsManager()
+    m_soundsManager(),
+    killAura({0.f, 0.f}, 100.f, sf::Color::White, &m_texturesManager.getKillAuraTexture(), sf::IntRect({0, 0}, {420, 420})) // Initialize kill aura
 {
     this->window.setFramerateLimit(60);
     background.setScale({WINDOW_WIDTH, WINDOW_HEIGHT});
@@ -87,9 +88,10 @@ void Game::_update() {
     player.update();
     player.setCanJump(false); // Presupunem ca nu putem sari pana cand nu verificam coliziunile
 
-    if (player.getIsAttacking()) {
-        std::cout << "Player is attacking!" << std::endl;
-        
+    if (player.getAttackTimer() > 0.f) {
+        killAura.setPosition({player.getX() + player.getWidth() / 2.f, player.getY() + player.getHeight() / 2.f});
+    } else{
+        killAura.setPosition({-9999.f, -9999.f}); // Set kill aura position to offscreen
     }
 
     if (m_f_playerInvincibilityTime > 0.f) {
@@ -166,6 +168,7 @@ void Game::_drawActors() {
         }
     }
 
+    window.draw(killAura); 
     window.draw(player);
     window.draw(nextLevelTrigger);
     for (auto& platform : platforms)

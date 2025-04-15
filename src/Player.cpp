@@ -22,7 +22,6 @@ Player::Player(sf::Vector2f position) {
     m_v2f_lastSpawn = position;
     m_f_attackCooldown = 1.f; // Initialize attack cooldown
     m_b_canAttack = false;
-    m_b_isAttacking = false;
 }
 
 Player::Player(sf::Vector2f position, sf::Texture* texture) {
@@ -102,20 +101,21 @@ void Player::update() {
 
 
     /// ATACK ///
+    if (m_f_attackTimer > 0.f) {
+        m_f_attackTimer -= 1.f / 60.f; // Decrease attack timer
+    }
     if (m_f_attackCooldown > 0.f) {
         m_f_attackCooldown -= 1.f / 60.f; // Decrease cooldown
     } else {
         m_b_canAttack = true; // Reset attack ability
     }
-    if (m_b_isAttacking)
-        m_b_isAttacking = false; // Reset attacking state
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::K)) {
         if (m_b_canAttack) {
             m_b_canAttack = false;
             m_f_attackCooldown = 1.f; // Reset cooldown
 
             // Attack logic
-            m_b_isAttacking = true; // Set attacking state
+            m_f_attackTimer = 0.5f; // Reset attack timer
         }
     }
 }
@@ -206,6 +206,6 @@ float Player::getAttackCooldown() const {
     return m_f_attackCooldown;
 }
 
-bool Player::getIsAttacking() const {
-    return m_b_isAttacking;
+float Player::getAttackTimer() const {
+    return m_f_attackTimer;
 }
