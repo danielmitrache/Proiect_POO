@@ -4,6 +4,7 @@ const unsigned int WINDOW_WIDTH = 1400u;
 const unsigned int WINDOW_HEIGHT = 800u;
 
 const int UNLOCK_ATTACK_CHAPTER = 4;
+const int UNLOCK_WASD_CHAPTER = 5;
 
 Game::Game() 
     : window(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "My game!"),
@@ -11,11 +12,11 @@ Game::Game()
     nextLevelTrigger({-9999.f, -9999.f}, 0),
     background("./assets/textures/Backgrounds/1.png"),
     m_f_playerInvincibilityTime(0.f),
-    m_coinText(m_font), m_deathCountText(m_font), m_levelNumberText(m_font), m_wantToExitText(m_font), m_attackCooldownText(m_pixelFont), 
+    m_coinText(m_font), m_deathCountText(m_font), m_levelNumberText(m_font), m_wantToExitText(m_font), m_attackCooldownText(m_font), 
     m_i_deathCount(0),
     m_texturesManager(),
     m_soundsManager(),
-    killAura({0.f, 0.f}, 100.f, sf::Color::White, &m_texturesManager.getKillAuraTexture(), sf::IntRect({0, 0}, {420, 420})) // Initialize kill aura
+    killAura({-9999.f, -9999.f}, 100.f, sf::Color::White, &m_texturesManager.getKillAuraTexture(), sf::IntRect({0, 0}, {420, 420})) // Initialize kill aura
 {
     this->window.setFramerateLimit(60);
     background.setScale({WINDOW_WIDTH, WINDOW_HEIGHT});
@@ -117,13 +118,13 @@ void Game::_update() {
 
     _moveEnemyWalkers(enemyWalkers, platforms);
     _updateEnemyShooters(enemyShooters, player);
-    _updateEnemyChasers(enemyChasers, player); // Update enemy chasers
+    _updateEnemyChasers(enemyChasers, player);
     _solvePlatformCollisions(player, platforms);
     _checkUnlockLevelTriggerCollision(player, unlockLevelTriggers);
     _checkNextLevelTriggerCollision(player, nextLevelTrigger, unlockLevelTriggers);
     _checkEnemyCollisions(player, enemyWalkers);
     _updateHearts(player.getHealth());
-    _checkEnemyKillAuraCollision(killAura, enemyShooters); // Check if the player is killing an enemy
+    _checkEnemyKillAuraCollision(killAura, enemyShooters);
     _checkBulletCollisions(enemyShooters, platforms);
 
     if (!m_b_isInStartMenu) {
@@ -264,6 +265,7 @@ void Game::_drawUI() {
 void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMenu, float tileSize) {
     // Stergem nivelul curent
     _deleteCurrentLevel();
+    player.setHealth(100.f); // Reset player health
 
     std::regex numberRegex(R"(\d+)");
     std::smatch match;
@@ -394,7 +396,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
                         break;
                     }
                 }
-                enemyChasers.push_back(EnemyChaser(position, {tileSize / 1.5f, tileSize / 1.5f}, &m_texturesManager.getEnemyChaserTexture(), sf::IntRect({6, 6}, {42, 42}), enemyChaserSpeed, 30.f));
+                enemyChasers.push_back(EnemyChaser(position, {tileSize / 1.5f, tileSize / 1.5f}, &m_texturesManager.getEnemyChaserTexture(), sf::IntRect({6, 6}, {42, 42}), enemyChaserSpeed, 50.f));
             }
             columnNumber ++;
         }
@@ -432,6 +434,7 @@ void Game::_loadStartMenu(std::vector<int> &availableChapters) {
     m_soundsManager.playBackgroundMusic("mainMenuMusic", sf::seconds(4.f));
     m_b_isInStartMenu = true;
     m_b_cameraFollowsPlayer = true;
+    player.setMode(PlayerMode::Platformer); // Set player mode to platformer
     const float tileSize = 64.f; 
     background.setColor(ColorHelpers::blendColors(sf::Color::White, sf::Color::Black, 0.5f)); // Set background color to black with 50% opacity
     background.setTexture("./assets/textures/Backgrounds/startmenu.png"); // Set background texture to start menu texture
@@ -823,7 +826,9 @@ void Game::_loadChapter(int chapterID) {
     m_soundsManager.playBackgroundMusic("chapter" + std::to_string(chapterID), sf::seconds(4.f)); // Play the chapter music
 
     int levelID = _getLevelIDFromChapterID(chapterID);
-
+    if (chapterID >= UNLOCK_WASD_CHAPTER) {
+        player.setMode(PlayerMode::WASD);
+    }
     // We load the level based on the level ID
     _loadPlatformerLevel("./assets/level_layouts/level" + std::to_string(levelID) + ".txt", true, 64.f);
     nextLevelTrigger.setNextLevelID(levelID + 1); // Set the next level ID to the next level
@@ -844,6 +849,9 @@ int Game::_getLevelIDFromChapterID(int chapterID) const {
             break;
         case 4:
             levelID = 20;
+            break;
+        case 5:
+            levelID = 25;
             break;
     }
     return levelID;
