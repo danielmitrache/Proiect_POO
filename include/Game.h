@@ -8,6 +8,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <random>
+#include <regex>
+#include <string>
 #include "Player.h"
 #include "Platform.h"
 #include "Colisions.h"
@@ -156,6 +158,12 @@ private:
 
     // Function that updates enemy chasers
     void _updateEnemyChasers(std::vector<EnemyChaser> &enemyChasers, Player &player);
+
+    // Function that reads a config file
+    std::vector< std::pair<sf::Vector2i,float> > _readConfigFile(const std::string& filePath);
+
+    // Function that checks if bullets go into walls
+    void _checkBulletCollisions(std::vector<EnemyShooter> &enemyShooters, std::vector<std::unique_ptr<Platform>> &platforms);
 };
 
 #endif // GAME_H

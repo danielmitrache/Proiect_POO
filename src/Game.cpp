@@ -90,7 +90,7 @@ void Game::_update() {
     /// DEBUG
     if (enemyShooters.size() > 0) {
         EnemyShooter &enemyShooter = enemyShooters[0]; // Get the first enemy shooter
-        //std::cout << enemyShooter.getBullets().size() << std::endl; // Print the number of bullets
+        std::cout << enemyShooter.getBullets().size() << std::endl; // Print the number of bullets
     }
     /// END DEBUG
 
@@ -121,6 +121,7 @@ void Game::_update() {
     _checkEnemyCollisions(player, enemyWalkers);
     _updateHearts(player.getHealth());
     _checkEnemyKillAuraCollision(killAura, enemyShooters); // Check if the player is killing an enemy
+    _checkBulletCollisions(enemyShooters, platforms);
 
     if (!m_b_isInStartMenu) {
         _updateKillAura(killAura, player); // Update kill aura position and state
@@ -243,6 +244,21 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
     // Stergem nivelul curent
     _deleteCurrentLevel();
 
+    std::regex numberRegex(R"(\d+)");
+    std::smatch match;
+    int levelNumber = 0;
+    if (std::regex_search(levelPath, match, numberRegex)) {
+        std::string levelNumberStr = match.str(0); // Extract the number from the string
+        levelNumber = std::stoi(levelNumberStr); // Convert the string to an integer
+        std::cout << "Level number: " << levelNumber << std::endl;
+    } else {
+        std::cerr << "No number found in the string!" << std::endl;
+    }   
+    std::string configPath = "./assets/level_configs/level" + std::to_string(levelNumber) + "_config.txt";
+    std::vector < std::pair<sf::Vector2i, float> > config = _readConfigFile(configPath);
+
+
+
     std::ifstream file(levelPath);
     if (!file.is_open()) {
         std::cerr << "Could not open file: " << levelPath << std::endl;
@@ -328,13 +344,36 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
                 m_i_coinsNeededToPass ++;
             }
             else if (tileType == 7) {
-                enemyWalkers.push_back(EnemyWalker(position, {tileSize, tileSize}, &m_texturesManager.getEnemyWalkerTextureRight(), sf::IntRect({4, 4}, {32, 32}), 3.f, 30.f));
+                enemyWalkers.push_back(EnemyWalker(position, {tileSize, tileSize}, &m_texturesManager.getEnemyWalkerTextureRight(), sf::IntRect({4, 4}, {32, 32}), 3.f, 25.f, 1.25f));
             }
             else if (tileType == 8) {
-                enemyShooters.push_back(EnemyShooter(position, {tileSize, tileSize}, &m_texturesManager.getEnemyShooterLeftTexture(), sf::IntRect({0, 0}, {44, 44}), 0.f, 10.f, 1.f, 100.f));
+                float enemyShooterSpeed = 1.5f; // Speed of the enemy shooter
+                std::cout << "Linia " << lineNumber << " coloana " << columnNumber << std::endl;
+                for (auto& configItem : config) {
+                    std::cout << "Config item: " << configItem.first.x << " " << configItem.first.y << " " << configItem.second << std::endl;
+                    if (configItem.first.x == -1 && configItem.first.y == -1) {
+                        break;
+                    }
+                    if (configItem.first.x == lineNumber && configItem.first.y == columnNumber) {
+                        enemyShooterSpeed = configItem.second;
+                        break;
+                    }
+                }
+                std::cout << "Enemy shooter speed: " << enemyShooterSpeed << std::endl;
+                enemyShooters.push_back(EnemyShooter(position, {tileSize, tileSize}, &m_texturesManager.getEnemyShooterLeftTexture(), sf::IntRect({0, 0}, {44, 44}), 0.f, 25.f, enemyShooterSpeed, 100.f));
             }
             else if (tileType == 9) {
-                enemyChasers.push_back(EnemyChaser(position, {tileSize / 1.5f, tileSize / 1.5f}, &m_texturesManager.getEnemyChaserTexture(), sf::IntRect({6, 6}, {42, 42}), 3.f, 30.f));
+                float enemyChaserSpeed = 1.5f; // Speed of the enemy shooter
+                for (auto& configItem : config) {
+                    if (configItem.first.x == -1 && configItem.first.y == -1) {
+                        continue;
+                    }
+                    if (configItem.first.x == lineNumber && configItem.first.y == columnNumber) {
+                        enemyChaserSpeed = configItem.second;
+                        break;
+                    }
+                }
+                enemyChasers.push_back(EnemyChaser(position, {tileSize / 1.5f, tileSize / 1.5f}, &m_texturesManager.getEnemyChaserTexture(), sf::IntRect({6, 6}, {42, 42}), enemyChaserSpeed, 30.f));
             }
             columnNumber ++;
         }
@@ -593,7 +632,7 @@ void Game::_checkEnemyCollisions(Player &player, std::vector<EnemyWalker> &enemy
 
             if (player.getVerticalSpeed() > 0.f) {
                 // Player jumps on the enemy
-                player.setVerticalSpeed(std::max(-player.getVerticalSpeed() * 1.2f, -20.f)); // Bounce off the enemy
+                player.setVerticalSpeed(std::max(-player.getVerticalSpeed() * enemyWalker.getBounceForce(), -20.f)); // Bounce off the enemy
                 enemyWalker.setTakeDamageTimer(); // Set the take damage timer to 0.2 seconds
                 continue; // Skip the rest of the loop
             } 
@@ -770,6 +809,9 @@ int Game::_getLevelIDFromChapterID(int chapterID) const {
         case 2:
             levelID = 7;
             break;
+        case 3:
+            levelID = 13;
+            break;
     }
     return levelID;
 }
@@ -798,7 +840,7 @@ void Game::_playerHit(Player &player, float damage) {
     if (m_f_playerInvincibilityTime <= 0.f) {
         player.setHealth(player.getHealth() - damage);
         m_soundsManager.playSfxSound("hit"); // Play sound when player collides with a deadly platform
-        m_f_playerInvincibilityTime = 2.f; // Set invincibility time to 1 second
+        m_f_playerInvincibilityTime = 1.f; // Set invincibility time to 1 second
         m_Overlay.setColor(sf::Color(255, 0, 0, 60)); // Set red overlay color to red with full opacity
     }
 }
@@ -846,3 +888,37 @@ void Game::_updateEnemyChasers(std::vector<EnemyChaser> &enemyChasers, Player &p
         enemyChaser.update(m_playerPositionHistory.front()); // Update the enemy chaser
     }
 }
+
+std::vector< std::pair<sf::Vector2i,float> > Game::_readConfigFile(const std::string& filePath) {
+    std::ifstream file(filePath);
+
+    if (!file.is_open()) {
+        std::cerr << "Could not open file: " << filePath << std::endl;
+        return {};
+    }
+
+    std::vector< std::pair<sf::Vector2i,float> > configData;
+
+    float coordX, coordY, value;
+    while (file >> coordX >> coordY >> value) {
+        configData.push_back({{static_cast<int>(coordX), static_cast<int>(coordY)}, value});
+    }
+    file.close();
+    return configData;
+}
+
+void Game::_checkBulletCollisions(std::vector<EnemyShooter> &enemyShooters, std::vector<std::unique_ptr<Platform>> &platforms) {
+    for (auto& enemyShooter : enemyShooters) {
+        for (size_t i = 0; i < enemyShooter.getBullets().size(); ++i) {
+            Bullet& bullet = enemyShooter.getBullets()[i];
+            for (auto& platform : platforms) {
+                if (Colisions::checkColision(bullet, *platform)) {
+                    enemyShooter.removeBullet(i); // Remove the bullet from the enemy shooter
+                    i --;
+                    break; // Exit the loop after removing the bullet
+                }
+            }
+        }
+    }
+}
+

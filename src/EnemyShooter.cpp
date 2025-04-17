@@ -25,6 +25,9 @@ void EnemyShooter::shootToPlayer(sf::Vector2f& playerPosition, float bulletSpeed
     if (length > 0) {
         direction /= length; // Normalize the direction vector
     }
+
+    std::cout << "Shooting!" << std::endl;
+    std::cout << "----" << std::endl;
     
     // Create a new bullet and set its properties
     Bullet bullet(m_shape.getPosition() + sf::Vector2f(10.f, 20.f), {10.f, 10.f}, bulletSpeed, direction, bulletDamage);

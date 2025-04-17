@@ -9,17 +9,20 @@
 
 class EnemyWalker : public Enemy {
 private:
-
+    float m_f_bounceForce = 1.2f;
 public:
-    EnemyWalker(const sf::Vector2f& position, float speed = 10.f, float damage = 10.f);
-    EnemyWalker(const sf::Vector2f& position, const sf::Vector2f& size, float speed = 10.f, float damage = 10.f);
-    EnemyWalker(const sf::Vector2f& position, const sf::Vector2f& size, sf::Texture* texture, float speed = 10.f, float damage = 10.f);
-    EnemyWalker(const sf::Vector2f& position, const sf::Vector2f& size, sf::Texture* texture, const sf::IntRect& textureRect, float speed = 10.f, float damage = 10.f);
+    EnemyWalker(const sf::Vector2f& position, float speed = 10.f, float damage = 10.f, float bounceForce = 1.2f);
+    EnemyWalker(const sf::Vector2f& position, const sf::Vector2f& size, float speed = 10.f, float damage = 10.f, float bounceForce = 1.2f);
+    EnemyWalker(const sf::Vector2f& position, const sf::Vector2f& size, sf::Texture* texture, float speed = 10.f, float damage = 10.f, float bounceForce = 1.2f);
+    EnemyWalker(const sf::Vector2f& position, const sf::Vector2f& size, sf::Texture* texture, const sf::IntRect& textureRect, float speed = 10.f, float damage = 10.f, float bounceForce = 1.2f);
 
     ~EnemyWalker() override;
 
     void walk();
     void reverseDirection();
+
+    void setBounceForce(float bounceForce);
+    float getBounceForce() const;
 };
 
 #endif // ENEMYWALKER_H
