@@ -2,13 +2,16 @@
 
 const unsigned int WINDOW_WIDTH = 1400u;
 const unsigned int WINDOW_HEIGHT = 800u;
+
+const int UNLOCK_ATTACK_CHAPTER = 4;
+
 Game::Game() 
     : window(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "My game!"),
     player({50.f, 200.f}),
     nextLevelTrigger({-9999.f, -9999.f}, 0),
     background("./assets/textures/Backgrounds/1.png"),
     m_f_playerInvincibilityTime(0.f),
-    m_coinText(m_font), m_deathCountText(m_font), m_levelNumberText(m_font), m_wantToExitText(m_font),
+    m_coinText(m_font), m_deathCountText(m_font), m_levelNumberText(m_font), m_wantToExitText(m_font), m_attackCooldownText(m_pixelFont), 
     m_i_deathCount(0),
     m_texturesManager(),
     m_soundsManager(),
@@ -233,6 +236,24 @@ void Game::_drawUI() {
         // Desenam textul cu numarul nivelului curent
         m_levelNumberText.setString("Chapter: " + std::to_string(m_i_currentChapter));
         window.draw(m_levelNumberText); // Desenam textul cu numarul nivelului curent
+
+        if (m_i_currentChapter >= UNLOCK_ATTACK_CHAPTER) {
+            if (player.getAttackCooldown() > 0) {
+                float roundedCooldown = std::round(player.getAttackCooldown() * 10.f) / 10.f;
+                std::ostringstream stream;
+                stream.precision(1);
+                stream << std::fixed << roundedCooldown; 
+                m_attackCooldownText.setString("Attack cooldown: " + stream.str() + "s");
+                m_attackCooldownText.setPosition({WINDOW_WIDTH - 330.f, 100.f});
+                m_attackCooldownText.setFillColor(sf::Color(150, 150, 150));
+            }
+            else {
+                m_attackCooldownText.setPosition({WINDOW_WIDTH - 250.f, 100.f});
+                m_attackCooldownText.setString("Attack ready!");
+                m_attackCooldownText.setFillColor(sf::Color::Red);
+            }
+            window.draw(m_attackCooldownText); // Desenam textul cu cooldown-ul de atac
+        }
     }
 
     if(escTimer > 0.f) {
@@ -769,15 +790,24 @@ void Game::_initTextElements() {
     m_coinText.setFillColor(sf::Color(200, 200, 200));
     m_coinText.setPosition({50.f, 45.f});
     m_coinText.setString("Coins: 0 / 0");
+
     m_deathCountText = sf::Text(m_pixelFont);
     m_deathCountText.setCharacterSize(30);
     m_deathCountText.setFillColor(sf::Color::Red);
     m_deathCountText.setPosition({50.f, 5.f});
     m_deathCountText.setString("Deaths: 0");
+
     m_levelNumberText = sf::Text(m_pixelFont);
     m_levelNumberText.setCharacterSize(30);
     m_levelNumberText.setFillColor(sf::Color::Black);
     m_levelNumberText.setPosition({50.f, 85.f});
+
+    m_attackCooldownText = sf::Text(m_pixelFont);
+    m_attackCooldownText.setCharacterSize(20);
+    m_attackCooldownText.setFillColor(sf::Color(200, 200, 200));
+    m_attackCooldownText.setPosition({WINDOW_WIDTH - 330.f, 100.f});
+    m_attackCooldownText.setString("Attack cooldown: 5s");
+
 
     m_wantToExitText = sf::Text(m_pixelFont);
     m_wantToExitText.setCharacterSize(20);
@@ -811,6 +841,9 @@ int Game::_getLevelIDFromChapterID(int chapterID) const {
             break;
         case 3:
             levelID = 13;
+            break;
+        case 4:
+            levelID = 20;
             break;
     }
     return levelID;
@@ -871,6 +904,10 @@ void Game::_checkEnemyKillAuraCollision(KillAura killAura, std::vector<EnemyShoo
 }
 
 void Game::_updateKillAura(KillAura &killAura, Player &player) {
+    if (m_i_currentChapter < UNLOCK_ATTACK_CHAPTER) {
+        killAura.setIsActive(false); 
+        return;
+    }
     if (player.getAttackTimer() > 0.f) {
         if (player.getAttackTimer() == 0.5) {
             killAura.setIsActive(true); // Set kill aura to active

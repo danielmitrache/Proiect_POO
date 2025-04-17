@@ -10,6 +10,7 @@
 #include <random>
 #include <regex>
 #include <string>
+#include <sstream>
 #include "Player.h"
 #include "Platform.h"
 #include "Colisions.h"
@@ -64,6 +65,7 @@ private:
     sf::Text m_deathCountText; // Textul pentru numarul de morti
     sf::Text m_levelNumberText; // Textul pentru numarul nivelului curent
     sf::Text m_wantToExitText; // Textul pentru a iesi din joc
+    sf::Text m_attackCooldownText; // Textul pentru cooldown-ul de atac
     std::vector<sf::Text> m_startMenuTexts; // Vector de texte pentru UI-ul din start menu
 
     TexturesManager m_texturesManager; // Managerul de texturi

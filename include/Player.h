@@ -37,7 +37,7 @@ private:
 
     // Attack
     bool m_b_canAttack = false;
-    float m_f_attackCooldown = 1.f; // Attack cooldown
+    float m_f_attackCooldown = 5.f; // Attack cooldown
     float m_f_attackTimer = 0.f; // Attack timer
 public:
     Player();
