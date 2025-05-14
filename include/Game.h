@@ -31,6 +31,11 @@
 #include "Bullet.h"
 #include "EnemyChaser.h"
 
+struct PositionSpeed {
+    sf::Vector2i position;
+    float speed;
+};
+
 class Game {
 private:
     int m_i_currentChapter = -1;
@@ -162,7 +167,7 @@ private:
     void _updateEnemyChasers(std::vector<EnemyChaser> &enemyChasers, Player &player);
 
     // Function that reads a config file
-    std::vector< std::pair<sf::Vector2i,float> > _readConfigFile(const std::string& filePath);
+    std::vector< PositionSpeed > _readConfigFile(const std::string& filePath);
 
     // Function that checks if bullets go into walls
     void _checkBulletCollisions(std::vector<EnemyShooter> &enemyShooters, std::vector<std::unique_ptr<Platform>> &platforms);

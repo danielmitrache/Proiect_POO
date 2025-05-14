@@ -278,7 +278,7 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
         std::cerr << "No number found in the string!" << std::endl;
     }   
     std::string configPath = "./assets/level_configs/level" + std::to_string(levelNumber) + "_config.txt";
-    std::vector < std::pair<sf::Vector2i, float> > config = _readConfigFile(configPath);
+    std::vector < PositionSpeed > config = _readConfigFile(configPath);
 
 
 
@@ -373,8 +373,8 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
                 float enemyShooterSpeed = 1.5f; // Speed of the enemy shooter
                 std::cout << "Linia " << lineNumber << " coloana " << columnNumber << std::endl;
                 for (auto& configItem : config) {
-                    if (configItem.first.x == lineNumber && configItem.first.y == columnNumber) {
-                        enemyShooterSpeed = configItem.second;
+                    if (configItem.position.x == lineNumber && configItem.position.y == columnNumber) {
+                        enemyShooterSpeed = configItem.speed;
                         break;
                     }
                 }
@@ -384,8 +384,8 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
             else if (tileType == 9) {
                 float enemyChaserSpeed = 1.5f; // Speed of the enemy shooter
                 for (auto& configItem : config) {
-                    if (configItem.first.x == lineNumber && configItem.first.y == columnNumber) {
-                        enemyChaserSpeed = configItem.second;
+                    if (configItem.position.x == lineNumber && configItem.position.y == columnNumber) {
+                        enemyChaserSpeed = configItem.speed;
                         break;
                     }
                 }
@@ -929,7 +929,7 @@ void Game::_updateEnemyChasers(std::vector<EnemyChaser> &enemyChasers, Player &p
     }
 }
 
-std::vector< std::pair<sf::Vector2i,float> > Game::_readConfigFile(const std::string& filePath) {
+std::vector< PositionSpeed > Game::_readConfigFile(const std::string& filePath) {
     std::ifstream file(filePath);
 
     if (!file.is_open()) {
@@ -937,11 +937,14 @@ std::vector< std::pair<sf::Vector2i,float> > Game::_readConfigFile(const std::st
         return {};
     }
 
-    std::vector< std::pair<sf::Vector2i,float> > configData;
+    std::vector< PositionSpeed > configData;
 
     float coordX, coordY, value;
     while (file >> coordX >> coordY >> value) {
-        configData.push_back({{static_cast<int>(coordX), static_cast<int>(coordY)}, value});
+        PositionSpeed configItem;
+        configItem.position = {(int)coordX, (int)coordY};
+        configItem.speed = value;
+        configData.push_back(configItem);
     }
     file.close();
     return configData;
