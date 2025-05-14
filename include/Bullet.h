@@ -29,6 +29,8 @@ public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     float getLifeTime() const;
+
+    friend std::ostream& operator<<(std::ostream& os, const Bullet& bullet);
 };
 
 #endif

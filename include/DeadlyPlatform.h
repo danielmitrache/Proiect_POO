@@ -11,7 +11,7 @@ public:
     ~DeadlyPlatform();
 
     virtual void turnInvisible() override;
-    virtual void turnVisible() override;
+    virtual void turnVisible() override; 
 };
 
 #endif // DEADLYPLATFORM_H

@@ -373,10 +373,6 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
                 float enemyShooterSpeed = 1.5f; // Speed of the enemy shooter
                 std::cout << "Linia " << lineNumber << " coloana " << columnNumber << std::endl;
                 for (auto& configItem : config) {
-                    std::cout << "Config item: " << configItem.first.x << " " << configItem.first.y << " " << configItem.second << std::endl;
-                    if (configItem.first.x == -1 && configItem.first.y == -1) {
-                        break;
-                    }
                     if (configItem.first.x == lineNumber && configItem.first.y == columnNumber) {
                         enemyShooterSpeed = configItem.second;
                         break;
@@ -388,9 +384,6 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
             else if (tileType == 9) {
                 float enemyChaserSpeed = 1.5f; // Speed of the enemy shooter
                 for (auto& configItem : config) {
-                    if (configItem.first.x == -1 && configItem.first.y == -1) {
-                        continue;
-                    }
                     if (configItem.first.x == lineNumber && configItem.first.y == columnNumber) {
                         enemyChaserSpeed = configItem.second;
                         break;
@@ -590,6 +583,8 @@ void Game::_deleteCurrentLevel() {
     }
     enemyShooters.clear();
     enemyChasers.clear();
+    nextLevelTriggers.clear();
+    
 }
 
 void Game::_checkUnlockLevelTriggerCollision(Player &player, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {

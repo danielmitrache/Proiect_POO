@@ -46,6 +46,8 @@ void EnemyShooter::update(sf::Vector2f &playerPosition) {
     }
 
     for (size_t i = 0; i < m_bullets.size(); ++ i) {
+        // Debug output for bullet position
+        std::cout << "Bullet " << i << ": " << m_bullets[i] << std::endl;
         if (m_bullets[i].getLifeTime() > 5.f) {
             m_bullets.erase(m_bullets.begin() + i); // Remove the bullet if it exceeds its lifetime
             --i; // Adjust the index after erasing

@@ -1,5 +1,19 @@
 #include "../include/TexturesManager.h"
 
+// Definirea membrilor statici
+sf::Texture TexturesManager::m_texture_tilesetTexture;
+sf::Texture TexturesManager::m_texture_heartTexture;
+sf::Texture TexturesManager::m_texture_enemyWalkerTexture_left;
+sf::Texture TexturesManager::m_texture_enemyWalkerTexture_right;
+sf::Texture TexturesManager::m_texture_playerTexture;
+sf::Texture TexturesManager::m_texture_nextLevelTriggerTexture;
+sf::Texture TexturesManager::m_texture_unlockLevelTriggerTexture;
+sf::Texture TexturesManager::m_texture_enemyWalkerTexture;
+sf::Texture TexturesManager::m_texture_enemyShooterTexture_right;
+sf::Texture TexturesManager::m_texture_enemyShooterTexture_left;
+sf::Texture TexturesManager::m_killAuraTexture;
+sf::Texture TexturesManager::m_enemyChaserTexture;
+
 TexturesManager::TexturesManager() {
     loadTextures();
 }

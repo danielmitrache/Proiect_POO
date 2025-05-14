@@ -36,3 +36,14 @@ void Bullet::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 float Bullet::getLifeTime() const {
     return m_f_lifeTime; // Return the lifetime of the bullet
 }
+
+std::ostream& operator<<(std::ostream& os, const Bullet& bullet) {
+    os << "Bullet ["
+       << "Position: " << bullet.getPosition().x << ", " << bullet.getPosition().y << ", "
+       << "Speed: " << bullet.m_f_speed << ", "
+       << "Direction: " << bullet.m_v_direction.x << ", " << bullet.m_v_direction.y << ", "
+       << "Damage: " << bullet.getDamage() << ", "
+       << "LifeTime: " << bullet.m_f_lifeTime
+       << "]";
+    return os;
+}

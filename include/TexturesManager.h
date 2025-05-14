@@ -4,17 +4,19 @@
 #include <iostream>
 class TexturesManager {
 private:
-    sf::Texture m_texture_tilesetTexture; // Texture for the tileset
-    sf::Texture m_texture_heartTexture; // Texture for the heart
-    sf::Texture m_texture_enemyWalkerTexture_left, m_texture_enemyWalkerTexture_right; // Texture for the enemy walker
-    sf::Texture m_texture_playerTexture; // Texture for the player
-    sf::Texture m_texture_nextLevelTriggerTexture; // Texture for the next level trigger
-    sf::Texture m_texture_unlockLevelTriggerTexture; // Texture for the unlock level trigger
-    sf::Texture m_texture_enemyWalkerTexture; // Texture for the enemy walker (default)
-    sf::Texture m_texture_enemyShooterTexture_right; // Texture for the enemy shooter
-    sf::Texture m_texture_enemyShooterTexture_left; // Texture for the enemy shooter (left)
-    sf::Texture m_killAuraTexture; // Texture for the kill aura
-    sf::Texture m_enemyChaserTexture; // Texture for the enemy chaser
+    // We declare the textures as static members so they can be shared across all instances of TexturesManager
+    // This way we avoid loading the same texture multiple times
+    static sf::Texture m_texture_tilesetTexture; // Texture for the tileset
+    static sf::Texture m_texture_heartTexture; // Texture for the heart
+    static sf::Texture m_texture_enemyWalkerTexture_left, m_texture_enemyWalkerTexture_right; // Texture for the enemy walker
+    static sf::Texture m_texture_playerTexture; // Texture for the player
+    static sf::Texture m_texture_nextLevelTriggerTexture; // Texture for the next level trigger
+    static sf::Texture m_texture_unlockLevelTriggerTexture; // Texture for the unlock level trigger
+    static sf::Texture m_texture_enemyWalkerTexture; // Texture for the enemy walker (default)
+    static sf::Texture m_texture_enemyShooterTexture_right; // Texture for the enemy shooter
+    static sf::Texture m_texture_enemyShooterTexture_left; // Texture for the enemy shooter (left)
+    static sf::Texture m_killAuraTexture; // Texture for the kill aura
+    static sf::Texture m_enemyChaserTexture; // Texture for the enemy chaser
 
 public:
     TexturesManager();
