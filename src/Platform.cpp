@@ -1,4 +1,4 @@
-#include "../include/Platform.h"
+#include "../include/platform.h"
 
 Platform::Platform() {
     setWidth(0.f);

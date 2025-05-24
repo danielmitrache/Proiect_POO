@@ -2,7 +2,7 @@
 #define UNLOCKLEVELTRIGGER_H
 
 #include <SFML/Graphics.hpp>
-#include "Triggers.h"
+#include "triggers.h"
 
 class UnlockLevelTrigger : public Triggers, public sf::Drawable {
 private:

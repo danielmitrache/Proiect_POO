@@ -1,7 +1,7 @@
 #ifndef KILLAURA_H
 #define KILLAURA_H
 
-#include "Actor.h"
+#include "actor.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cmath>

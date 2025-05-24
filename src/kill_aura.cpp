@@ -1,4 +1,4 @@
-#include "../include/KillAura.h"
+#include "../include/kill_Aura.h"
 
 KillAura::KillAura(sf::Vector2f position, float radius, sf::Color color)
     : Actor(position.x, position.y), m_f_killAuraRadius(radius), m_color(color), m_b_isActive(false), m_f_animationDuration(-.5f) {

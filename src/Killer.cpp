@@ -1,4 +1,4 @@
-#include "../include/Killer.h"
+#include "../include/killer.h"
 
 Killer::Killer() 
     : m_f_damage(0.f) {}

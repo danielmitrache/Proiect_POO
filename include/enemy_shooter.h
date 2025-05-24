@@ -1,8 +1,8 @@
 #ifndef ENEMYSHOOTER_H
 #define ENEMYSHOOTER_H
 
-#include "Enemy.h"
-#include "Bullet.h"
+#include "enemy.h"
+#include "bullet.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>

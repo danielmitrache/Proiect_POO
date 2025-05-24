@@ -1,4 +1,4 @@
-#include "../include/Game.h"
+#include "../include/game.h"
 
 const unsigned int WINDOW_WIDTH = 1400u;
 const unsigned int WINDOW_HEIGHT = 800u;
@@ -36,11 +36,11 @@ Game::~Game() {}
 
 // Loop-ul principal al jocului
 void Game::run() {
-    ProgressManager::saveChapterToFile(1);
-    std::vector<int> availableChapters = ProgressManager::loadSavedChaptersFromFile(); // Get available chapters from ProgressManager
+    Progress_Manager::saveChapterToFile(1);
+    std::vector<int> availableChapters = Progress_Manager::loadSavedChaptersFromFile(); // Get available chapters from Progress_Manager:
     // Set the player color based on how many chapters he has unlocked
     float playerFadeFactor = std::min(1.f, ((availableChapters.size() - 1) * 0.12f));
-    player.setColor(ColorHelpers::blendColors(sf::Color::Blue, sf::Color::White, playerFadeFactor)); // Set player color based on the number of unlocked chapters
+    player.setColor(Color_Helpers::blendColors(sf::Color::Blue, sf::Color::White, playerFadeFactor)); // Set player color based on the number of unlocked chapters
 
     _loadStartMenu(availableChapters); // Load the start menu
     player.setHasGravity(true);
@@ -76,7 +76,7 @@ void Game::_processEvents() {
                 }
                 else {
                     if (!m_b_isInStartMenu) {
-                        std::vector<int> availableChapters = ProgressManager::loadSavedChaptersFromFile(); // Get available chapters from ProgressManager
+                        std::vector<int> availableChapters = Progress_Manager::loadSavedChaptersFromFile(); // Get available chapters from Progress_Manager:
                         m_b_isInStartMenu = true; // Set the flag to true
                         _loadStartMenu(availableChapters); // Load the start menu
                     }
@@ -136,7 +136,7 @@ void Game::_update() {
    
     if (!m_b_isInStartMenu) {
         m_f_backgroundHue ++;
-        background.setColor(ColorHelpers::blendColors(sf::Color::White, ColorHelpers::hsvToRgb(fmod(m_f_backgroundHue, 360.f), 0.5f, 0.5f), 0.5f)); // Setam culoarea fundalului in functie de unghiul de rotatie    
+        background.setColor(Color_Helpers::blendColors(sf::Color::White, Color_Helpers::hsvToRgb(fmod(m_f_backgroundHue, 360.f), 0.5f, 0.5f), 0.5f)); // Setam culoarea fundalului in functie de unghiul de rotatie    
     }
  
     if (player.getHealth() <= 0) {
@@ -310,11 +310,11 @@ void Game::_loadPlatformerLevel(const std::string &levelPath, bool comingFromMen
         m_i_collectedCoins = 0;
         m_i_coinsNeededToPass = 0;
         m_i_deathCount = 0;
-        ProgressManager::saveChapterToFile(m_i_currentChapter); // Save the current chapter to the file
+        Progress_Manager::saveChapterToFile(m_i_currentChapter); // Save the current chapter to the file
 
         /// Go back to the start menu
         m_b_isInStartMenu = true;
-        std::vector<int> availableChapters = ProgressManager::loadSavedChaptersFromFile(); // Get available chapters from ProgressManager
+        std::vector<int> availableChapters = Progress_Manager::loadSavedChaptersFromFile(); // Get available chapters from Progress_Manager:
         _loadStartMenu(availableChapters); // Load the start menu
         return;
     }
@@ -429,7 +429,7 @@ void Game::_loadStartMenu(std::vector<int> &availableChapters) {
     m_b_cameraFollowsPlayer = true;
     player.setMode(PlayerMode::Platformer); // Set player mode to platformer
     const float tileSize = 64.f; 
-    background.setColor(ColorHelpers::blendColors(sf::Color::White, sf::Color::Black, 0.5f)); // Set background color to black with 50% opacity
+    background.setColor(Color_Helpers::blendColors(sf::Color::White, sf::Color::Black, 0.5f)); // Set background color to black with 50% opacity
     background.setTexture("./assets/textures/Backgrounds/startmenu.png"); // Set background texture to start menu texture
     _deleteCurrentLevel(); // Delete the current level
 
@@ -460,7 +460,7 @@ void Game::_loadStartMenu(std::vector<int> &availableChapters) {
             sf::Vector2f size(tileSize, tileSize);
             if (tileType == 1) {
                 platforms.push_back(std::make_unique<Platform>(position, size, &m_texturesManager.getTilesetTexture(), grassNormalTile));
-                platforms.back()->setColor(ColorHelpers::blendColors(sf::Color::White, sf::Color::Black, 0.5f)); // Set color to gray
+                platforms.back()->setColor(Color_Helpers::blendColors(sf::Color::White, sf::Color::Black, 0.5f)); // Set color to gray
             }
             else if (tileType == 4) {
                 player.move(position);
@@ -473,7 +473,7 @@ void Game::_loadStartMenu(std::vector<int> &availableChapters) {
                     nextLevelTriggers.back().setColor(sf::Color(34,244,218)); // Set color to white
                 } else {
                     nextLevelTriggers.push_back(NextLevelTrigger(position, currentChapterTrigger, false));
-                    nextLevelTriggers.back().setColor(ColorHelpers::blendColors(sf::Color(34,244,218), sf::Color::Black, 0.5f)); // Set color to red with full opacity
+                    nextLevelTriggers.back().setColor(Color_Helpers::blendColors(sf::Color(34,244,218), sf::Color::Black, 0.5f)); // Set color to red with full opacity
                 }
                 nextLevelTriggers.back().setTexture(&m_texturesManager.getNextLevelTriggerTexture(), sf::IntRect({0, 0}, {32, 32}));
 
@@ -751,22 +751,22 @@ void Game::_resetPlayerPositionAndHealth() {
 }
 
 void Game::_updateAnimations() {
-    AnimationManager::updateAnimationTimer(); // Update animation timer
-    if (AnimationManager::getAnimationTimer() >= 0.1f) { // Check if it's time to update the animation frame
-        AnimationManager::setAnimationTimer(0.f); // Reset animation timer
+    Animation_Manager::updateAnimationTimer(); // Update animation timer
+    if (Animation_Manager::getAnimationTimer() >= 0.1f) { // Check if it's time to update the animation frame
+        Animation_Manager::setAnimationTimer(0.f); // Reset animation timer
 
-        nextLevelTrigger.setTexture(&m_texturesManager.getNextLevelTriggerTexture(), AnimationManager::getStarAnimationRect()); // Update the texture of the next level trigger
-        AnimationManager::nextStarAnimationFrame(); // Update the animation frame for the star
+        nextLevelTrigger.setTexture(&m_texturesManager.getNextLevelTriggerTexture(), Animation_Manager::getStarAnimationRect()); // Update the texture of the next level trigger
+        Animation_Manager::nextStarAnimationFrame(); // Update the animation frame for the star
 
         for (auto& unlockLevelTrigger : unlockLevelTriggers) {
-            unlockLevelTrigger.setTexture(&m_texturesManager.getUnlockLevelTriggerTexture(), AnimationManager::getCoinAnimationRect()); // Update the texture of the unlock level trigger
+            unlockLevelTrigger.setTexture(&m_texturesManager.getUnlockLevelTriggerTexture(), Animation_Manager::getCoinAnimationRect()); // Update the texture of the unlock level trigger
         }
-        AnimationManager::nextCoinAnimationFrame(); // Update the animation frame for the coin
+        Animation_Manager::nextCoinAnimationFrame(); // Update the animation frame for the coin
 
         if (m_b_isInStartMenu) {
             for (auto& nLT : nextLevelTriggers) {
                 if (nLT.isInteractable())
-                    nLT.setTexture(&m_texturesManager.getNextLevelTriggerTexture(), AnimationManager::getStarAnimationRect()); // Update the texture of the next level trigger
+                    nLT.setTexture(&m_texturesManager.getNextLevelTriggerTexture(), Animation_Manager::getStarAnimationRect()); // Update the texture of the next level trigger
             }
         }
     }

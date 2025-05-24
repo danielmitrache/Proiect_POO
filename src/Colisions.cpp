@@ -1,4 +1,4 @@
-#include "../include/Colisions.h"
+#include "../include/colisions.h"
 #include <iostream>
 
 namespace Colisions {

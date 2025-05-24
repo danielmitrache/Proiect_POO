@@ -1,4 +1,4 @@
-#include "../include/Triggers.h"
+#include "../include/triggers.h"
 
 Triggers::Triggers() : Actor() {
     m_b_isActive = false;

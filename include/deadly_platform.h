@@ -1,8 +1,8 @@
 #ifndef DEADLYPLATFORM_H
 #define DEADLYPLATFORM_H
-#include "Platform.h"
-#include "Killer.h"
-#include "CanChangeVisibility.h"	
+#include "platform.h"
+#include "killer.h"
+#include "can_change_visibility.h"	
 
 class DeadlyPlatform : public Platform, public Killer, public CanChangeVisibility {
 public:

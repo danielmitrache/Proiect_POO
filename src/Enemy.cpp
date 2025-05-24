@@ -1,4 +1,4 @@
-#include "../include/Enemy.h"
+#include "../include/enemy.h"
 
 Enemy::Enemy(const sf::Vector2f& position, float speed, float damage)
     : Actor(position.x, position.y), Killer(damage) {
@@ -89,7 +89,7 @@ void Enemy::updateTakeDamageTimer(float deltaTime) {
 
 void Enemy::setTakeDamageTimer(float duration) {
     m_f_takeDamageTimer = duration; // Set the take damage timer to 0.5 seconds
-    m_shape.setFillColor(ColorHelpers::blendColors(sf::Color::White, sf::Color::Red, 0.3f)); // Set the color of the enemy walker shape to red
+    m_shape.setFillColor(Color_Helpers::blendColors(sf::Color::White, sf::Color::Red, 0.3f)); // Set the color of the enemy walker shape to red
 }
 
 void Enemy::setSpeed(float speed) {

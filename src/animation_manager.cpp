@@ -1,6 +1,6 @@
-#include "../include/AnimationManager.h"
+#include "../include/animation_manager.h"
 
-namespace AnimationManager {
+namespace Animation_Manager {
     const std::vector<sf::IntRect> m_starAnimationRects = {
         sf::IntRect({0, 0}, {32, 32}),
         sf::IntRect({32, 0}, {32, 32}),

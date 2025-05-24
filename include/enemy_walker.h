@@ -2,10 +2,10 @@
 #define ENEMYWALKER_H
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Enemy.h"
-#include "Killer.h"
-#include "Actor.h"
-#include "ColorHelpers.h"
+#include "enemy.h"
+#include "killer.h"
+#include "actor.h"
+#include "color_helpers.h"
 
 class EnemyWalker : public Enemy {
 private:

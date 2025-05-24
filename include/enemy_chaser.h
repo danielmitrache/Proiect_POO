@@ -2,7 +2,7 @@
 #define ENEMYCHASER_H
 
 #include <SFML/Graphics.hpp>
-#include "Enemy.h"
+#include "enemy.h"
 #include <cmath>
 #include <iostream>
 

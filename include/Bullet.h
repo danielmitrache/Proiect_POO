@@ -2,9 +2,9 @@
 #define BULLET_H
 
 #include <SFML/Graphics.hpp>
-#include "Actor.h"
-#include "Colisions.h"
-#include "Killer.h"
+#include "actor.h"
+#include "colisions.h"
+#include "killer.h"
 
 class Bullet : public Actor, public Killer, public sf::Drawable {
 private:

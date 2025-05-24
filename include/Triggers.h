@@ -1,7 +1,7 @@
 #ifndef TRIGEGERS_H
 #define TRIGEGERS_H
 #include <SFML/Graphics.hpp>
-#include "Actor.h"
+#include "actor.h"
 
 class Triggers : public Actor {
 private:

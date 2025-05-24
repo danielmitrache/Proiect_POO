@@ -1,4 +1,4 @@
-#include "../include/EnemyWalker.h"
+#include "../include/enemy_walker.h"
 
 EnemyWalker::EnemyWalker(const sf::Vector2f& position, float speed, float damage, float bounceForce)
     : Enemy(position, speed, damage), m_f_bounceForce(bounceForce) {}

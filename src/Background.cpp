@@ -1,4 +1,4 @@
-#include "../include/Background.h"
+#include "../include/background.h"
 #include <iostream>
 
 Background::Background() : m_sprite(m_texture) {}

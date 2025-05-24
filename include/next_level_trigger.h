@@ -1,7 +1,7 @@
 #ifndef NEXTLEVELTRIGGER_H
 #define NEXTLEVELTRIGGER_H
 
-#include "Triggers.h"
+#include "triggers.h"
 
 class NextLevelTrigger : public Triggers, public sf::Drawable {
 private:

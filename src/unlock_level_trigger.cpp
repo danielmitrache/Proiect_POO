@@ -1,4 +1,4 @@
-#include "../include/UnlockLevelTrigger.h"
+#include "../include/unlock_level_trigger.h"
 
 UnlockLevelTrigger::UnlockLevelTrigger() : Triggers() {
     m_shape.setFillColor(sf::Color(255, 165, 0, 255));

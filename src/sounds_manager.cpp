@@ -1,4 +1,4 @@
-#include "../include/SoundsManager.h"
+#include "../include/sounds_manager.h"
 
 SoundsManager::SoundsManager() {
     loadSfxSound("collideWithStar", "./assets/sounds/collideWithStar.wav");

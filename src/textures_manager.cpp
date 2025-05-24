@@ -1,4 +1,4 @@
-#include "../include/TexturesManager.h"
+#include "../include/textures_manager.h"
 
 // Definirea membrilor statici
 sf::Texture TexturesManager::m_texture_tilesetTexture;

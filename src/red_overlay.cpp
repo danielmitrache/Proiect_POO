@@ -1,4 +1,4 @@
-#include "../include/RedOverlay.h"
+#include "../include/red_overlay.h"
 
 RedOverlay::RedOverlay() {
     m_redOverlay.setSize(sf::Vector2f(2000.f, 2000.f)); // Set the size of the overlay to match the window size

@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
-#include "Actor.h"
-#include "Gravity.h"
+#include "actor.h"
+#include "gravity.h"
 #include <iostream>
 #ifndef PLAYER_H
 #define PLAYER_H

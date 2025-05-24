@@ -1,4 +1,4 @@
-#include "../include/EnemyShooter.h"
+#include "../include/enemy_shooter.h"
 
 EnemyShooter::EnemyShooter(sf::Vector2f position, sf::Vector2f size, sf::Texture* texture, const sf::IntRect& textureRect, float speed, float damage, float fireRate, float health) 
 : Enemy(position, size, texture, textureRect, speed, damage) {

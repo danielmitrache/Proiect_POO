@@ -1,4 +1,4 @@
-#include "../include/Player.h"
+#include "../include/player.h"
 
 Player::Player() {
     setWidth(50.f);

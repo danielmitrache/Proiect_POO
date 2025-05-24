@@ -2,7 +2,7 @@
 #define PLATFORM_H
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Actor.h"
+#include "actor.h"
 
 class Platform : public Actor, public sf::Drawable {
 private:

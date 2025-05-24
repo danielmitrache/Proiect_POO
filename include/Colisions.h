@@ -1,7 +1,7 @@
 #ifndef COLISIONS_H
 #define COLISIONS_H
 #include <SFML/Graphics.hpp>
-#include "Actor.h"
+#include "actor.h"
 
 namespace Colisions {
     // Function that checks whether two actors are colliding

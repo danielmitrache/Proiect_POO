@@ -1,6 +1,6 @@
-#include "../include/ProgressManager.h"
+#include "../include/progress_manager.h"
 
-namespace ProgressManager {
+namespace Progress_Manager {
     void saveChapterToFile(int chapterToSave) {
         std::ifstream in("./assets/gameinfo/unlockedchapters.txt");
         if (!in.is_open()) {

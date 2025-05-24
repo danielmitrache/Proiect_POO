@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-namespace AnimationManager {
+namespace Animation_Manager {
     extern const std::vector<sf::IntRect> m_starAnimationRects;
     extern const std::vector<sf::IntRect> m_coinAnimationRects;
     extern int m_i_starAnimationIndex, m_i_coinAnimationIndex;

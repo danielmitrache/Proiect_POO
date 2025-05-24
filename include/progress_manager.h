@@ -4,7 +4,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
-namespace ProgressManager {
+namespace Progress_Manager {
     void saveChapterToFile(int chapter);
     std::vector<int> loadSavedChaptersFromFile();
 }

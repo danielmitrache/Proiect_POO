@@ -1,4 +1,4 @@
-#include "../include/EnemyChaser.h"
+#include "../include/enemy_chaser.h"
 
 EnemyChaser::EnemyChaser(sf::Vector2f position, sf::Vector2f size, sf::Texture* texture, sf::IntRect textureRect, float speed, float damage, float health)
     : Enemy(position, size, texture, textureRect, speed, damage), m_b_isChasingPlayer(false) {}

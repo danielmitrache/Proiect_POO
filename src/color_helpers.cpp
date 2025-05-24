@@ -1,6 +1,6 @@
-#include "../include/ColorHelpers.h"
+#include "../include/color_helpers.h"
 
-namespace ColorHelpers {
+namespace Color_Helpers {
     // Function to convert a hex color string to an sf::Color object
     sf::Color hsvToRgb(float hue, float saturation, float value) {
         int h = static_cast<int>(hue / 60) % 6;

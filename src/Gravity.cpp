@@ -1,4 +1,4 @@
-#include "../include/Gravity.h" 
+#include "../include/gravity.h" 
 
 bool Gravity::getHasGravity() const {
     return m_b_hasGravity;

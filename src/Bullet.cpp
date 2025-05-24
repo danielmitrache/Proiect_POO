@@ -1,4 +1,4 @@
-#include "../include/Bullet.h"
+#include "../include/bullet.h"
 
 Bullet::Bullet(sf::Vector2f position, sf::Vector2f size, float speed, sf::Vector2f direction, float damage)
     : Actor(position, size), m_f_speed(speed), m_v_direction(direction), Killer(damage) {

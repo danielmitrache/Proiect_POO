@@ -1,4 +1,4 @@
-#include "../include/DeadlyPlatform.h"
+#include "../include/deadly_platform.h"
 
 DeadlyPlatform::DeadlyPlatform(const sf::Vector2f& position, const sf::Vector2f& size, float damage, bool isVisible)
     : Platform(position, size), Killer(damage) 

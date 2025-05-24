@@ -1,4 +1,4 @@
-#include "../include/NextLevelTrigger.h"
+#include "../include/next_level_trigger.h"
 
 NextLevelTrigger::NextLevelTrigger() : Triggers() {
     m_i_nextLevelID = 0; // Initialize the next level ID to 0

@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
-namespace ColorHelpers {
+namespace Color_Helpers {
     // Function to convert a hex color string to an sf::Color object
     sf::Color hsvToRgb(float hue, float saturation, float value);
 
