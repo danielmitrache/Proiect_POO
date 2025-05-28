@@ -3,6 +3,8 @@
 
 class CanChangeVisibility {
 public:
+    virtual ~CanChangeVisibility() = default;
+
     virtual void turnInvisible() = 0;
     virtual void turnVisible() = 0;
 };

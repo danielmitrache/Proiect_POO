@@ -18,7 +18,7 @@ public:
     Platform(sf::Vector2f position, sf::Vector2f size, sf::Texture* texture, const sf::IntRect& textureRect);
     Platform(sf::Vector2f position, sf::Vector2f size, bool isSticky);
     Platform(sf::Vector2f position, sf::Vector2f size, bool isSticky, sf::Texture* texture, const sf::IntRect& textureRect);
-    ~Platform();
+    virtual ~Platform();
 
     // Draw the platform
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

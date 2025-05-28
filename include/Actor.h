@@ -10,7 +10,7 @@ public:
     Actor();
     Actor(float x, float y);
     Actor(sf::Vector2f position, sf::Vector2f size);
-    ~Actor();
+    virtual ~Actor() = default;
     
     float getX() const;
     float getY() const;

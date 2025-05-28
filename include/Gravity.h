@@ -11,6 +11,8 @@ protected:
     // Purely virtual function that defines how gravity is applied to an object
     virtual void _applyGravity() = 0;
 public:
+    Gravity() = default;
+    virtual ~Gravity() = default;
     bool getHasGravity() const;
     void setHasGravity(bool hasGravity);
 };
