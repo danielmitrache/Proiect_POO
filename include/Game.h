@@ -113,13 +113,13 @@ private:
     void _solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<Platform>> &platforms);
 
     // Function that solves trigger collisions
-    void _checkNextLevelTriggerCollision(Player &player, NextLevelTrigger &nextLevelTrigger, std::vector<UnlockLevelTrigger> &unlockLevelTriggers);
+    void _checkTriggersCollision(Player &player, NextLevelTrigger &nextLevelTrigger, std::vector<UnlockLevelTrigger> &unlockLevelTriggers);
+
+    // Function that checks if the player is in the trigger area of the unlock level trigger
+    void _checkTriggersCollision(Player &player, std::vector<UnlockLevelTrigger> &unlockLevelTriggers);
 
     // Function that deletes the current level
     void _deleteCurrentLevel();
-
-    // Function that checks if the player is in the trigger area of the unlock level trigger
-    void _checkUnlockLevelTriggerCollision(Player &player, std::vector<UnlockLevelTrigger> &unlockLevelTriggers);
 
     // Function that updates hearts based on player health
     void _updateHearts(int health);

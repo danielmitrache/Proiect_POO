@@ -10,11 +10,11 @@
 
 class Enemy : public Actor, public Killer, public sf::Drawable {
 protected:
-    float m_f_speed; // Speed of the enemy walker
-    sf::Vector2f m_v_direction; // Direction of the enemy walker
-    sf::RectangleShape m_shape; // Shape of the enemy walker
+    float m_f_speed; // Speed of the enemy 
+    sf::Vector2f m_v_direction; // Direction of the enemy 
+    sf::RectangleShape m_shape; // Shape of the enemy 
 
-    sf::Texture* m_texture; // Texture for the enemy walker
+    sf::Texture* m_texture; // Texture for the enemy 
 private:
     float m_f_takeDamageTimer;
 public:

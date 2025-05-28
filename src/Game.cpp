@@ -120,8 +120,8 @@ void Game::_update() {
     _updateEnemyShooters(enemyShooters, player);
     _updateEnemyChasers(enemyChasers, player);
     _solvePlatformCollisions(player, platforms);
-    _checkUnlockLevelTriggerCollision(player, unlockLevelTriggers);
-    _checkNextLevelTriggerCollision(player, nextLevelTrigger, unlockLevelTriggers);
+    _checkTriggersCollision(player, unlockLevelTriggers);
+    _checkTriggersCollision(player, nextLevelTrigger, unlockLevelTriggers);
     _checkEnemyCollisions(player, enemyWalkers);
     _updateHearts(player.getHealth());
     _checkEnemyKillAuraCollision(killAura, enemyShooters);
@@ -564,7 +564,7 @@ void Game::_solvePlatformCollisions(Player &player, std::vector<std::unique_ptr<
     }
 }
 
-void Game::_checkNextLevelTriggerCollision(Player &player, NextLevelTrigger &nextLevelTrigger, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {
+void Game::_checkTriggersCollision(Player &player, NextLevelTrigger &nextLevelTrigger, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {
     if (Colisions::checkColision(player, nextLevelTrigger) && unlockLevelTriggers.empty()) {
         m_soundsManager.playSfxSound("collideWithStar"); // Play sound when player collides with the next level trigger
         _loadPlatformerLevel(nextLevelTrigger.getNextLevelPath(), false, 64.f);
@@ -587,7 +587,7 @@ void Game::_deleteCurrentLevel() {
     
 }
 
-void Game::_checkUnlockLevelTriggerCollision(Player &player, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {
+void Game::_checkTriggersCollision(Player &player, std::vector<UnlockLevelTrigger> &unlockLevelTriggers) {
     for (size_t i = 0; i < unlockLevelTriggers.size(); ++i) {
         if (Colisions::checkColision(player, unlockLevelTriggers[i])) {
             m_soundsManager.playSfxSound("pickupCoin"); // Play sound when player collects a coin
