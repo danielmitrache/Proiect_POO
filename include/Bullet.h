@@ -31,6 +31,7 @@ public:
     float getLifeTime() const;
 
     friend std::ostream& operator<<(std::ostream& os, const Bullet& bullet);
+    friend Bullet operator+(const Bullet& lhs, const Bullet& rhs);
 };
 
 #endif

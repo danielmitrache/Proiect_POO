@@ -47,3 +47,12 @@ std::ostream& operator<<(std::ostream& os, const Bullet& bullet) {
        << "]";
     return os;
 }
+
+Bullet operator+(const Bullet& lhs, const Bullet& rhs) {
+    sf::Vector2f newPosition = lhs.getPosition() + rhs.getPosition();
+    sf::Vector2f newSize = sf::Vector2f(lhs.getWidth() + rhs.getWidth(), lhs.getHeight() + rhs.getHeight());
+    float newSpeed = lhs.m_f_speed + rhs.m_f_speed;
+    sf::Vector2f newDirection = lhs.m_v_direction + rhs.m_v_direction;
+    float newDamage = lhs.getDamage() + rhs.getDamage();
+    return Bullet(newPosition, newSize, newSpeed, newDirection, newDamage);
+}
